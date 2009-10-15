@@ -4,22 +4,31 @@ module DataCatalog
     include Resource
 
     model Category
+
+    # == Permissions
+    
+    permission :read   => :basic
+    permission :modify => :curator
+
+    # == Properties
     
     property :name
     property :parent_id
-    property :sources
-    property :source_ids do
-      categorizations.map do |categorization|
-        categorization.source.id
+
+    property :id,         :w => :nobody
+    property :created_at, :w => :nobody
+    property :updated_at, :w => :nobody
+
+    property :sources, :read_only do
+      sources.map do |source|
+        {
+          "id"    => source.id,
+          "href"  => "/sources/#{source.id}",
+          "title" => source.title,
+          "url"   => source.url,
+        }
       end
     end
-
-    permission_to_view :basic
-    permission_to_modify :curator
-
-    read_only :source_ids
-    read_only :created_at
-    read_only :updated_at
 
   end
 
