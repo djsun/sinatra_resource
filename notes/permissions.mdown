@@ -130,13 +130,44 @@ To extract the pattern:
     Relation : :owner
 
 To back up (skipping a few steps, but I hope this is still clear) and remove
-the "iff" we would have:
+the "iff" we would give us this pattern:
 
     UserType User {can | can't} Action Resource Instance Relation
 
 The nice thing about the {can | can't} style is that it allows for one or both
 'sides' to be specified.
+
+Which brings us back to the 'allow?' and 'disallow?' methods:
+
+    def allow?(user_type, user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
     
+    def disallow?(user_type, user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+
+I would expect that user_type can be derived from user, so we can simplify:
+
+    def allow?(user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+    
+    def disallow?(user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+
+It is tempting to try to simplify further. For example, why not assume that resource can be inferred from instance? That may be so, but I'm not so convinced that there is only one resource for each instance. For example,
+what if we are talking about a "note" which can be exposed in two places:
+
+* /sources/40/note/231
+* /note/231
+
+I skipped a key question: is this two resources or two representations?
+(Sorry, I'm not going to answer this one right now.)
+
+Depending on your answer, another question arises: is there a need to specify different permissions for each of these (resources | representations)?
+
 ## Property-level use cases:
 
 ## Notes:
