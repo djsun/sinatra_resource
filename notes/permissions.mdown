@@ -1,3 +1,8 @@
+# Preface
+
+Please consider this document in the context of building APIs in the Resource
+Oriented Architecture style.
+
 # Introduction
 
 Permission systems may be relatively simple or relatively complex.
@@ -170,8 +175,7 @@ Depending on your answer, another question arises: is there a need to specify di
 
 ## Property-level use cases:
 
-## Notes:
-
-* "can <action> some <resource>" is not very useful
-  * it doesn't say how "some" is determined
-  
+* read/write (a good default)
+* writable only by a certain user type / permission (e.g. admin)
+* writable only users that satisfy a relation (e.g. ownership)
+* writable only on creation
