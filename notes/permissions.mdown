@@ -96,30 +96,46 @@ the 'user at hand' is different from the 'user type'.
 
 These stories can be rewritten to make the pattern clearer:
 
-    :basic_user user can   :read   the Note n where n.owner == user
-    :basic_user user can't :read   the Note n where n.owner != user
+    :basic_user user can   :read   the Note n if n.owner == user
+    :basic_user user can't :read   the Note n if n.owner != user
     :basic_user user can   :create a   Note
-    :basic_user user can   :update the Note n where n.owner == user
-    :basic_user user can't :update the Note n where n.owner != user
-    :basic_user user can   :delete the Note n where n.owner == user
-    :basic_user user can't :delete the Note n where n.owner != user
-
-    :basic_user user 
-
-    user[0] can't :update any          Note  # less useful
-    user[0] can   :update some         Notes # less useful
-    user[0] can   :update an   owned   Note
-    user[0] can't :update an   unowned Note
-
-    user[0] can't :delete any          Note  # less useful
-    user[0] can   :delete some         Notes # less useful
-    user[0] can   :delete an   owned   Note
-    user[0] can't :delete an   unowned Note
+    :basic_user user can   :update the Note n if n.owner == user
+    :basic_user user can't :update the Note n if n.owner != user
+    :basic_user user can   :delete the Note n if n.owner == user
+    :basic_user user can't :delete the Note n if n.owner != user
 
 To extract the pattern:
 
     UserType {can | can't} Action
-    
+
+There is another way to see it, that uses "iff" ("if and only if"):
+
+    :basic_user user can   :read   the Note n iff n.owner == user
+    :basic_user user can   :create a   Note
+    :basic_user user can   :update the Note n iff n.owner == user
+    :basic_user user can   :delete the Note n iff n.owner == user
+
+I'm not sure I prefer the "iff" form. It is more compact, but I get the
+feeling that it makes it harder to have multilevel (cascading) permissions.
+
+To extract the pattern:
+
+    UserType User Action Resource Instance Relation
+
+    UserType : :basic_user
+    User     : 'user'
+    Action   : [:read, :create, :update, :delete]
+    Resource : Note
+    Instance : 'n'
+    Relation : :owner
+
+To back up (skipping a few steps, but I hope this is still clear) and remove
+the "iff" we would have:
+
+    UserType User {can | can't} Action Resource Instance Relation
+
+The nice thing about the {can | can't} style is that it allows for one or both
+'sides' to be specified.
     
 ## Property-level use cases:
 
