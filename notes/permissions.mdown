@@ -1,22 +1,69 @@
-Permissions can occur at many levels:
+# Permissions can occur at many levels:
 
 * action level
 * document level
 
-What are some example use cases?
+# What are some example use cases?
 
-:admin_user can   :create a   Source
-:admin_user can   :read   any Source
-:admin_user can   :update any Source
-:admin_user can   :delete any Source
+## Resource-level permission stories:
 
-:basic_user can   :read   any Source
-:basic_user can't :update any Source
+This stories illustrate when a user type either can or cannot access
+a resource based just upon the action type.
 
-:basic_user can't :read   any Note
-:basic_user can   :read   any Note created by him/her
-:basic_user can   :update any Note created by him/her
-:basic_user can   :delete _
-:basic_user can   :update a   Source t
+    :admin_user can   :read   any Source
+    :admin_user can   :create a   Source
+    :admin_user can   :update any Source
+    :admin_user can   :delete any Source
 
+    :basic_user can   :read   any Source
+    :basic_user can't :create any Source
+    :basic_user can't :update any Source
+    :basic_user can't :delete any Source
 
+To extract the pattern:
+
+    UserType {can | can't} Action Resource
+
+In other words, if you know the user type, action, and resource, you
+know whether to allow or disallow.
+
+    def allow?(user_type, action, resource)
+      # logic depends solely on parameters
+    end
+    
+    def disallow?(user_type, action, resource)
+      # logic depends solely on parameters
+    end
+
+## Document-level use cases:
+
+In some cases, knowing the user type, action, and resource is not enough --
+the relationship between the 'document at hand' and the 'user at hand' is also
+needed. Note that the 'document at hand' is different from the 'resource' and
+the 'user at hand' is different from the 'user type'.
+
+    :basic_user can't :read   any          Note  # less useful
+    :basic_user can   :read   some         Notes # less useful
+    :basic_user can   :read   an   owned   Note
+    :basic_user can't :read   an   unowned Note
+    
+    :basic_user can   :create a            Note
+    
+    :basic_user can't :update any          Note  # less useful
+    :basic_user can   :update some         Notes # less useful
+    :basic_user can   :update an   owned   Note
+    :basic_user can't :update an   unowned Note
+    
+    :basic_user can't :delete any          Note  # less useful
+    :basic_user can   :delete some         Notes # less useful
+    :basic_user can   :delete an   owned   Note
+    :basic_user can't :delete an   unowned Note
+    
+    
+## Property-level use cases:
+
+## Notes:
+
+* "can <action> some <resource>" is not very useful
+  * it doesn't say how "some" is determined
+  
