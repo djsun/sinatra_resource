@@ -1,7 +1,42 @@
-# Permissions can occur at many levels:
+# Introduction
+
+Permission systems may be relatively simple or relatively complex.
+
+Simple permission systems are more rigid, less expressive, and hopefully
+simpler to develop. Complex permission systems are more flexible, more
+expressive, simpler (in theory) for an end-user to update, but harder to
+develop.
+
+It is not hard to envision reasonable permission systems that get moderately
+complicated fairly quickly. Why?
+
+* It may be easier to state permissions in terms of general rules and
+  exceptions to the general rule instead of spelling out every single
+  situation explicitly.
+* Permissions are often multi-leveled.
+* Permissions are rules, so sometimes the precedence is not obvious.
+* Permissions are sometimes most conveniently stated in terms of
+  'positive' and 'negative' rules. This create possibilities for
+  logical contradictions.
+
+A relatively simple example of a permission system would:
+
+* have single level
+* would require every situation to be spelled out explicitly
+
+A more complex, but still achievable permission system would:
+
+* have a couple of levels
+* would allow general rules to be stated
+* would allow specific situations to be spelled out
+* would allow more specific rules to override more general ones
+* would detect conflicts
+
+# Permissions can be stated at many levels:
 
 * action level
 * document level
+* property level
 
 # What are some example use cases?
 
@@ -58,6 +93,32 @@ the 'user at hand' is different from the 'user type'.
     :basic_user can   :delete some         Notes # less useful
     :basic_user can   :delete an   owned   Note
     :basic_user can't :delete an   unowned Note
+
+These stories can be rewritten to make the pattern clearer:
+
+    :basic_user user can   :read   the Note n where n.owner == user
+    :basic_user user can't :read   the Note n where n.owner != user
+    :basic_user user can   :create a   Note
+    :basic_user user can   :update the Note n where n.owner == user
+    :basic_user user can't :update the Note n where n.owner != user
+    :basic_user user can   :delete the Note n where n.owner == user
+    :basic_user user can't :delete the Note n where n.owner != user
+
+    :basic_user user 
+
+    user[0] can't :update any          Note  # less useful
+    user[0] can   :update some         Notes # less useful
+    user[0] can   :update an   owned   Note
+    user[0] can't :update an   unowned Note
+
+    user[0] can't :delete any          Note  # less useful
+    user[0] can   :delete some         Notes # less useful
+    user[0] can   :delete an   owned   Note
+    user[0] can't :delete an   unowned Note
+
+To extract the pattern:
+
+    UserType {can | can't} Action
     
     
 ## Property-level use cases:
