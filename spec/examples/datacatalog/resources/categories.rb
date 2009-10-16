@@ -19,7 +19,7 @@ module DataCatalog
     property :created_at, :w => :nobody
     property :updated_at, :w => :nobody
 
-    property :sources, :read_only do
+    property :sources do
       sources.map do |source|
         {
           "id"    => source.id,
