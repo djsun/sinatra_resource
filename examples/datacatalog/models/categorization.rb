@@ -17,6 +17,15 @@ module DataCatalog
     belongs_to :source
     belongs_to :category
 
+    # == Validations
+    
+    validate :validate_associations
+
+    def validate_associations
+      errors.add(:source_id, "must be valid") if source.nil?
+      errors.add(:category_id, "must be valid") if category.nil?
+    end
+
   end
 
 end
