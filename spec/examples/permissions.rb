@@ -6,7 +6,3 @@ module Roles
   role :admin
   
 end
-
-# permission [:modify, Users] do
-#   allow :basic
-# end
