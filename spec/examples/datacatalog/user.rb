@@ -11,10 +11,9 @@ module DataCatalog
 
     # == Attributes
 
-    key :curator,         Boolean, :default => false
-    key :admin,           Boolean, :default => false
     key :name,  String
     key :email, String
+    key :role,  String
     timestamps!
 
     # == Indices
