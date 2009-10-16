@@ -1,25 +1,29 @@
-class Category
+module DataCatalog
 
-  include MongoMapper::Document
+  class Category
 
-  # == Attributes
+    include MongoMapper::Document
 
-  key :name, String
-  key :parent_id, String
-  timestamps!
+    # == Attributes
 
-  # == Indices
+    key :name, String
+    key :parent_id, String
+    timestamps!
 
-  # == Associations
+    # == Indices
 
-  many :categorizations
+    # == Associations
 
-  def sources
-    categorizations.map(&:source)
+    many :categorizations
+
+    def sources
+      categorizations.map(&:source)
+    end
+
+    # == Validations
+
+    validates_presence_of :name
+
   end
-
-  # == Validations
-
-  validates_presence_of :name
 
 end

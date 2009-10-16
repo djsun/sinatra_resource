@@ -1,9 +1,13 @@
-module Roles
+module DataCatalog
   
-  role :anonymous
-  role :basic
-  role :owner
-  role :curator
-  role :admin
+  module Roles
   
+    role :anonymous
+    role :basic
+    role :owner
+    role :curator
+    role :admin
+  
+  end
+
 end
