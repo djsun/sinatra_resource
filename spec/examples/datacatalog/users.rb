@@ -9,18 +9,18 @@ module DataCatalog
 
     # == Permissions
 
-    permission :read   => :owner
+    permission :read   => :basic
     permission :modify => :owner
 
     # == Properties
   
     property :name,       :r => :basic
-    property :email
-    property :role,       :w => :admin
+    property :email,      :r => :owner
+    property :role,       :r => :owner, :w => :admin
 
     property :id,         :r => :basic, :w => :nobody
-    property :created_at, :w => :nobody
-    property :updated_at, :w => :nobody
+    property :created_at, :r => :owner, :w => :nobody
+    property :updated_at, :r => :owner, :w => :nobody
 
     # == Callbacks
     
