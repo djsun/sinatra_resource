@@ -14,11 +14,11 @@ module DataCatalog
 
     property :title
     property :url
-    property :raw,              :w => :admin
+    property :raw,        :w => :admin
 
-    property :id,               :w => :nobody
-    property :created_at,       :w => :nobody
-    property :updated_at,       :w => :nobody
+    property :id,         :w => :nobody
+    property :created_at, :w => :nobody
+    property :updated_at, :w => :nobody
     
     property :categories do
       categorizations.map do |categorization|
