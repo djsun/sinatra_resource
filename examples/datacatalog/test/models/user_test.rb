@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../helpers/model_test_helper')
 
-class UserTest < Test::Unit::TestCase
+class UserTest < ModelTestCase
   
   include DataCatalog
 
@@ -11,11 +11,11 @@ class UserTest < Test::Unit::TestCase
   
     context "correct params" do
       before do
-        @source = User.new(@required)
+        @user = User.new(@required)
       end
       
       test "should be valid" do
-        assert_equal true, @source.valid?
+        assert_equal true, @user.valid?
       end
     end
   end

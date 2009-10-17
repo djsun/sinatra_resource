@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../helpers/model_test_helper')
 
-class SourceTest < Test::Unit::TestCase
+class SourceTest < ModelTestCase
   
   include DataCatalog
 

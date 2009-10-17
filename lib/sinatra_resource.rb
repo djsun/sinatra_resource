@@ -1,6 +1,2 @@
-module SinatraResource
-  
-  module Resource
-  end
-  
-end
+require File.dirname(__FILE__) + "/resource"
+require File.dirname(__FILE__) + "/roles"
