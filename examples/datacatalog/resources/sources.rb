@@ -1,6 +1,8 @@
 module DataCatalog
 
   class Sources < Base
+    include SinatraResource::Resource
+
     model Source
 
     # == Permissions

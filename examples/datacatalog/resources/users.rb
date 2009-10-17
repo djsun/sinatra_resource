@@ -1,6 +1,8 @@
 module DataCatalog
 
   class Users < Base
+    include SinatraResource::Resource
+
     model User
 
     # == Permissions

@@ -1,6 +1,8 @@
 module DataCatalog
 
   class Categories < Base
+    include SinatraResource::Resource
+
     model Category
 
     # == Permissions
