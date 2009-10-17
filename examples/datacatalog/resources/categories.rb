@@ -1,8 +1,6 @@
 module DataCatalog
 
-  class Categories
-    include Resource
-
+  class Categories < Base
     model Category
 
     # == Permissions

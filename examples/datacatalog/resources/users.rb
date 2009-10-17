@@ -1,7 +1,6 @@
 module DataCatalog
 
-  class Users
-    include Resource
+  class Users < Base
 
     model User
 

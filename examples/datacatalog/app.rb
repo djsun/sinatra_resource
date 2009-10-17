@@ -3,10 +3,6 @@ require 'rubygems'
 gem 'sinatra', '>= 0.9.4'
 require 'sinatra/base'
 
-# gem 'sinatra_resource'
-# require 'sinatra_resource'
-require File.dirname(__FILE__) + "/../../lib/sinatra_resource"
-
 require File.dirname(__FILE__) + '/config/config'
 
 Sinatra::Base.set(:config, Config.environment_config)

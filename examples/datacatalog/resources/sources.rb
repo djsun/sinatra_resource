@@ -1,8 +1,7 @@
 module DataCatalog
 
-  class Sources
-    include Resource
-
+  class Sources < Base
+    
     model Source
 
     # == Permissions
