@@ -14,20 +14,16 @@ class SourcesGetOneResourceTest < ResourceTestCase
         get "/#{@source.id}"
       end
       
-      test "debugging" do
-        puts last_response.inspect
-      end
-
       use "return 401 because the API key is missing"
     end
 
-    # context "incorrect API key" do
-    #   before do
-    #     get "/#{@source.id}", :api_key => BAD_API_KEY
-    #   end
-    # 
-    #   use "return 401 because the API key is invalid"
-    # end
+    context "incorrect API key" do
+      before do
+        get "/#{@source.id}", :api_key => BAD_API_KEY
+      end
+    
+      use "return 401 because the API key is invalid"
+    end
   end
 
 end

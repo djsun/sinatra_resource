@@ -53,17 +53,24 @@ module SinatraResource
       @klass.instance_eval do
         helpers do
           def check_permission(action)
-            puts "\n== check_permission(#{action.inspect})"
+            # puts "\n== check_permission(#{action.inspect})"
             role = lookup_role
-            puts "   role : #{role.inspect}"
+            if role == :anonymous && minimum_role(action) != :anonymous
+              missing_api_key!
+            end
+            # puts "   role : #{role.inspect}"
+            invalid_api_key! unless role
             unauthorized_api_key! unless authorized?(role, action)
           end
         
           def authorized?(role, action)
-            rom = read_or_modify?(action)
-            minimum_role = config[:permission][rom].inspect
             klass = config[:roles]
-            klass.satisfies?(role, minimum_role)
+            klass.satisfies?(role, minimum_role(action))
+          end
+          
+          def minimum_role(action)
+            rom = read_or_modify?(action)
+            config[:permission][rom]
           end
           
           def read_or_modify?(role)

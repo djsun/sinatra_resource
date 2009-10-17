@@ -36,9 +36,9 @@ module SinatraResource
       
       # ancestors(:admin)
       def ancestors(role)
-        puts "\n== ancestors(#{role.inspect})"
+        # puts "\n== ancestors(#{role.inspect})"
         r = _ancestors([role])
-        puts "   #{r.inspect}"
+        # puts "   #{r.inspect}"
         r
       end
       
@@ -48,16 +48,16 @@ module SinatraResource
       # _ancestors([:owner, :curator, :basic, :anonymous])
       # _ancestors([:owner, :curator, :basic, :anonymous])
       def _ancestors(roles)
-        puts "\n== _ancestors(#{roles.inspect})"
+        # puts "\n== _ancestors(#{roles.inspect})"
         list = roles.map { |role| parents(role) }.flatten.uniq
         return roles if list == roles
         r = _ancestors(list)
-        puts "   #{r.inspect}"
+        # puts "   #{r.inspect}"
         r
       end
       
       def parents(role)
-        puts "\n== parents(#{role.inspect})"
+        # puts "\n== parents(#{role.inspect})"
         x = @role_config[role]
         r = if x.is_a?(Enumerable)
           x
@@ -66,7 +66,7 @@ module SinatraResource
         else
           []
         end
-        puts "   #{r.inspect}"
+        # puts "   #{r.inspect}"
         r
       end
     end
