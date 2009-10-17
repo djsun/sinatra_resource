@@ -16,10 +16,14 @@ module SinatraResource
           :model      => nil,
           :permission => {},
           :property   => {},
+          :roles      => nil,
         }
       end
 
       def model(name)
+        if @resource_config[:model]
+          raise DefinitionError, "model already declared" 
+        end
         @resource_config[:model] = name
       end
       
@@ -34,6 +38,13 @@ module SinatraResource
           @resource_config[:property][name] ||= {}
           @resource_config[:property][name][kind] = role
         end
+      end
+      
+      def roles(klass)
+        if @resource_config[:roles]
+          raise DefinitionError, "roles already declared"
+        end
+        @resource_config[:roles] = klass
       end
       
       def build

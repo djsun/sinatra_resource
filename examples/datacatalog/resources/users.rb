@@ -7,6 +7,7 @@ module DataCatalog
 
     # == Permissions
 
+    roles Roles
     permission :read   => :basic
     permission :modify => :owner
 

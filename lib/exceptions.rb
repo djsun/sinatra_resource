@@ -1,5 +1,9 @@
 module SinatraResource
 
-  class ValidationError < RuntimeError; end
+  class Error < RuntimeError; end
+    
+  class ValidationError < Error; end
+  
+  class DefinitionError < Error; end
 
 end

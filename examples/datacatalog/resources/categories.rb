@@ -6,7 +6,8 @@ module DataCatalog
     model Category
 
     # == Permissions
-    
+
+    roles Roles
     permission :read   => :basic
     permission :modify => :curator
 

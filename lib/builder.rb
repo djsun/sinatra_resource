@@ -53,16 +53,32 @@ module SinatraResource
       @klass.instance_eval do
         helpers do
           def check_permission(action)
+            puts "\n== check_permission(#{action.inspect})"
             role = lookup_role
+            puts "   role : #{role.inspect}"
             unauthorized_api_key! unless authorized?(role, action)
           end
         
           def authorized?(role, action)
-            puts "\n== authorized?"
-            # puts "-  config : #{config.inspect}"
-            # puts @resource_config[:permissions].inspect
-            puts config[:permission].inspect
-            puts config[:property].inspect
+            rom = read_or_modify?(action)
+            minimum_role = config[:permission][rom].inspect
+            klass = config[:roles]
+            klass.satisfies?(role, minimum_role)
+          end
+          
+          def read_or_modify?(role)
+            case role
+            when :read
+              :read
+            when :create
+              :modify
+            when :update
+              :modify
+            when :delete
+              :modify
+            else
+              raise "Unexpected role : #{role.inspect}"
+            end
           end
         end
       end
