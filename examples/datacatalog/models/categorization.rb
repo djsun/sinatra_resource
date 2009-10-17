@@ -1,0 +1,31 @@
+module DataCatalog
+
+  class Categorization
+
+    include MongoMapper::Document
+
+    # == Attributes
+
+    key :source_id,   String
+    key :category_id, String
+    timestamps!
+
+    # == Indices
+
+    # == Associations
+
+    belongs_to :source
+    belongs_to :category
+
+    # == Validations
+    
+    validate :validate_associations
+
+    def validate_associations
+      errors.add(:source_id, "must be valid") if source.nil?
+      errors.add(:category_id, "must be valid") if category.nil?
+    end
+
+  end
+
+end

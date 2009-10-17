@@ -1,0 +1,9 @@
+development:
+  base_uri: http://localhost:3000/
+  mongo_hostname: localhost
+  mongo_database: s_r_example_1_dev
+
+test:
+  base_uri: http://localhost:4567/
+  mongo_hostname: localhost
+  mongo_database: s_r_example_1_test

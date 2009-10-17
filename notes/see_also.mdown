@@ -1,0 +1,3 @@
+# Permissions
+
+* http://www.agileweboperations.com/role-based-permissions-for-your-ruby-on-rails-application/

@@ -1,0 +1,7 @@
+# Synonyms
+
+Here are some rough synonyms:
+
+* "user type" == "permission level"
+* "Sinatra action" == "Sinatra route"
+* "group of Sinatra actions" == "Rails controller"
