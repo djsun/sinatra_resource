@@ -15,7 +15,8 @@ module SinatraResource
         }
       end
 
-      def model(*args)
+      def model(name)
+        @resource_config[:model] = name
       end
       
       def permission(access_rules)
@@ -32,8 +33,16 @@ module SinatraResource
       end
       
       def build
+        validate
         Builder.new(self).build
       end
+
+      def validate
+        unless @resource_config[:model]
+          raise ValidationError, "model required"
+        end
+      end
+      
     end
   end
   
