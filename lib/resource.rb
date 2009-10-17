@@ -14,6 +14,10 @@ module SinatraResource
       
       def property(*args)
       end
+      
+      def build
+        Builder.new(self).build
+      end
     end
   end
   

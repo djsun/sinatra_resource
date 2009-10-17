@@ -12,6 +12,9 @@ class SourcesGetOneResourceTest < ResourceTestCase
     context "anonymous" do
       before do
         get "/#{@source.id}"
+      end
+      
+      test "debugging" do
         puts last_response.inspect
       end
 

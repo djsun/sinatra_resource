@@ -8,9 +8,10 @@ module DataCatalog
 
     # == Attributes
 
-    key :name,  String
-    key :email, String
-    key :role,  String
+    key :name,    String
+    key :email,   String
+    key :role,    String
+    key :api_key, String
     timestamps!
 
     # == Indices

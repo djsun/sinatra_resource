@@ -27,7 +27,8 @@ module DataCatalog
         }
       end
     end
-
   end
+  
+  Categories.build
 
 end

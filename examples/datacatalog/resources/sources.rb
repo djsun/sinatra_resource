@@ -1,7 +1,6 @@
 module DataCatalog
 
   class Sources < Base
-    
     model Source
 
     # == Permissions
@@ -30,7 +29,8 @@ module DataCatalog
     end
 
     # == Callbacks
-
   end
+  
+  Sources.build
 
 end
