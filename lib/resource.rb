@@ -2,32 +2,33 @@ module SinatraResource
   
   module Resource
     def self.included(includee)
-      puts "\n== includee : #{includee.inspect}"
-      puts "   self : #{self.inspect}"
       includee.extend ClassMethods
       includee.setup
     end
     
     module ClassMethods
       def setup
-        puts "\n== setup"
-        puts "   self: #{self.inspect}"
         @resource_config = {
           :model      => nil,
-          :permission => [],
-          :property   => [],
+          :permission => {},
+          :property   => {},
         }
       end
 
       def model(*args)
       end
       
-      def permission(hash)
-        puts "\n== permission"
-        puts @resource_config.inspect
+      def permission(access_rules)
+        access_rules.each_pair do |verb, role|
+          @resource_config[:permission][verb] = role
+        end
       end
       
-      def property(*args)
+      def property(name, access_rules={})
+        access_rules.each_pair do |kind, role|
+          @resource_config[:property][name] ||= {}
+          @resource_config[:property][name][kind] = role
+        end
       end
       
       def build

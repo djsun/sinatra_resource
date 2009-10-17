@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/../../../lib/sinatra_resource'
 
 module DataCatalog
   
