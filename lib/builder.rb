@@ -2,8 +2,9 @@ module SinatraResource
 
   class Builder
     
-    def initialize(klass)
-      @klass = klass
+    def initialize(options)
+      @klass = options[:klass]
+      @config = options[:config]
     end
     
     def build
@@ -49,9 +50,20 @@ module SinatraResource
     end
     
     def build_helpers
-      @klass.helpers do
-        def check_permission(action)
-          # unauthorized! unless ...
+      @klass.instance_eval do
+        helpers do
+          def check_permission(action)
+            role = lookup_role
+            unauthorized_api_key! unless authorized?(role, action)
+          end
+        
+          def authorized?(role, action)
+            puts "\n== authorized?"
+            # puts "-  config : #{config.inspect}"
+            # puts @resource_config[:permissions].inspect
+            puts config[:permission].inspect
+            puts config[:property].inspect
+          end
         end
       end
     end

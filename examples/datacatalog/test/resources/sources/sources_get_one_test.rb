@@ -18,7 +18,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
         puts last_response.inspect
       end
 
-      use "return 401 because the API key is missing"
+      # use "return 401 because the API key is missing"
     end
 
     # context "incorrect API key" do

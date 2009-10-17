@@ -6,6 +6,10 @@ module SinatraResource
       includee.setup
     end
     
+    def config
+      self.class.instance_variable_get("@resource_config")
+    end
+    
     module ClassMethods
       def setup
         @resource_config = {
@@ -34,7 +38,11 @@ module SinatraResource
       
       def build
         validate
-        Builder.new(self).build
+        builder = Builder.new(
+          :klass  => self,
+          :config => @resource_config
+        )
+        builder.build
       end
 
       def validate
