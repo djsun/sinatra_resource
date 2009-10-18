@@ -3,6 +3,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 class SourcesGetOneResourceTest < ResourceTestCase
 
   def app; DataCatalog::Sources end
+  
+  before :all do
+    db = MongoMapper.database
+    db.drop_collection("sources")
+    db.drop_collection("users")
+  end
 
   before do
     @source = create_source
@@ -13,15 +19,15 @@ class SourcesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@source.id}"
       end
-      
+    
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/#{@source.id}", :api_key => BAD_API_KEY
       end
-    
+  
       use "return 401 because the API key is invalid"
     end
   end
@@ -30,12 +36,12 @@ class SourcesGetOneResourceTest < ResourceTestCase
     before do
       @user = create_user(:role => role)
     end
-    
+  
     context "#{role} : get /:fake_id" do
       before do
         get "/#{FAKE_ID}", :api_key => @user.api_key
       end
-      
+    
       use "return 404 Not Found"
       use "return an empty response body"
     end
