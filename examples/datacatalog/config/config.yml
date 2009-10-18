@@ -2,8 +2,10 @@ development:
   base_uri: http://localhost:3000/
   mongo_hostname: localhost
   mongo_database: s_r_example_1_dev
+  api_key_salt: 51a920cc75eb105934df9be349be68cfdd6acf1c
 
 test:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
   mongo_database: s_r_example_1_test
+  api_key_salt: 51a920cc75eb105934df9be349be68cfdd6acf1c
