@@ -41,7 +41,8 @@ module SinatraResource
         role = check_permission(:create)
         check_params(:create)
         document = create_document!
-        display(document)
+        resource = build_resource(:read, role, document)
+        display(resource)
       end
     end
     

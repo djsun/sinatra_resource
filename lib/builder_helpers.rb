@@ -28,15 +28,17 @@ module SinatraResource
       #
       # @param [Symbol] situation
       #
+      # @param [MongoMapper::Document, nil] document
+      #
       # @return [String]
       #
       # @api public
-      def body_for(situation)
+      def body_for(situation, document=nil)
         case situation
         when :internal_server_error
           nil
         when :invalid_document
-          nil
+          { "errors" => document.errors.errors }
         when :not_found
           nil
         when :unauthorized
@@ -103,10 +105,10 @@ module SinatraResource
       # @return [MongoMapper::Document]
       #
       # @api private
-      def create_document
+      def create_document!
         document = config[:model].new(params)
         unless document.valid?
-          error 400, display(body_for(:invalid_document))
+          error 400, display(body_for(:invalid_document, document))
         end
         document
       end

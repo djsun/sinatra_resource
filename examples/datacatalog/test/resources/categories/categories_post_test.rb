@@ -23,7 +23,7 @@ class CategoriesPostResourceTest < ResourceTestCase
   end
 
   %w(basic).each do |role|
-    context "#{role} : post / missing name" do
+    context "#{role} : post / but missing name" do
       before do
         post "/", :api_key => api_key_for(role)
       end
@@ -31,18 +31,41 @@ class CategoriesPostResourceTest < ResourceTestCase
       use "return 401 Unauthorized"
     end
 
-    # context "#{role} : post / with valid params" do
-    #   before do
-    #     post "/",
-    #       :api_key => api_key_for(role),
-    #       :name    => "New Category"
-    #   end
-    #   
-    #   use "return 401 Unauthorized"
-    # end
+    context "#{role} : post / with valid params" do
+      before do
+        post "/",
+          :api_key => api_key_for(role),
+          :name    => "New Category"
+      end
+      
+      use "return 401 Unauthorized"
+    end
   end
 
   %w(curator admin).each do |role|
+    context "#{role} : post / but missing name" do
+      before do
+        post "/", :api_key => api_key_for(role)
+      end
+  
+      use "return 400 Bad Request"
+      
+      test "should report missing name" do
+        actual = parsed_response_body["errors"]["name"]
+        assert_include "can't be empty", actual
+      end
+    end
+
+    context "#{role} : post / with valid params" do
+      before do
+        post "/",
+          :api_key => api_key_for(role),
+          :name    => "New Category"
+      end
+  
+      use "return 200 Ok"
+      doc_properties %w(name id created_at updated_at sources)
+    end
   end
 
 end
