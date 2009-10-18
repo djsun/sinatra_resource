@@ -31,22 +31,16 @@ module SinatraResource
       # satisfies?(:basic,     :basic) # => true
       # satisfies?(:anonymous, :basic) # => false
       def satisfies?(role, minimum_role)
-        # puts "\n== satisfies?(#{role.inspect}, #{minimum_role.inspect})"
         unless @role_config.include?(role)
           raise UndefinedRole, "#{role.inspect} not in list of defined roles " +
             "(#{@role_config.keys.inspect})"
         end
-        x = (role == minimum_role || ancestors(role).include?(minimum_role))
-        # puts "   #{x.inspect}"
-        x
+        role == minimum_role || ancestors(role).include?(minimum_role)
       end
       
       # ancestors(:admin)
       def ancestors(role)
-        # puts "\n== ancestors(#{role.inspect})"
-        r = _ancestors([role])
-        # puts "   #{r.inspect}"
-        r
+        _ancestors([role])
       end
       
       # _ancestors([:owner, :curator])
@@ -55,28 +49,21 @@ module SinatraResource
       # _ancestors([:owner, :curator, :basic, :anonymous])
       # _ancestors([:owner, :curator, :basic, :anonymous])
       def _ancestors(roles)
-        # puts "\n== _ancestors(#{roles.inspect})"
         parents = roles.map { |role| parents(role) }.flatten
         list = parents.concat(roles).uniq
-        # puts "   list : #{list.inspect}"
         return roles if list == roles
-        r = _ancestors(list)
-        # puts "   #{r.inspect}"
-        r
+        _ancestors(list)
       end
       
       def parents(role)
-        # puts "\n== parents(#{role.inspect})"
         x = @role_config[role]
-        r = if x.is_a?(Enumerable)
+        if x.is_a?(Enumerable)
           x
         elsif x
           [x]
         else
           []
         end
-        # puts "   #{r.inspect}"
-        r
       end
     end
   end
