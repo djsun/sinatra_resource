@@ -15,7 +15,7 @@ module SinatraResource
         @resource_config = {
           :model      => nil,
           :permission => {},
-          :property   => {},
+          :properties => {},
           :roles      => nil,
         }
       end
@@ -35,8 +35,8 @@ module SinatraResource
       
       def property(name, access_rules={})
         access_rules.each_pair do |kind, role|
-          @resource_config[:property][name] ||= {}
-          @resource_config[:property][name][kind] = role
+          @resource_config[:properties][name] ||= {}
+          @resource_config[:properties][name][kind] = role
         end
       end
       

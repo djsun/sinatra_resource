@@ -41,6 +41,28 @@ module SinatraResource
         end
       end
       
+      # Build a resource for +action+ with +properties+, based on a
+      # +document+.
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @param [Hash<Symbol => Hash>] properties
+      #
+      # @param [MongoMapper::Document] document
+      #
+      # @return [Hash<String => Object>]
+      #
+      # @api public
+      def build_resource(action, properties, document)
+        resource = {}
+        properties.each_pair do |property, access_rules|
+          minimum_role = access_rules[to_r_or_w(action)]
+          resource[property.to_s] = value(property, document)
+        end
+        resource
+      end
+
       # Halt unless the current params are ok for +action+
       #
       # @param [Symbol] action
@@ -122,6 +144,24 @@ module SinatraResource
         config[:permission][to_read_or_modify(action)]
       end
 
+      # Converts +action+ to :r or :w (i.e. read or write).
+      #
+      # @param [Symbol] action
+      #   :read, :create, or :update
+      #
+      # @return [Symbol]
+      #   :r or :w
+      #
+      # @api private
+      def to_r_or_w(action)
+        case action
+        when :read   then :r
+        when :create then :w
+        when :update then :w
+        else raise "Unexpected action : #{action.inspect}"
+        end
+      end
+
       # Converts +action+ to (:read or :modify).
       #
       # @param [Symbol] action
@@ -137,10 +177,23 @@ module SinatraResource
         when :create then :modify
         when :update then :modify
         when :delete then :modify
-        else raise "Unexpected role : #{role.inspect}"
+        else raise "Unexpected action : #{action.inspect}"
         end
       end
-
+      
+      # Lookup +property+ in +document+
+      #
+      # @param [Symbol] property
+      #
+      # @param [MongoMapper::Document] document
+      #
+      # @return [undefined]
+      #
+      # @api private
+      def value(property, document)
+        document[:id == property ? :_id : property]
+      end
+      
     end
 
   end

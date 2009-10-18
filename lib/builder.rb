@@ -22,7 +22,8 @@ module SinatraResource
         id = params.delete("id")
         check_params(:read)
         document = find_document!(config[:model], id)
-        display(document)
+        resource = build_resource(:read, config[:properties], document)
+        display(resource)
       end
     end
 
@@ -31,6 +32,7 @@ module SinatraResource
         check_permission(:read)
         check_params(:read)
         documents = find_documents!(config[:model])
+        # resources = build_resources(config[:properties], documents)
         display(documents)
       end
     end
