@@ -8,10 +8,10 @@ module DataCatalog
     helpers do
       def lookup_role
         api_key = params.delete("api_key")
-        return "anonymous" unless api_key
+        return :anonymous unless api_key
         @current_user = User.find_by_api_key(api_key)
         return nil unless @current_user
-        @current_user.role
+        @current_user.role.intern
       end
     end
   end

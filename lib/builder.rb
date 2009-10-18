@@ -55,7 +55,7 @@ module SinatraResource
           def check_permission(action)
             # puts "\n== check_permission(#{action.inspect})"
             role = lookup_role
-            if role == "anonymous" && minimum_role(action) != "anonymous"
+            if role == :anonymous && minimum_role(action) != :anonymous
               missing_api_key!
             end
             # puts "   role : #{role.inspect}"
