@@ -17,9 +17,11 @@ module DataCatalog
       end
 
       def before_authorization(role, action)
-        invalid_api_key! unless role
+        unless role
+          error 401, display({ "errors" => ["invalid_api_key"] })
+        end
         if role == :anonymous && minimum_role(action) != :anonymous
-          missing_api_key!
+          error 401, display({ "errors" => ["missing_api_key"] })
         end
       end
     end

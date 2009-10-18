@@ -26,24 +26,28 @@ class SourcesGetOneResourceTest < ResourceTestCase
     end
   end
 
+  %w(basic).each do |role|
   # %w(basic curator admin).each do |role|
-  #   before do
-  #     @user = create_user(:role => role)
-  #   end
-  #   
-  #   context "#{role} API key : get /:fake_id" do
-  #     before do
-  #       get "/#{FAKE_ID}", :api_key => @user.api_key
-  #     end
-  #     
-  #     # test "debug" do
-  #     #   puts "\n== role : #{role.inspect}"
-  #     #   puts last_response.body.inspect
-  #     # end
-  # 
-  #     use "return 404 Not Found"
-  #     use "return an empty response body"
-  #   end
+    before do
+      @user = create_user(:role => role)
+    end
+    
+    context "#{role} API key : get /:fake_id" do
+      before do
+        get "/#{FAKE_ID}", :api_key => @user.api_key
+      end
+      
+      test "debug" do
+        puts "\n== role : #{role.inspect}"
+        puts "last_response : #{last_response.inspect}"
+        puts "last_response.body : #{last_response.body.inspect}"
+      end
+  
+      use "return 404 Not Found"
+      use "return an empty response body"
+    end
+  end
+  
   # 
   #   # context "#{role} API key : get /:id" do
   #   #   before do

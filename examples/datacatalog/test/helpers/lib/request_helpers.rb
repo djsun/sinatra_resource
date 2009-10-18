@@ -1,7 +1,12 @@
 module RequestHelpers
 
   def parsed_response_body
-    Crack::JSON.parse(last_response.body)
+    s = last_response.body
+    if s == ""
+      nil
+    else
+      Crack::JSON.parse(s)
+    end
   end
   
 end

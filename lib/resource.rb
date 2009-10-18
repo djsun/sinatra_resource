@@ -22,7 +22,7 @@ module SinatraResource
 
       def model(name)
         if @resource_config[:model]
-          raise DefinitionError, "model already declared" 
+          raise DefinitionError, "model already declared"
         end
         @resource_config[:model] = name
       end
