@@ -30,5 +30,6 @@ end
 # But if you are running inside TextMate, it is handy to automatically drop the
 # database here:
 if ENV["TM_APP_PATH"]
+  puts "TextMate environment detected. Dropping test database..."
   Config.drop_database
 end

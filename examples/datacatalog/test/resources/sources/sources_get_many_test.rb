@@ -1,9 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
-class UsersGetOneResourceTest < ResourceTestCase
+class SourcesGetOneResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Users end
+  def app; DataCatalog::Sources end
+
+  before do
+    @sources = 3.times.map do |i|
+      create_source(:title => "Source #{i}")
+    end
+  end
   
+  after do
+    @sources.each { |x| x.destroy }
+  end
+
   context "get /" do
     context "anonymous" do
       before do
@@ -24,20 +34,31 @@ class UsersGetOneResourceTest < ResourceTestCase
 
   %w(basic curator admin).each do |role|
     before do
-      @user = create_user(:role => role)
+      @the_user = create_user(:role => role)
     end
     
     after do
-      @user.destroy
+      @the_user.destroy
     end
   
     context "#{role} : get /" do
       before do
-        get "/", :api_key => @user.api_key
+        get "/", :api_key => @the_user.api_key
       end
   
       use "return 200 Ok"
-      docs_properties %w(name email role api_key id created_at updated_at)
+      
+      test "body should have 3 sources" do
+        assert_equal 3, parsed_response_body.length
+      end
+      
+      test "body should have correct source titles" do
+        actual = parsed_response_body.map { |e| e["title"] }
+        expected = ["Source 0", "Source 1", "Source 2"]
+        assert_equal expected, actual.sort
+      end
+      
+      docs_properties %w(title url raw id created_at updated_at)
     end
   end
 

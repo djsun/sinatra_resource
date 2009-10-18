@@ -2,7 +2,17 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class UsersGetOneResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Users end
+  def app; DataCatalog::Categories end
+
+  before do
+    @categories = 3.times.map do |i|
+      create_category(:name => "Category #{i}")
+    end
+  end
+  
+  after do
+    @categories.each { |x| x.destroy }
+  end
 
   context "get /" do
     context "anonymous" do
@@ -24,20 +34,31 @@ class UsersGetOneResourceTest < ResourceTestCase
 
   %w(basic curator admin).each do |role|
     before do
-      @user = create_user(:role => role)
+      @the_user = create_user(:role => role)
     end
     
     after do
-      @user.destroy
+      @the_user.destroy
     end
   
     context "#{role} : get /" do
       before do
-        get "/", :api_key => @user.api_key
+        get "/", :api_key => @the_user.api_key
       end
   
       use "return 200 Ok"
-      docs_properties %w(name email role api_key id created_at updated_at)
+      
+      test "body should have 3 categories" do
+        assert_equal 3, parsed_response_body.length
+      end
+      
+      test "body should have correct category names" do
+        actual = parsed_response_body.map { |e| e["name"] }
+        expected = ["Category 0", "Category 1", "Category 2"]
+        assert_equal expected, actual.sort
+      end
+      
+      docs_properties %w(name id created_at updated_at)
     end
   end
 
