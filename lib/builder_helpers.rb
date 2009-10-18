@@ -4,7 +4,7 @@ module SinatraResource
 
     module Helpers
 
-      # Is the role authorized for the action?
+      # Is +role+ authorized for +action+?
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -21,7 +21,7 @@ module SinatraResource
         klass.satisfies?(role, minimum_role(action))
       end
       
-      # Default body message for a situation
+      # Default body message for a +situation+
       #
       # @param [Symbol] situation
       #
@@ -41,7 +41,7 @@ module SinatraResource
         end
       end
       
-      # Halt unless the current params are ok for the action
+      # Halt unless the current params are ok for +action+
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
@@ -53,7 +53,7 @@ module SinatraResource
         # TODO
       end
 
-      # Halt unless the current role has permission to carry out the action
+      # Halt unless the current role has permission to carry out +action+
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
@@ -67,9 +67,9 @@ module SinatraResource
         unauthorized! unless authorized?(role, action)
       end
       
-      # Convert object to appropriate format, such as JSON or XML
+      # Convert +object+ to desired format. (Perhaps JSON or XML)
       # 
-      # @param [Object]
+      # @param [Object] object
       #
       # @return [String]
       #
@@ -79,11 +79,12 @@ module SinatraResource
         object.nil? ? nil : object.to_json
       end
 
-      # Find a document by id. Calls not_found! if needed, which probably
-      # should cause a 404 Not Found status code to be returned.
+      # Find a +model+ document using +id+. If not found, returns 404.
       #
       # @param [Class] model
       #   a class that includes MongoMapper::Document
+      #
+      # @param [String] id
       #
       # @return [MongoMapper::Document]
       #
@@ -96,7 +97,7 @@ module SinatraResource
         document
       end
 
-      # Return the minimum role required for a given action.
+      # Return the minimum role required for +action+.
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
@@ -109,8 +110,7 @@ module SinatraResource
         config[:permission][to_read_or_modify(action)]
       end
 
-      # Convert from (:read, :create, :update, or :delete) to (:read or
-      # :modify).
+      # Converts +action+ to (:read or :modify).
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
