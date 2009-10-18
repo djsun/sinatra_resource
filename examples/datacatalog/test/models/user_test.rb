@@ -32,6 +32,10 @@ class UserTest < ModelTestCase
         before do
           @user = User.create(@required)
         end
+        
+        after do
+          @user.destroy
+        end
 
         test "should be valid" do
           assert_equal true, @user.valid?

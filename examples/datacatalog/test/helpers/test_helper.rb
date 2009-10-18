@@ -1,6 +1,7 @@
 require 'rubygems'
 
 require 'test/unit'
+
 require 'rack/test'
 require 'rr'
 

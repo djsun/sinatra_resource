@@ -1,25 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
-class UsersGetOneResourceTest < ResourceTestCase
+class UsersGetManyResourceTest < ResourceTestCase
 
   def app; DataCatalog::Users end
 
-  before :all do    # MongoMapper.database.drop_collection('users')
+  before do
     @users = 3.times.map do |i|
       create_user(:name => "User #{i}")
     end
-    @roles = {}
-    %w(basic curator admin).map do |role|
-      @roles[role] = create_user(
-        :name => "#{role} User",
-        :role => role
-      )
-    end
   end
   
-  after :all do
+  after do
     @users.each { |x| x.destroy }
-    @roles.each_pair { |role, user| user.destroy }
   end
 
   context "get /" do
@@ -43,7 +35,7 @@ class UsersGetOneResourceTest < ResourceTestCase
   %w(basic curator admin).each do |role|
     context "#{role} : get /" do
       before do
-        get "/", :api_key => @roles[role].api_key
+        get "/", :api_key => api_key_for(role)
       end
   
       use "return 200 Ok"

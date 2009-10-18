@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
-class UsersGetOneResourceTest < ResourceTestCase
+class CategoriesGetManyResourceTest < ResourceTestCase
 
   def app; DataCatalog::Categories end
 
@@ -33,17 +33,9 @@ class UsersGetOneResourceTest < ResourceTestCase
   end
 
   %w(basic curator admin).each do |role|
-    before do
-      @the_user = create_user(:role => role)
-    end
-    
-    after do
-      @the_user.destroy
-    end
-  
     context "#{role} : get /" do
       before do
-        get "/", :api_key => @the_user.api_key
+        get "/", :api_key => api_key_for(role)
       end
   
       use "return 200 Ok"

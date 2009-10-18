@@ -14,6 +14,12 @@ class CategorizationTest < ModelTestCase
       )
     end
     
+    after do
+      @source.destroy
+      @category.destroy
+      @categorization.destroy
+    end
+    
     test "Categorization#source is correct" do
       assert_equal @source, @categorization.source
     end

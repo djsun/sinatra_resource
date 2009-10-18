@@ -31,17 +31,9 @@ class UsersGetOneResourceTest < ResourceTestCase
   end
 
   %w(basic curator admin).each do |role|
-    before do
-      @the_user = create_user(:role => role)
-    end
-    
-    after do
-      @the_user.destroy
-    end
-  
     context "#{role} : get /:fake_id" do
       before do
-        get "/#{FAKE_ID}", :api_key => @the_user.api_key
+        get "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
     
       use "return 404 Not Found"
@@ -50,7 +42,7 @@ class UsersGetOneResourceTest < ResourceTestCase
 
     context "#{role} : get /:id" do
       before do
-        get "/#{@user.id}", :api_key => @the_user.api_key
+        get "/#{@user.id}", :api_key => api_key_for(role)
       end
 
       use "return 200 Ok"
