@@ -26,33 +26,32 @@ class SourcesGetOneResourceTest < ResourceTestCase
     end
   end
 
-  %w(basic curator admin).each do |role|
-    before do
-      @user = create_user(:role => role)
-    end
-    
-    context "#{role} API key : get /:fake_id" do
-      before do
-        get "/#{FAKE_ID}", :api_key => @user.api_key
-      end
-      
-      # test "debug" do
-      #   puts "\n== role : #{role.inspect}"
-      #   puts last_response.body.inspect
-      # end
-
-      use "return 200 Ok" # NOT CORRECT
-
-      # use "attempted GET source with :fake_id"
-    end
-
-    # context "#{role} API key : get /:id" do
-    #   before do
-    #     get "/#{@id}", :api_key => primary_api_key_for(role)
-    #   end
-    # 
-    #   use "successful GET source with :id"
-    # end
-  end
+  # %w(basic curator admin).each do |role|
+  #   before do
+  #     @user = create_user(:role => role)
+  #   end
+  #   
+  #   context "#{role} API key : get /:fake_id" do
+  #     before do
+  #       get "/#{FAKE_ID}", :api_key => @user.api_key
+  #     end
+  #     
+  #     # test "debug" do
+  #     #   puts "\n== role : #{role.inspect}"
+  #     #   puts last_response.body.inspect
+  #     # end
+  # 
+  #     use "return 404 Not Found"
+  #     use "return an empty response body"
+  #   end
+  # 
+  #   # context "#{role} API key : get /:id" do
+  #   #   before do
+  #   #     get "/#{@id}", :api_key => primary_api_key_for(role)
+  #   #   end
+  #   # 
+  #   #   use "successful GET source with :id"
+  #   # end
+  # end
 
 end
