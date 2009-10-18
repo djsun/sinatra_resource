@@ -33,10 +33,15 @@ module SinatraResource
         end
       end
       
-      def property(name, access_rules={})
-        access_rules.each_pair do |kind, role|
-          @resource_config[:properties][name] ||= {}
-          @resource_config[:properties][name][kind] = role
+      def property(name, access_rules={}, &block)
+        @resource_config[:properties][name] ||= {}
+        if block
+          @resource_config[:properties][name][:w] = :nobody
+          @resource_config[:properties][name][:read_proc] = block
+        else
+          access_rules.each_pair do |kind, role|
+            @resource_config[:properties][name][kind] = role
+          end
         end
       end
       
@@ -49,11 +54,7 @@ module SinatraResource
       
       def build
         validate
-        builder = Builder.new(
-          :klass  => self,
-          :config => @resource_config
-        )
-        builder.build
+        Builder.new(self).build
       end
 
       def validate

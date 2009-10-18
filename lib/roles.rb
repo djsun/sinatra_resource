@@ -71,6 +71,7 @@ module SinatraResource
       # Find the parents of +role+.
       #
       # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
       #
       # @return [Array<Symbol>]
       #
@@ -137,6 +138,7 @@ module SinatraResource
       #   satisfies?(:basic,     :basic) # => true
       #
       # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
       #
       # @param [Symbol] minimum
       #

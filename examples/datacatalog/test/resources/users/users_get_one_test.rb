@@ -30,8 +30,7 @@ class UsersGetOneResourceTest < ResourceTestCase
     end
   end
 
-  %w(basic).each do |role|
-  # %w(basic curator admin).each do |role|
+  %w(basic curator admin).each do |role|
     context "#{role} : get /:fake_id" do
       before do
         get "/#{FAKE_ID}", :api_key => api_key_for(role)
@@ -40,7 +39,9 @@ class UsersGetOneResourceTest < ResourceTestCase
       use "return 404 Not Found"
       use "return an empty response body"
     end
+  end
 
+  %w(basic curator).each do |role|
     context "#{role} : get /:id" do
       before do
         get "/#{@user.id}", :api_key => api_key_for(role)
@@ -48,6 +49,17 @@ class UsersGetOneResourceTest < ResourceTestCase
 
       use "return 200 Ok"
       doc_properties %w(name id)
+    end
+  end
+
+  %w(admin).each do |role|
+    context "#{role} : get /:id" do
+      before do
+        get "/#{@user.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 200 Ok"
+      doc_properties %w(name email role api_key id created_at updated_at)
     end
   end
 

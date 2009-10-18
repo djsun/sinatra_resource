@@ -2,9 +2,8 @@ module SinatraResource
 
   class Builder
     
-    def initialize(options)
-      @klass = options[:klass]
-      @config = options[:config]
+    def initialize(klass)
+      @klass = klass
     end
     
     def build
@@ -18,29 +17,31 @@ module SinatraResource
     
     def build_get_one
       @klass.get '/:id/?' do
-        check_permission(:read)
+        role = check_permission(:read)
         id = params.delete("id")
         check_params(:read)
-        document = find_document!(config[:model], id)
-        resource = build_resource(:read, config[:properties], document)
+        document = find_document!(id)
+        resource = build_resource(:read, role, document)
         display(resource)
       end
     end
 
     def build_get_many
       @klass.get '/?' do
-        check_permission(:read)
+        role = check_permission(:read)
         check_params(:read)
-        documents = find_documents!(config[:model])
-        # resources = build_resources(config[:properties], documents)
+        documents = find_documents!
+        # resources = build_resources(:read, role, documents)
         display(documents)
       end
     end
     
     def build_post
       @klass.post '/?' do
-        check_permission(:create)
+        role = check_permission(:create)
         check_params(:create)
+        document = create_document!
+        display(document)
       end
     end
     

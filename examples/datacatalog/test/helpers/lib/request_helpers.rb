@@ -34,7 +34,6 @@ module RequestHelpers
         end
       end
     end
-
   end
   
 end

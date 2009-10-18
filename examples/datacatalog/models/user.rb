@@ -17,6 +17,20 @@ module DataCatalog
     # == Indices
 
     ensure_index :email
+
+    # == Validations
+    
+    validates_presence_of :name
+    validates_presence_of :role
+    validate :validate_role
+
+    VALID_ROLES = %w(basic curator admin)
+
+    def validate_role
+      unless VALID_ROLES.include?(role)
+        errors.add(:role, "must be in #{VALID_ROLES.inspect}")
+      end
+    end
     
     # == Callbacks
     

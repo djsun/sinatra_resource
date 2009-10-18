@@ -4,7 +4,7 @@ module SinatraResource
 
     module Helpers
 
-      # Is +role+ authorized for +action+?
+      # Is +role+ authorized for +action+, and, if specified, +property+?
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -12,13 +12,16 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
+      # @param [Symbol] property
+      #   a property of a resource
+      #
       # @return [Boolean]
       #
       # @api private
-      def authorized?(role, action)
+      def authorized?(role, action, property=nil)
         klass = config[:roles]
         klass.validate_role(role)
-        klass.satisfies?(role, minimum_role(action))
+        klass.satisfies?(role, minimum_role(action, property))
       end
       
       # Default body message for a +situation+
@@ -47,18 +50,20 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
-      # @param [Hash<Symbol => Hash>] properties
+      # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
       #
       # @param [MongoMapper::Document] document
       #
       # @return [Hash<String => Object>]
       #
       # @api public
-      def build_resource(action, properties, document)
+      def build_resource(action, role, document)
         resource = {}
-        properties.each_pair do |property, access_rules|
-          minimum_role = access_rules[to_r_or_w(action)]
-          resource[property.to_s] = value(property, document)
+        config[:properties].each_pair do |property, hash|
+          if authorized?(role, action, property)
+            resource[property.to_s] = value(property, document, hash)
+          end
         end
         resource
       end
@@ -80,13 +85,30 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
-      # @return [undefined]
+      # @return [Symbol]
+      #   a role (such as :anonymous, :basic, or :admin)
       #
       # @api public
       def check_permission(action)
         role = lookup_role
         before_authorization(role, action)
-        unauthorized! unless authorized?(role, action)
+        unless authorized?(role, action)
+          error 401, display(body_for(:unauthorized))
+        end
+        role
+      end
+      
+      # Create a document from params. If not valid, returns 400.
+      #
+      # @return [MongoMapper::Document]
+      #
+      # @api private
+      def create_document
+        document = config[:model].new(params)
+        unless document.valid?
+          error 400, display(body_for(:invalid_document))
+        end
+        document
       end
       
       # Convert +object+ to desired format. (Perhaps JSON or XML)
@@ -101,18 +123,15 @@ module SinatraResource
         object.nil? ? nil : object.to_json
       end
 
-      # Find a +model+ document using +id+. If not found, returns 404.
-      #
-      # @param [Class] model
-      #   a class that includes MongoMapper::Document
+      # Find a document using +id+. If not found, returns 404.
       #
       # @param [String] id
       #
       # @return [MongoMapper::Document]
       #
       # @api private
-      def find_document!(model, id)
-        document = model.find_by_id(id)
+      def find_document!(id)
+        document = config[:model].find_by_id(id)
         unless document
           error 404, display(body_for(:not_found))
         end
@@ -127,11 +146,12 @@ module SinatraResource
       # @return [Array<MongoMapper::Document>]
       #
       # @api private
-      def find_documents!(model)
-        model.find(:all)
+      def find_documents!
+        config[:model].find(:all)
       end
 
-      # Return the minimum role required for +action+.
+      # Return the minimum role required for +action+, and, if specified,
+      # +property+.
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
@@ -140,8 +160,13 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       #
       # @api public
-      def minimum_role(action)
-        config[:permission][to_read_or_modify(action)]
+      def minimum_role(action, property=nil)
+        # puts "\n== minimum_role(#{action.inspect}, #{property.inspect})"
+        if property.nil?
+          config[:permission][to_read_or_modify(action)]
+        else
+          config[:properties][property][to_r_or_w(action)]
+        end || :anonymous
       end
 
       # Converts +action+ to :r or :w (i.e. read or write).
@@ -181,17 +206,23 @@ module SinatraResource
         end
       end
       
-      # Lookup +property+ in +document+
+      # Lookup +attribute+ in +document+
       #
-      # @param [Symbol] property
+      # @param [Symbol] attribute
+      #   an attribute of +document+
       #
       # @param [MongoMapper::Document] document
       #
       # @return [undefined]
       #
       # @api private
-      def value(property, document)
-        document[:id == property ? :_id : property]
+      def value(attribute, document, property_hash)
+        if property_hash[:read_proc]
+          proc = property_hash[:read_proc]
+          # proc.call
+        else
+          document[:id == attribute ? :_id : attribute]
+        end
       end
       
     end
