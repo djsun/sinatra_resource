@@ -8,6 +8,10 @@ class SourcesGetOneResourceTest < ResourceTestCase
     @source = create_source
   end
 
+  after do
+    @source.destroy
+  end
+
   context "get /:id" do
     context "anonymous" do
       before do
@@ -28,16 +32,16 @@ class SourcesGetOneResourceTest < ResourceTestCase
 
   %w(basic curator admin).each do |role|
     before do
-      @user = create_user(:role => role)
+      @the_user = create_user(:role => role)
     end
     
     after do
-      @user.destroy
+      @the_user.destroy
     end
   
     context "#{role} : get /:fake_id" do
       before do
-        get "/#{FAKE_ID}", :api_key => @user.api_key
+        get "/#{FAKE_ID}", :api_key => @the_user.api_key
       end
     
       use "return 404 Not Found"
@@ -46,7 +50,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
 
     context "#{role} : get /:id" do
       before do
-        get "/#{@source.id}", :api_key => @user.api_key
+        get "/#{@source.id}", :api_key => @the_user.api_key
       end
 
       use "return 200 Ok"

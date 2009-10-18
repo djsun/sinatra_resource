@@ -4,10 +4,6 @@ class UsersGetOneResourceTest < ResourceTestCase
 
   def app; DataCatalog::Users end
   
-  before do
-    @user = create_user
-  end
-
   context "get /" do
     context "anonymous" do
       before do

@@ -7,6 +7,10 @@ class CategoriesGetOneResourceTest < ResourceTestCase
   before do
     @category = create_category
   end
+  
+  after do
+    @category.destroy
+  end
 
   context "get /:id" do
     context "anonymous" do
@@ -28,16 +32,16 @@ class CategoriesGetOneResourceTest < ResourceTestCase
 
   %w(basic curator admin).each do |role|
     before do
-      @user = create_user(:role => role)
+      @the_user = create_user(:role => role)
     end
     
     after do
-      @user.destroy
+      @the_user.destroy
     end
   
     context "#{role} : get /:fake_id" do
       before do
-        get "/#{FAKE_ID}", :api_key => @user.api_key
+        get "/#{FAKE_ID}", :api_key => @the_user.api_key
       end
     
       use "return 404 Not Found"
@@ -46,7 +50,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
 
     context "#{role} : get /:id" do
       before do
-        get "/#{@category.id}", :api_key => @user.api_key
+        get "/#{@category.id}", :api_key => @the_user.api_key
       end
 
       use "return 200 Ok"
