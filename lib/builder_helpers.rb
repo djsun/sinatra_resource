@@ -17,11 +17,7 @@ module SinatraResource
       # @api private
       def authorized?(role, action)
         klass = config[:roles]
-        r = nil
-        10_000.times do
-          r = klass.satisfies?(role, minimum_role(action))
-        end
-        r
+        klass.satisfies?(role, minimum_role(action))
       end
       
       # Default body message for a situation

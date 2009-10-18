@@ -43,26 +43,9 @@ module SinatraResource
       #
       # @api public
       def satisfies?(role, minimum)
-        # Version 1 - 7.370558 sec w/ 10_000 iterations
-        # role == minimum || ancestors(role).include?(minimum)
-        
-        # Version 2 - 8.058421 sec w/ 10_000 iterations
-        # args = [role, minimum]
-        # @satisfies_cache[args] if @satisfies_cache[args]
-        # @satisfies_cache[args] = (
-        #   role == minimum || ancestors(role).include?(minimum)
-        # )
-
-        # Version 3 - 0.686734 sec w/ 10_000 iterations
         @satisfies_cache[[role, minimum]] ||= (
           role == minimum || ancestors(role).include?(minimum)
         )
-
-        # Version 4 - 8.138032 sec w/ 10_000 iterations
-        # @satisfies_cache[[role, minimum]] if @satisfies_cache[[role, minimum]]
-        # @satisfies_cache[[role, minimum]] = (
-        #   role == minimum || ancestors(role).include?(minimum)
-        # )
       end
       
       def validate_role(role)
