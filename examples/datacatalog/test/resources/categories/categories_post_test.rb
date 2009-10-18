@@ -55,20 +55,22 @@ class CategoriesPostResourceTest < ResourceTestCase
         assert_include "can't be empty", actual
       end
     end
+    
+    [:id, :created_at, :updated_at, :sources].each do |invalid|
+      context "#{role} : post / but with #{invalid}" do
+        before do
+          post "/",
+            :api_key    => api_key_for(role),
+            :name       => "New Category",
+            invalid     => Time.now
+        end
 
-    context "#{role} : post / but with created_at" do
-      before do
-        post "/",
-          :api_key    => api_key_for(role),
-          :name       => "New Category",
-          :created_at => Time.now
-      end
-  
-      use "return 400 Bad Request"
-      
-      test "should report created_at as invalid" do
-        actual = parsed_response_body["errors"]["invalid_params"]
-        assert_include "created_at", actual
+        use "return 400 Bad Request"
+
+        test "should report #{invalid} as invalid" do
+          actual = parsed_response_body["errors"]["invalid_params"]
+          assert_include invalid.to_s, actual
+        end
       end
     end
 
