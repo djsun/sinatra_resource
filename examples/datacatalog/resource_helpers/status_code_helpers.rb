@@ -22,7 +22,7 @@ module DataCatalog
       error 404, nil.to_json
     end
 
-    def unauthorized_api_key!
+    def unauthorized!
       error 401, { "errors" => ["unauthorized_api_key"] }.to_json
     end
     

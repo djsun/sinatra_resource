@@ -8,42 +8,67 @@ module SinatraResource
         
       end
 
-      # @public
+      # Check to see if the current role has permission for the specified
+      # action.
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @return [undefined]
+      #
+      # @api public
       def check_permission(action)
-        # puts "\n== check_permission(#{action.inspect})"
         role = lookup_role
-        if role == :anonymous && minimum_role(action) != :anonymous
-          missing_api_key!
-        end
-        # puts "   role : #{role.inspect}"
-        invalid_api_key! unless role
-        unauthorized_api_key! unless authorized?(role, action)
+        before_authorization(role, action)
+        unauthorized! unless authorized?(role, action)
       end
 
-      # @private
+      # Is the role authorized for the action?
+      #
+      # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @return [Boolean]
+      #
+      # @api private
       def authorized?(role, action)
         klass = config[:roles]
         klass.satisfies?(role, minimum_role(action))
       end
     
-      # @private
+      # Return the minimum role required for a given action.
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @return [Symbol]
+      #   a role (such as :anonymous, :basic, or :admin)
+      #
+      # @api semipublic
       def minimum_role(action)
         config[:permission][to_read_or_modify(action)]
       end
 
-      # @private
-      def to_read_or_modify(role)
-        case role
-        when :read
-          :read
-        when :create
-          :modify
-        when :update
-          :modify
-        when :delete
-          :modify
-        else
-          raise "Unexpected role : #{role.inspect}"
+      # Convert from (:read, :create, :update, or :delete) to (:read or
+      # :modify).
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @return [Symbol]
+      #   :read or :modify
+      #
+      # @api private
+      def to_read_or_modify(action)
+        case action
+        when :read   then :read
+        when :create then :modify
+        when :update then :modify
+        when :delete then :modify
+        else raise "Unexpected role : #{role.inspect}"
         end
       end
 
