@@ -56,7 +56,9 @@ module SinatraResource
       # _ancestors([:owner, :curator, :basic, :anonymous])
       def _ancestors(roles)
         # puts "\n== _ancestors(#{roles.inspect})"
-        list = roles.map { |role| parents(role) }.flatten.uniq
+        parents = roles.map { |role| parents(role) }.flatten
+        list = parents.concat(roles).uniq
+        # puts "   list : #{list.inspect}"
         return roles if list == roles
         r = _ancestors(list)
         # puts "   #{r.inspect}"
