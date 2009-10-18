@@ -1,0 +1,181 @@
+# Preface
+
+Please consider this document in the context of building APIs in the Resource
+Oriented Architecture style.
+
+# Introduction
+
+Permission systems may be relatively simple or relatively complex.
+
+Simple permission systems are more rigid, less expressive, and hopefully
+simpler to develop. Complex permission systems are more flexible, more
+expressive, simpler (in theory) for an end-user to update, but harder to
+develop.
+
+It is not hard to envision reasonable permission systems that get moderately
+complicated fairly quickly. Why?
+
+* It may be easier to state permissions in terms of general rules and
+  exceptions to the general rule instead of spelling out every single
+  situation explicitly.
+* Permissions are often multi-leveled.
+* Permissions are rules, so sometimes the precedence is not obvious.
+* Permissions are sometimes most conveniently stated in terms of
+  'positive' and 'negative' rules. This create possibilities for
+  logical contradictions.
+
+A relatively simple example of a permission system would:
+
+* have single level
+* would require every situation to be spelled out explicitly
+
+A more complex, but still achievable permission system would:
+
+* have a couple of levels
+* would allow general rules to be stated
+* would allow specific situations to be spelled out
+* would allow more specific rules to override more general ones
+* would detect conflicts
+
+# Permissions can be stated at many levels:
+
+* action level
+* document level
+* property level
+
+# What are some example use cases?
+
+## Resource-level permission stories:
+
+This stories illustrate when a user type either can or cannot access
+a resource based just upon the action type.
+
+    :admin_user can   :read   any Source
+    :admin_user can   :create a   Source
+    :admin_user can   :update any Source
+    :admin_user can   :delete any Source
+
+    :basic_user can   :read   any Source
+    :basic_user can't :create any Source
+    :basic_user can't :update any Source
+    :basic_user can't :delete any Source
+
+To extract the pattern:
+
+    UserType {can | can't} Action Resource
+
+In other words, if you know the user type, action, and resource, you
+know whether to allow or disallow.
+
+    def allow?(user_type, action, resource)
+      # logic depends solely on parameters
+    end
+    
+    def disallow?(user_type, action, resource)
+      # logic depends solely on parameters
+    end
+
+## Document-level use cases:
+
+In some cases, knowing the user type, action, and resource is not enough --
+the relationship between the 'document at hand' and the 'user at hand' is also
+needed. Note that the 'document at hand' is different from the 'resource' and
+the 'user at hand' is different from the 'user type'.
+
+    :basic_user can't :read   any          Note  # less useful
+    :basic_user can   :read   some         Notes # less useful
+    :basic_user can   :read   an   owned   Note
+    :basic_user can't :read   an   unowned Note
+    
+    :basic_user can   :create a            Note
+    
+    :basic_user can't :update any          Note  # less useful
+    :basic_user can   :update some         Notes # less useful
+    :basic_user can   :update an   owned   Note
+    :basic_user can't :update an   unowned Note
+    
+    :basic_user can't :delete any          Note  # less useful
+    :basic_user can   :delete some         Notes # less useful
+    :basic_user can   :delete an   owned   Note
+    :basic_user can't :delete an   unowned Note
+
+These stories can be rewritten to make the pattern clearer:
+
+    :basic_user user can   :read   the Note n if n.owner == user
+    :basic_user user can't :read   the Note n if n.owner != user
+    :basic_user user can   :create a   Note
+    :basic_user user can   :update the Note n if n.owner == user
+    :basic_user user can't :update the Note n if n.owner != user
+    :basic_user user can   :delete the Note n if n.owner == user
+    :basic_user user can't :delete the Note n if n.owner != user
+
+To extract the pattern:
+
+    UserType {can | can't} Action
+
+There is another way to see it, that uses "iff" ("if and only if"):
+
+    :basic_user user can   :read   the Note n iff n.owner == user
+    :basic_user user can   :create a   Note
+    :basic_user user can   :update the Note n iff n.owner == user
+    :basic_user user can   :delete the Note n iff n.owner == user
+
+I'm not sure I prefer the "iff" form. It is more compact, but I get the
+feeling that it makes it harder to have multilevel (cascading) permissions.
+
+To extract the pattern:
+
+    UserType User Action Resource Instance Relation
+
+    UserType : :basic_user
+    User     : 'user'
+    Action   : [:read, :create, :update, :delete]
+    Resource : Note
+    Instance : 'n'
+    Relation : :owner
+
+To back up (skipping a few steps, but I hope this is still clear) and remove
+the "iff" we would give us this pattern:
+
+    UserType User {can | can't} Action Resource Instance Relation
+
+The nice thing about the {can | can't} style is that it allows for one or both
+'sides' to be specified.
+
+Which brings us back to the 'allow?' and 'disallow?' methods:
+
+    def allow?(user_type, user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+    
+    def disallow?(user_type, user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+
+I would expect that user_type can be derived from user, so we can simplify:
+
+    def allow?(user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+    
+    def disallow?(user, action, resource, instance, relation)
+      # logic depends solely on parameters
+    end
+
+It is tempting to try to simplify further. For example, why not assume that resource can be inferred from instance? That may be so, but I'm not so convinced that there is only one resource for each instance. For example,
+what if we are talking about a "note" which can be exposed in two places:
+
+* /sources/40/note/231
+* /note/231
+
+I skipped a key question: is this two resources or two representations?
+(Sorry, I'm not going to answer this one right now.)
+
+Depending on your answer, another question arises: is there a need to specify different permissions for each of these (resources | representations)?
+
+## Property-level use cases:
+
+* read/write (a good default)
+* writable only by a certain user type / permission (e.g. admin)
+* writable only users that satisfy a relation (e.g. ownership)
+* writable only on creation

@@ -1,0 +1,18 @@
+# Questions:
+
+* How to use MongoMapper?
+
+* How to use ActiveRecord?
+
+* How to use DataMapper?
+
+* How to handle permissions?
+
+* How to handle action-level permissions?
+
+* How to handle document-level permissions?
+
+* How to do complete overrides?
+
+* How to have a resource define a "ratings" property if the underlying model
+  already has a :ratings association?
