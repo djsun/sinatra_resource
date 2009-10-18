@@ -4,12 +4,6 @@ class SourcesGetOneResourceTest < ResourceTestCase
 
   def app; DataCatalog::Sources end
   
-  before :all do
-    db = MongoMapper.database
-    db.drop_collection("sources")
-    db.drop_collection("users")
-  end
-
   before do
     @source = create_source
   end
@@ -35,6 +29,10 @@ class SourcesGetOneResourceTest < ResourceTestCase
   %w(basic curator admin).each do |role|
     before do
       @user = create_user(:role => role)
+    end
+    
+    after do
+      @user.destroy
     end
   
     context "#{role} : get /:fake_id" do
