@@ -14,7 +14,6 @@ module DataCatalog
     # == Properties
     
     property :name
-    property :parent_id
 
     property :id,         :w => :nobody
     property :created_at, :w => :nobody
