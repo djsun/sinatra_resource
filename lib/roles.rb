@@ -109,10 +109,10 @@ module SinatraResource
       #   role :manager => :basic
       #   role :admin   => [:editor, :manager]
       #
-      # This means:
-      #   * admin > manager > basic > anonymous
-      #   * admin > editor  > basic > anonymous
-      #   * manager and editor cannot be compared
+      #   # which means:
+      #   # * admin > manager > basic > anonymous
+      #   # * admin > editor  > basic > anonymous
+      #   # * manager and editor cannot be compared
       #
       # @param [Symbol, Hash<Symbol => [Symbol, Array<Symbol>]>] arg
       #
