@@ -8,6 +8,7 @@ module SinatraResource
         
       end
 
+      # @public
       def check_permission(action)
         # puts "\n== check_permission(#{action.inspect})"
         role = lookup_role
@@ -19,17 +20,19 @@ module SinatraResource
         unauthorized_api_key! unless authorized?(role, action)
       end
 
+      # @private
       def authorized?(role, action)
         klass = config[:roles]
         klass.satisfies?(role, minimum_role(action))
       end
-
+    
+      # @private
       def minimum_role(action)
-        rom = read_or_modify?(action)
-        config[:permission][rom]
+        config[:permission][to_read_or_modify(action)]
       end
 
-      def read_or_modify?(role)
+      # @private
+      def to_read_or_modify(role)
         case role
         when :read
           :read
