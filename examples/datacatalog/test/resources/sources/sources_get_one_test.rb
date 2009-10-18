@@ -31,7 +31,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       @user = create_user(:role => role)
     end
     
-    context "#{role} API key : get /:fake_id" do
+    context "#{role} : get /:fake_id" do
       before do
         get "/#{FAKE_ID}", :api_key => @user.api_key
       end
@@ -39,16 +39,15 @@ class SourcesGetOneResourceTest < ResourceTestCase
       use "return 404 Not Found"
       use "return an empty response body"
     end
+
+    context "#{role} : get /:id" do
+      before do
+        get "/#{@source.id}", :api_key => @user.api_key
+      end
+
+      use "return 200 Ok"
+      properties %w(title url raw id created_at updated_at)
+    end
   end
-  
-  # 
-  #   # context "#{role} API key : get /:id" do
-  #   #   before do
-  #   #     get "/#{@id}", :api_key => primary_api_key_for(role)
-  #   #   end
-  #   # 
-  #   #   use "successful GET source with :id"
-  #   # end
-  # end
 
 end

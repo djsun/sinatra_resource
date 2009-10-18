@@ -22,6 +22,7 @@ module SinatraResource
         id = params.delete("id")
         check_params(:read)
         document = find_document!(config[:model], id)
+        display(document)
       end
     end
 
