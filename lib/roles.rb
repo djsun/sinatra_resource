@@ -31,7 +31,14 @@ module SinatraResource
       # satisfies?(:basic,     :basic) # => true
       # satisfies?(:anonymous, :basic) # => false
       def satisfies?(role, minimum_role)
-        role == minimum_role || ancestors(role).include?(minimum_role)
+        # puts "\n== satisfies?(#{role.inspect}, #{minimum_role.inspect})"
+        unless @role_config.include?(role)
+          raise UndefinedRole, "#{role.inspect} not in list of defined roles " +
+            "(#{@role_config.keys.inspect})"
+        end
+        x = (role == minimum_role || ancestors(role).include?(minimum_role))
+        # puts "   #{x.inspect}"
+        x
       end
       
       # ancestors(:admin)
