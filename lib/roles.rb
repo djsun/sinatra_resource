@@ -7,11 +7,116 @@ module SinatraResource
     end
     
     module ClassMethods
-      def setup
-        @role_config = {}
-        @satisfies_cache = {}
+
+      # Find the ancestors of +role+.
+      #
+      # @param [Symbol] role
+      #
+      # @return [Array<Symbol>]
+      #
+      # @api private
+      def ancestors(role)
+        _ancestors([role])
+      end
+
+      # Find the ancestors of +roles+.
+      #
+      # Implementation details
+      #
+      # This is a recursive function. For each recursion, all of the parents
+      # of the list are found. A new list is created by merging the original
+      # list and the parents. The recursion stops when the new list is the
+      # same as the original list.
+      #
+      # If you have these roles ...
+      #   role :anonymous
+      #   role :basic   => :anonymous
+      #   role :owner   => :basic
+      #   role :curator => :basic
+      #   role :admin   => [:owner, :curator]
+      #
+      # ... and you do ...
+      #   _ancestors([:owner, :curator])
+      #
+      # ... then the recursion unfolds like this:
+      #   _ancestors([:owner, :curator, :basic])
+      #   _ancestors([:owner, :curator, :basic, :anonymous])
+      #
+      # @param [Array<Symbol>] roles
+      #
+      # @return [Array<Symbol>]
+      #
+      # @api private
+      def _ancestors(roles)
+        parents = roles.map { |role| parents(role) }.flatten
+        list = parents.concat(roles).uniq
+        return roles if list == roles
+        _ancestors(list)
       end
       
+      # Low-level way to define a role. You can also specify what role it
+      # builds upon (+parent_name+).
+      #
+      # @param [Symbol] name
+      #   The name of the role being defined
+      #
+      # @param [Symbol, nil] parent_name
+      #   The name of the parent role
+      #
+      # @api private
+      def create_role(name, parent_name=nil)
+        @role_config[name] = parent_name
+      end
+
+      # Find the parents of +role+.
+      #
+      # @param [Symbol] role
+      #
+      # @return [Array<Symbol>]
+      #
+      # @api private
+      def parents(role)
+        x = @role_config[role]
+        if x.is_a?(Enumerable)
+          x
+        elsif x
+          [x]
+        else
+          []
+        end
+      end
+
+      # High-level way to define a role. You can also specify what role it
+      # builds upon (its parent).
+      #
+      # For example:
+      #   role :anonymous
+      #   role :basic => :anonymous
+      #   role :admin => :basic
+      #
+      # This means: admin > basic > anonymous
+      #
+      # The order of the role statements does not matter. Only the
+      # dependencies between a role and its parent are significant.
+      #
+      # Roles do not have to be a single linear ordering. You can have any
+      # number of roles, connected in a DAG (directed acyclic graph). For
+      # example:
+      #
+      #   role :anonymous
+      #   role :basic   => :anonymous
+      #   role :editor  => :basic
+      #   role :manager => :basic
+      #   role :admin   => [:editor, :manager]
+      #
+      # This means:
+      #   * admin > manager > basic > anonymous
+      #   * admin > editor  > basic > anonymous
+      #   * manager and editor cannot be compared
+      #
+      # @param [Symbol, Hash<Symbol => [Symbol, Array<Symbol>]>] arg
+      #
+      # @api public
       def role(arg)
         if arg.is_a?(Symbol)
           create_role(arg)
@@ -23,14 +128,10 @@ module SinatraResource
           raise ArgumentError
         end
       end
-      
-      def create_role(name, parent_name=nil)
-        @role_config[name] = parent_name
-      end
 
-      # Is +role+ as least as privileged as +minimum+?
+      # Is +role+ at least as privileged as +minimum+?
       #
-      # For example:
+      # @example
       #   satisfies?(:anonymous, :basic) # => false
       #   satisfies?(:admin,     :basic) # => true
       #   satisfies?(:basic,     :basic) # => true
@@ -47,41 +148,21 @@ module SinatraResource
           role == minimum || ancestors(role).include?(minimum)
         )
       end
-      
+
+      # @api private
+      def setup
+        @role_config = {}
+        @satisfies_cache = {}
+      end
+
+      # Halt if +role+ is undefined.
+      #
+      # @raise [UndefinedRole] if role undefined
+      #
+      # @api private
       def validate_role(role)
         unless @role_config.include?(role)
           raise UndefinedRole, "#{role.inspect} not defined"
-        end
-      end
-      
-      def _satisfies?(role, minimum_role)
-      end
-      
-      # ancestors(:admin)
-      def ancestors(role)
-        _ancestors([role])
-      end
-      
-      # _ancestors([:owner, :curator])
-      # _ancestors([:owner, :curator, :basic, :basic])
-      # _ancestors([:owner, :curator, :basic])
-      # _ancestors([:owner, :curator, :basic, :anonymous])
-      # _ancestors([:owner, :curator, :basic, :anonymous])
-      def _ancestors(roles)
-        parents = roles.map { |role| parents(role) }.flatten
-        list = parents.concat(roles).uniq
-        return roles if list == roles
-        _ancestors(list)
-      end
-      
-      def parents(role)
-        x = @role_config[role]
-        if x.is_a?(Enumerable)
-          x
-        elsif x
-          [x]
-        else
-          []
         end
       end
     end

@@ -17,6 +17,7 @@ module SinatraResource
       # @api private
       def authorized?(role, action)
         klass = config[:roles]
+        klass.validate_role(role)
         klass.satisfies?(role, minimum_role(action))
       end
       
