@@ -9,6 +9,7 @@ module SinatraResource
     module ClassMethods
       def setup
         @role_config = {}
+        @satisfies_cache = {}
       end
       
       def role(arg)
@@ -27,15 +28,34 @@ module SinatraResource
         @role_config[name] = parent_name
       end
 
-      # satisfies?(:admin,     :basic) # => true
-      # satisfies?(:basic,     :basic) # => true
-      # satisfies?(:anonymous, :basic) # => false
-      def satisfies?(role, minimum_role)
+      # Is +role+ as least as privileged as +minimum+?
+      #
+      # For example:
+      #   satisfies?(:anonymous, :basic) # => false
+      #   satisfies?(:admin,     :basic) # => true
+      #   satisfies?(:basic,     :basic) # => true
+      #
+      # @param [Symbol] role
+      #
+      # @param [Symbol] minimum
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def satisfies?(role, minimum)
+        @satisfies_cache[[role, minimum]] if @satisfies_cache[[role, minimum]]
+        @satisfies_cache[[role, minimum]] = (
+          role == minimum || ancestors(role).include?(minimum)
+        )
+      end
+      
+      def validate_role(role)
         unless @role_config.include?(role)
-          raise UndefinedRole, "#{role.inspect} not in list of defined roles " +
-            "(#{@role_config.keys.inspect})"
+          raise UndefinedRole, "#{role.inspect} not defined"
         end
-        role == minimum_role || ancestors(role).include?(minimum_role)
+      end
+      
+      def _satisfies?(role, minimum_role)
       end
       
       # ancestors(:admin)
