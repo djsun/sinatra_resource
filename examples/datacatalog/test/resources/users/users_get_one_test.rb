@@ -50,7 +50,7 @@ class UsersGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      properties %w(name email role api_key id created_at updated_at)
+      doc_properties %w(name email role api_key id created_at updated_at)
     end
   end
 

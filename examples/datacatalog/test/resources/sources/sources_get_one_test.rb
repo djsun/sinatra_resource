@@ -50,7 +50,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      properties %w(title url raw id created_at updated_at)
+      doc_properties %w(title url raw id created_at updated_at)
     end
   end
 

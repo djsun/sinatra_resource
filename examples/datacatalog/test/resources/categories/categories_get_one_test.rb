@@ -50,7 +50,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      properties %w(name id created_at updated_at)
+      doc_properties %w(name id created_at updated_at)
     end
   end
 

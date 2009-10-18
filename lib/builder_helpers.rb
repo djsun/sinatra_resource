@@ -97,6 +97,18 @@ module SinatraResource
         document
       end
 
+      # Find all +model+ documents.
+      #
+      # @param [Class] model
+      #   a class that includes MongoMapper::Document
+      #
+      # @return [Array<MongoMapper::Document>]
+      #
+      # @api private
+      def find_documents!(model)
+        model.find(:all)
+      end
+
       # Return the minimum role required for +action+.
       #
       # @param [Symbol] action

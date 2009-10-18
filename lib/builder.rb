@@ -30,6 +30,8 @@ module SinatraResource
       @klass.get '/?' do
         check_permission(:read)
         check_params(:read)
+        documents = find_documents!(config[:model])
+        display(documents)
       end
     end
     
