@@ -17,9 +17,10 @@ module SinatraResource
     
     def build_get_one
       @klass.get '/:id/?' do
-        role = check_permission(:read)
+        role = lookup_role
+        check_permission(:read, role)
         id = params.delete("id")
-        check_params(:read)
+        check_params(:read, role)
         document = find_document!(id)
         resource = build_resource(:read, role, document)
         display(resource)
@@ -28,8 +29,9 @@ module SinatraResource
 
     def build_get_many
       @klass.get '/?' do
-        role = check_permission(:read)
-        check_params(:read)
+        role = lookup_role
+        check_permission(:read, role)
+        check_params(:read, role)
         documents = find_documents!
         # resources = build_resources(:read, role, documents)
         display(documents)
@@ -38,8 +40,9 @@ module SinatraResource
     
     def build_post
       @klass.post '/?' do
-        role = check_permission(:create)
-        check_params(:create)
+        role = lookup_role
+        check_permission(:create, role)
+        check_params(:create, role)
         document = create_document!
         resource = build_resource(:read, role, document)
         display(resource)
@@ -48,17 +51,18 @@ module SinatraResource
     
     def build_put
       @klass.put '/:id/?' do
-        check_permission(:update)
+        role = lookup_role
+        check_permission(:update, role)
         id = params.delete("id")
-        check_params(:update)
+        check_params(:update, role)
       end
     end
     
     def build_delete
       @klass.delete '/:id/?' do
-        check_permission(:delete)
+        role = check_permission(:delete)
         id = params.delete("id")
-        check_params(:delete)
+        check_params(:delete, role)
       end
     end
     

@@ -18,7 +18,7 @@ module SinatraResource
       # @return [Boolean]
       #
       # @api private
-      def authorized?(role, action, property=nil)
+      def authorized?(action, role, property=nil)
         klass = config[:roles]
         klass.validate_role(role)
         klass.satisfies?(role, minimum_role(action, property))
@@ -28,17 +28,19 @@ module SinatraResource
       #
       # @param [Symbol] situation
       #
-      # @param [MongoMapper::Document, nil] document
+      # @param [Object] object
       #
       # @return [String]
       #
       # @api public
-      def body_for(situation, document=nil)
+      def body_for(situation, object=nil)
         case situation
         when :internal_server_error
           nil
         when :invalid_document
-          { "errors" => document.errors.errors }
+          { "errors" => object.errors.errors }
+        when :invalid_params
+          { "errors" => { "invalid_params" => object } }
         when :not_found
           nil
         when :unauthorized
@@ -63,7 +65,7 @@ module SinatraResource
       def build_resource(action, role, document)
         resource = {}
         config[:properties].each_pair do |property, hash|
-          if authorized?(role, action, property)
+          if authorized?(action, role, property)
             resource[property.to_s] = value(property, document, hash)
           end
         end
@@ -75,11 +77,22 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
+      # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
+      #
       # @return [undefined]
       #
       # @api public
-      def check_params(action)
-        # TODO
+      def check_params(action, role)
+        invalid = []
+        params.each_pair do |property, value|
+          unless authorized?(action, role, property.intern)
+            invalid << property
+          end
+        end
+        unless invalid.empty?
+          error 400, display(body_for(:invalid_params, invalid))
+        end
       end
 
       # Halt unless the current role has permission to carry out +action+
@@ -87,17 +100,17 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
-      # @return [Symbol]
+      # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
       #
+      # @return [undefined]
+      #
       # @api public
-      def check_permission(action)
-        role = lookup_role
-        before_authorization(role, action)
-        unless authorized?(role, action)
+      def check_permission(action, role)
+        before_authorization(action, role)
+        unless authorized?(action, role)
           error 401, display(body_for(:unauthorized))
         end
-        role
       end
       
       # Create a document from params. If not valid, returns 400.

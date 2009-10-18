@@ -16,7 +16,7 @@ module DataCatalog
         role.intern
       end
 
-      def before_authorization(role, action)
+      def before_authorization(action, role)
         unless role
           error 401, display({ "errors" => ["invalid_api_key"] })
         end

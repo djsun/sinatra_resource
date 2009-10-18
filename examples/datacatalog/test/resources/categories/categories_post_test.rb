@@ -56,6 +56,22 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
     end
 
+    context "#{role} : post / but with created_at" do
+      before do
+        post "/",
+          :api_key    => api_key_for(role),
+          :name       => "New Category",
+          :created_at => Time.now
+      end
+  
+      use "return 400 Bad Request"
+      
+      test "should report created_at as invalid" do
+        actual = parsed_response_body["errors"]["invalid_params"]
+        assert_include "created_at", actual
+      end
+    end
+
     context "#{role} : post / with valid params" do
       before do
         post "/",
