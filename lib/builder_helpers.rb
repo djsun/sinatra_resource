@@ -163,7 +163,6 @@ module SinatraResource
       #
       # @api public
       def minimum_role(action, property=nil)
-        # puts "\n== minimum_role(#{action.inspect}, #{property.inspect})"
         if property.nil?
           config[:permission][to_read_or_modify(action)]
         else
