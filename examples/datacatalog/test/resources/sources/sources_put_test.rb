@@ -178,6 +178,15 @@ class SourcesPutResourceTest < ResourceTestCase
       end
     end  
 
+    context "#{role} : put / with no parameters" do
+      before do
+        put "/#{@source.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no parameters were given"
+      use "source unchanged"
+    end
+
     [:title, :url].each do |missing|
       context "#{role} : put / without #{missing}" do
         before do
