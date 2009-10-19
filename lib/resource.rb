@@ -49,6 +49,15 @@ module SinatraResource
 
       # Specify the underlying +model+
       #
+      # @example
+      #   model User
+      #
+      #   # which refers to, for example ...
+      #   # class User
+      #   #   include MongoMapper::Document
+      #   #   ...
+      #   # end
+      #
       # @param [MongoMapper::Document] model
       #
       # @return [undefined]
@@ -84,6 +93,11 @@ module SinatraResource
       
       # Declare a property and its access rules.
       #
+      # @example
+      #   property :name,  :r => :basic
+      #   property :email, :r => :owner
+      #   property :role,  :r => :owner, :w => :admin
+      #
       # @param [Symbol] name
       #
       # @param [Hash] access_rules
@@ -107,6 +121,18 @@ module SinatraResource
       end
       
       # Specify the role definitions for this resource.
+      #
+      # @example
+      #   roles Roles
+      #   
+      #   # which refers to, for example ...
+      #   # module Roles
+      #   #   include SinatraResource::Roles
+      #   # 
+      #   #   role :anonymous
+      #   #   role :basic => :anonymous
+      #   #   role :admin => :basic
+      #   # end
       #
       # @param [Class] klass
       #
