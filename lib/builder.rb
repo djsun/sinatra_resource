@@ -55,10 +55,6 @@ module SinatraResource
         role = get_role(id)
         check_permission(:update, role)
         check_params(:update, role)
-        # # START TEMP
-        # doc = find_document!(id)
-        # puts "\n-- doc : #{doc.inspect}"
-        # # END TEMP
         document = update_document!(id)
         resource = build_resource(role, document)
         display(resource)

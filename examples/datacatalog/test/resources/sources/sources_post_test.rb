@@ -1,15 +1,30 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
 class SourcesPostResourceTest < ResourceTestCase
+  
+  include DataCatalog
 
-  def app; DataCatalog::Sources end
+  def app; Sources end
   
   before do
+    @source_count = Source.all.length
     @valid_params = {
       :title   => "New Source",
       :url     => "http://data.gov/details/123"
     }
     @extra_admin_params = { :raw => { "key" => "value" } }
+  end
+
+  shared "no new sources" do
+    test "should not change number of source documents in database" do
+      assert_equal @source_count, Source.all.length
+    end
+  end
+
+  shared "one new source" do
+    test "should add one source document to database" do
+      assert_equal @source_count + 1, Source.all.length
+    end
   end
   
   context "post /" do
@@ -19,6 +34,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
     
       use "return 401 because the API key is missing"
+      use "no new sources"
     end
 
     context "incorrect API key" do
@@ -27,6 +43,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 401 because the API key is invalid"
+      use "no new sources"
     end
   end
 
@@ -38,6 +55,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 401 Unauthorized"
+        use "no new sources"
       end
     end
 
@@ -48,6 +66,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 401 Unauthorized"
+        use "no new sources"
       end
     end
   
@@ -57,6 +76,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
       
       use "return 401 Unauthorized"
+      use "no new sources"
     end
   end
   
@@ -68,6 +88,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
+        use "no new sources"
         missing_param missing
       end
     end
@@ -79,6 +100,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
+        use "no new sources"
         invalid_param invalid
       end
     end
@@ -89,7 +111,16 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 200 Ok"
+      use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
+
+      test "should set all fields in database" do
+        source = Source.find_by_id(parsed_response_body["id"])
+        raise "Cannot find source" unless source
+        @valid_params.each_pair do |key, value|
+          assert_equal value, source[key]
+        end
+      end
     end
   end
 
@@ -102,6 +133,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
+        use "no new sources"
         missing_param missing
       end
     end
@@ -114,6 +146,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
+        use "no new sources"
         invalid_param invalid
       end
     end
@@ -124,7 +157,16 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 200 Ok"
+      use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
+
+      test "should set all fields in database" do
+        source = Source.find_by_id(parsed_response_body["id"])
+        raise "Cannot find source" unless source
+        @valid_params.merge(@extra_admin_params).each_pair do |key, value|
+          assert_equal value, source[key]
+        end
+      end
     end
   end
 

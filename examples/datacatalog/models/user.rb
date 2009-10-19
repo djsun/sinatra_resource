@@ -35,7 +35,9 @@ module DataCatalog
     # == Callbacks
     
     def before_create
-      self._api_key = generate_api_key
+      unless _api_key
+        self._api_key = generate_api_key
+      end
     end
 
     def generate_api_key

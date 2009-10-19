@@ -117,6 +117,9 @@ module SinatraResource
         unless document.valid?
           error 400, display(body_for(:invalid_document, document))
         end
+        unless document.save
+          error 400, display(body_for(:internal_server_error))
+        end
         document
       end
       
@@ -234,7 +237,6 @@ module SinatraResource
       # @return [MongoMapper::Document]
       def update_document!(id)
         document = config[:model].update(id, params)
-        # puts "\n-- document : #{document.inspect}"
         unless document.valid?
           error 400, display(body_for(:invalid_document, document))
         end
@@ -254,9 +256,10 @@ module SinatraResource
       def value(attribute, document, property_hash)
         if property_hash[:read_proc]
           proc = property_hash[:read_proc]
+          # TODO
           # proc.call
         else
-          document[:id == attribute ? :_id : attribute]
+          document[attribute == :id ? :_id : attribute]
         end
       end
       
