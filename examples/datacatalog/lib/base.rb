@@ -28,6 +28,10 @@ module DataCatalog
       
       # Is +user+ the owner of +document+?
       #
+      # First, checks to see if +user+ and +document+ are the same. After
+      # that, try to follow the +document.user+ relationship, if present, to
+      # see if that points to +user+.
+      #
       # @param [DataCatalog::User] user
       #
       # @param [MongoMapper::Document] user
