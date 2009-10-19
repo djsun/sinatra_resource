@@ -25,36 +25,22 @@ class UserTest < ModelTestCase
         assert_equal nil, @user._api_key
       end
     end
-
-    context "missing name" do
-      before do
-        @user = User.new(@required.merge(:name => ""))
-      end
     
-      test "should be invalid" do
-        assert_equal false, @user.valid?
-      end
+    [:name, :role].each do |missing|
+      context "missing #{missing}" do
+        before do
+          @user = User.new(@required.delete_if { |k, v| k == missing })
+        end
 
-      test "should have errors" do
-        @user.valid?
-        expected = "can't be empty"
-        assert_include expected, @user.errors.errors[:name]
-      end
-    end
+        test "should be invalid" do
+          assert_equal false, @user.valid?
+        end
 
-    context "missing role" do
-      before do
-        @user = User.new(@required.merge(:role => ""))
-      end
-    
-      test "should be invalid" do
-        assert_equal false, @user.valid?
-      end
-
-      test "should have errors" do
-        @user.valid?
-        expected = "can't be empty"
-        assert_include expected, @user.errors.errors[:role]
+        test "should have errors" do
+          @user.valid?
+          expected = "can't be empty"
+          assert_include expected, @user.errors.errors[missing]
+        end
       end
     end
 
