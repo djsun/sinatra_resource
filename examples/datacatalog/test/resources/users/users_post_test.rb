@@ -9,6 +9,10 @@ class UsersPostResourceTest < ResourceTestCase
       :name => "New User",
       :role => "basic"
     }
+    @extra_admin_params = {
+      :role     => "basic",
+      :_api_key => "222200004444"
+    }
   end
   
   context "post /" do
@@ -63,10 +67,8 @@ class UsersPostResourceTest < ResourceTestCase
     [:name, :role].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
-          post "/", valid_params_for(role).merge(
-            :role     => "basic",
-            :_api_key => "222200004444"
-          ).delete_if { |k, v| k == missing }
+          post "/", valid_params_for(role).
+            merge(@extra_admin_params).delete_if { |k, v| k == missing }
         end
         
         use "return 400 Bad Request"
@@ -77,11 +79,8 @@ class UsersPostResourceTest < ResourceTestCase
     [:id, :created_at, :updated_at].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
-          post "/", valid_params_for(role).merge(
-            :role     => "basic",
-            :_api_key => "222200004444",
-            invalid   => 9
-          )
+          post "/", valid_params_for(role).
+            merge(@extra_admin_params).merge(invalid => 9)
         end
   
         use "return 400 Bad Request"
@@ -91,10 +90,7 @@ class UsersPostResourceTest < ResourceTestCase
   
     context "#{role} : post / with valid params" do
       before do
-        post "/", valid_params_for(role).merge(
-          :role     => "basic",
-          :_api_key => "222200004444"
-        )
+        post "/", valid_params_for(role).merge(@extra_admin_params)
       end
   
       use "return 200 Ok"
