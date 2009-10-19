@@ -85,7 +85,7 @@ class UsersPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
-        invalid_param invalid.to_s
+        invalid_param invalid
       end
     end
   
