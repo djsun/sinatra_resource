@@ -51,7 +51,7 @@ class UsersGetManyResourceTest < ResourceTestCase
         assert_equal expected, actual.sort
       end
       
-      docs_properties %w(name email role api_key id created_at updated_at)
+      docs_properties %w(name email role _api_key id created_at updated_at)
     end
   end
 

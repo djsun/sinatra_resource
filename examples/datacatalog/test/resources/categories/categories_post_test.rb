@@ -10,7 +10,7 @@ class CategoriesPostResourceTest < ResourceTestCase
     }
   end
   
-  context "post /:id" do
+  context "post /" do
     context "anonymous" do
       before do
         post "/", @valid_params

@@ -16,7 +16,7 @@ module DataCatalog
     property :name,       :r => :basic
     property :email,      :r => :owner
     property :role,       :r => :owner, :w => :admin
-    property :api_key,    :r => :owner, :w => :admin
+    property :_api_key,   :r => :owner, :w => :admin
 
     property :id,         :r => :basic, :w => :nobody
     property :created_at, :r => :owner, :w => :nobody

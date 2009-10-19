@@ -22,7 +22,7 @@ class UserTest < ModelTestCase
       end
       
       test "should not set api_key" do
-        assert_equal nil, @user.api_key
+        assert_equal nil, @user._api_key
       end
     end
 
@@ -90,7 +90,7 @@ class UserTest < ModelTestCase
         end
     
         test "should set api_key" do
-          assert_not_equal nil, @user.api_key
+          assert_not_equal nil, @user._api_key
         end
       end
     end

@@ -8,10 +8,10 @@ module DataCatalog
 
     # == Attributes
 
-    key :name,    String
-    key :email,   String
-    key :role,    String
-    key :api_key, String
+    key :name,     String
+    key :email,    String
+    key :role,     String
+    key :_api_key, String
     timestamps!
 
     # == Indices
@@ -35,7 +35,7 @@ module DataCatalog
     # == Callbacks
     
     def before_create
-      self.api_key = generate_api_key
+      self._api_key = generate_api_key
     end
 
     def generate_api_key
