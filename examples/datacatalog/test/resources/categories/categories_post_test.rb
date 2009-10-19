@@ -32,7 +32,7 @@ class CategoriesPostResourceTest < ResourceTestCase
     [:name].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
-          post "/", valid_params_for(role).merge(missing => "")
+          post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
 
         use "return 401 Unauthorized"

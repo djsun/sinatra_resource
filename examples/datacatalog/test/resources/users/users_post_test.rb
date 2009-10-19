@@ -33,7 +33,7 @@ class UsersPostResourceTest < ResourceTestCase
     [:name, :role].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
-          post "/", valid_params_for(role).merge(missing => "")
+          post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
   
         use "return 401 Unauthorized"
@@ -66,7 +66,7 @@ class UsersPostResourceTest < ResourceTestCase
           post "/", valid_params_for(role).merge(
             :role     => "basic",
             :_api_key => "222200004444"
-          ).merge(missing => "")
+          ).delete_if { |k, v| k == missing }
         end
         
         use "return 400 Bad Request"
