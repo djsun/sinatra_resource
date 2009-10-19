@@ -20,20 +20,14 @@ class CategoryTest < ModelTestCase
         assert_equal true, @category.valid?
       end
     end
-
-    context "missing name" do
-      before do
-        @category = Category.new(@required.merge(:name => ""))
-      end
     
-      test "should be invalid" do
-        assert_equal false, @category.valid?
-      end
-
-      test "should have errors" do
-        @category.valid?
-        expected = "can't be empty"
-        assert_include expected, @category.errors.errors[:name]
+    [:name].each do |missing|
+      context "missing #{missing}" do
+        before do
+          @category = Category.new(@required.delete_if { |k, v| k == missing })
+        end
+        
+        missing_key(:category, missing)
       end
     end
   end

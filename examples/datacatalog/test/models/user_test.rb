@@ -31,16 +31,8 @@ class UserTest < ModelTestCase
         before do
           @user = User.new(@required.delete_if { |k, v| k == missing })
         end
-
-        test "should be invalid" do
-          assert_equal false, @user.valid?
-        end
-
-        test "should have errors" do
-          @user.valid?
-          expected = "can't be empty"
-          assert_include expected, @user.errors.errors[missing]
-        end
+        
+        missing_key(:user, missing)
       end
     end
 

@@ -22,21 +22,16 @@ class SourceTest < ModelTestCase
       end
     end
 
-    context "missing name" do
-      before do
-        @source = Source.new(@required.merge(:title => ""))
-      end
-    
-      test "should be invalid" do
-        assert_equal false, @source.valid?
-      end
-
-      test "should have errors" do
-        @source.valid?
-        expected = "can't be empty"
-        assert_include expected, @source.errors.errors[:title]
+    [:title, :url].each do |missing|
+      context "missing #{missing}" do
+        before do
+          @source = Source.new(@required.delete_if { |k, v| k == missing })
+        end
+        
+        missing_key(:source, missing)
       end
     end
+
   end
   
 end
