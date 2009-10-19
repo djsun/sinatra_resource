@@ -32,7 +32,7 @@ module SinatraResource
       #
       # @return [String]
       #
-      # @api public
+      # @api private
       def body_for(situation, object=nil)
         case situation
         when :internal_server_error
@@ -61,7 +61,7 @@ module SinatraResource
       #
       # @return [Hash<String => Object>]
       #
-      # @api public
+      # @api private
       def build_resource(action, role, document)
         resource = {}
         config[:properties].each_pair do |property, hash|
@@ -82,7 +82,7 @@ module SinatraResource
       #
       # @return [undefined]
       #
-      # @api public
+      # @api private
       def check_params(action, role)
         invalid = []
         params.each_pair do |property, value|
@@ -105,7 +105,7 @@ module SinatraResource
       #
       # @return [undefined]
       #
-      # @api public
+      # @api private
       def check_permission(action, role)
         before_authorization(action, role)
         unless authorized?(action, role)
@@ -116,8 +116,6 @@ module SinatraResource
       # Create a document from params. If not valid, returns 400.
       #
       # @return [MongoMapper::Document]
-      #
-      # @api private
       def create_document!
         document = config[:model].new(params)
         unless document.valid?
@@ -132,7 +130,7 @@ module SinatraResource
       #
       # @return [String]
       #
-      # @api public
+      # @api private
       def display(object)
         # raise NotImplemented
         object.nil? ? nil : object.to_json
@@ -164,6 +162,21 @@ module SinatraResource
       def find_documents!
         config[:model].find(:all)
       end
+      
+      # Get role, using +id+ if specified. Delegates to +lookup_role+.
+      #
+      # When +id+ is present, it can help determine 'relative' roles such
+      # as 'ownership' of the current user of a particular document.
+      #
+      # @param [String, nil] id
+      #
+      # @return [Symbol]
+      #
+      # @api private
+      def get_role(id=nil)
+        document = id ? config[:model].find_by_id(id) : nil
+        lookup_role(document)
+      end
 
       # Return the minimum role required for +action+, and, if specified,
       # +property+.
@@ -174,7 +187,7 @@ module SinatraResource
       # @return [Symbol]
       #   a role (such as :anonymous, :basic, or :admin)
       #
-      # @api public
+      # @api private
       def minimum_role(action, property=nil)
         if property.nil?
           config[:permission][to_read_or_modify(action)]

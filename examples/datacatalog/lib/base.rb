@@ -6,14 +6,37 @@ module DataCatalog
     end
     
     helpers do
-      def lookup_role
+      def lookup_role(document=nil)
         api_key = params.delete("api_key")
         return :anonymous unless api_key
+        role_for(api_key, document)
+      end
+      
+      def role_for(api_key, document=nil)
+        user = user_for(api_key)
+        return nil unless user
+        return :owner if document && owner?(user, document)
+        user.role.intern
+      end
+      
+      def user_for(api_key)
         user = User.first(:conditions => { :_api_key => api_key })
         return nil unless user
-        role = user.role
-        return nil unless role
-        role.intern
+        raise "API key found, but user has no role" unless user.role
+        user
+      end
+      
+      # Is +user+ the owner of +document+?
+      #
+      # @param [DataCatalog::User] user
+      #
+      # @param [MongoMapper::Document] user
+      #
+      # @return [Boolean]
+      def owner?(user, document)
+        return true if user == document
+        return false unless document.respond_to?(:user)
+        document.user == user
       end
 
       def before_authorization(action, role)
