@@ -6,7 +6,7 @@ module DataCatalog
 
     # == Attributes
 
-    key :name, String
+    key :name,        String
     timestamps!
 
     # == Indices

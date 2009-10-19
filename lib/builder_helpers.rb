@@ -41,6 +41,8 @@ module SinatraResource
           { "errors" => object.errors.errors }
         when :invalid_params
           { "errors" => { "invalid_params" => object } }
+        when :no_params
+          { "errors" => "no_params" }
         when :not_found
           nil
         when :unauthorized
@@ -88,6 +90,9 @@ module SinatraResource
         end
         unless invalid.empty?
           error 400, display(body_for(:invalid_params, invalid))
+        end
+        if action == :update && params.empty?
+          error 400, display(body_for(:no_params))
         end
       end
 

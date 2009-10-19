@@ -14,7 +14,6 @@ class UsersPutResourceTest < ResourceTestCase
       :role   => "curator"
     }
     @extra_admin_params = {
-      :role     => "basic",
       :_api_key => "222200004444"
     }
   end

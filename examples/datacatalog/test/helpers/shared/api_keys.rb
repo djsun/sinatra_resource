@@ -1,4 +1,13 @@
 class ResourceTestCase
+
+  shared "return 400 because no parameters were given" do
+    use "return 400 Bad Request"
+    
+    test "body should say no parameters were given" do
+      assert_include "errors", parsed_response_body
+      assert_include "no_params", parsed_response_body["errors"]
+    end
+  end
   
   shared "return 401 because the API key is invalid" do
     use "return 401 Unauthorized"
