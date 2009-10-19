@@ -2,14 +2,29 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class CategoriesPostResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Categories end
+  include DataCatalog
+
+  def app; Categories end
 
   before do
+    @category_count = Category.all.length
     @valid_params = {
       :name => "New Category"
     }
   end
-  
+
+  shared "no new categories" do
+    test "should not change number of category documents in database" do
+      assert_equal @category_count, Category.all.length
+    end
+  end
+
+  shared "one new category" do
+    test "should add one category document to database" do
+      assert_equal @category_count + 1, Category.all.length
+    end
+  end
+
   context "post /" do
     context "anonymous" do
       before do
@@ -17,6 +32,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
     
       use "return 401 because the API key is missing"
+      use "no new categories"
     end
 
     context "incorrect API key" do
@@ -25,6 +41,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
   
       use "return 401 because the API key is invalid"
+      use "no new categories"
     end
   end
 
@@ -36,6 +53,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         end
 
         use "return 401 Unauthorized"
+        use "no new categories"
       end
     end
 
@@ -46,6 +64,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         end
   
         use "return 401 Unauthorized"
+        use "no new categories"
       end
     end
 
@@ -55,6 +74,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
       
       use "return 401 Unauthorized"
+      use "no new categories"
     end
   end
 
@@ -66,6 +86,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
+        use "no new categories"
         missing_param missing
       end
     end
@@ -77,6 +98,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
+        use "no new categories"
         invalid_param invalid
       end
     end
@@ -87,7 +109,16 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
   
       use "return 200 Ok"
+      use "one new category"
       doc_properties %w(name id created_at updated_at sources)
+
+      test "should set all fields in database" do
+        category = Category.find_by_id(parsed_response_body["id"])
+        raise "Cannot find category" unless category
+        @valid_params.each_pair do |key, value|
+          assert_equal value, category[key]
+        end
+      end
     end
   end
 
