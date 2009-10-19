@@ -3,11 +3,17 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 class CategoriesPostResourceTest < ResourceTestCase
 
   def app; DataCatalog::Categories end
+
+  before do
+    @valid_params = {
+      :name => "New Category"
+    }
+  end
   
   context "post /:id" do
     context "anonymous" do
       before do
-        post "/"
+        post "/", @valid_params
       end
     
       use "return 401 because the API key is missing"
@@ -15,7 +21,7 @@ class CategoriesPostResourceTest < ResourceTestCase
 
     context "incorrect API key" do
       before do
-        post "/", :api_key => BAD_API_KEY
+        post "/", @valid_params.merge(:api_key => BAD_API_KEY)
       end
   
       use "return 401 because the API key is invalid"
@@ -23,19 +29,29 @@ class CategoriesPostResourceTest < ResourceTestCase
   end
 
   %w(basic).each do |role|
-    context "#{role} : post / but missing name" do
-      before do
-        post "/", :api_key => api_key_for(role)
+    [:name].each do |missing|
+      context "#{role} : post / but missing #{missing}" do
+        before do
+          post "/", valid_params_for(role).merge(missing => "")
+        end
+
+        use "return 401 Unauthorized"
       end
+    end
+
+    [:id, :created_at, :updated_at, :sources].each do |invalid|
+      context "#{role} : post / but with #{invalid}" do
+        before do
+          post "/", valid_params_for(role).merge(invalid => 9)
+        end
   
-      use "return 401 Unauthorized"
+        use "return 401 Unauthorized"
+      end
     end
 
     context "#{role} : post / with valid params" do
       before do
-        post "/",
-          :api_key => api_key_for(role),
-          :name    => "New Category"
+        post "/", valid_params_for(role)
       end
       
       use "return 401 Unauthorized"
@@ -43,24 +59,23 @@ class CategoriesPostResourceTest < ResourceTestCase
   end
 
   %w(curator admin).each do |role|
-    context "#{role} : post / but missing name" do
-      before do
-        post "/", :api_key => api_key_for(role)
+    [:name].each do |missing|
+      context "#{role} : post / but missing #{missing}" do
+        before do
+          post "/", valid_params_for(role).merge(missing => "")
+        end
+
+        use "return 400 Bad Request"
+        missing_param missing
       end
-  
-      use "return 400 Bad Request"
-      missing_param "name"
     end
-    
+
     [:id, :created_at, :updated_at, :sources].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
-          post "/",
-            :api_key    => api_key_for(role),
-            :name       => "New Category",
-            invalid     => Time.now
+          post "/", valid_params_for(role).merge(invalid => 9)
         end
-
+  
         use "return 400 Bad Request"
         invalid_param invalid
       end
@@ -68,9 +83,7 @@ class CategoriesPostResourceTest < ResourceTestCase
 
     context "#{role} : post / with valid params" do
       before do
-        post "/",
-          :api_key => api_key_for(role),
-          :name    => "New Category"
+        post "/", valid_params_for(role)
       end
   
       use "return 200 Ok"

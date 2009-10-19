@@ -39,6 +39,16 @@ class SourcesPostResourceTest < ResourceTestCase
         use "return 401 Unauthorized"
       end
     end
+
+    [:id, :created_at, :updated_at, :categories].each do |invalid|
+      context "#{role} : post / but with #{invalid}" do
+        before do
+          post "/", valid_params_for(role).merge(invalid => 9)
+        end
+  
+        use "return 401 Unauthorized"
+      end
+    end
   
     context "#{role} : post / with valid params" do
       before do
@@ -60,8 +70,10 @@ class SourcesPostResourceTest < ResourceTestCase
         missing_param missing
       end
     end
-    
-    [:id, :created_at, :updated_at, :categories].each do |invalid|
+  end
+
+  %w(curator).each do |role|
+    [:raw, :id, :created_at, :updated_at, :categories].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).merge(invalid => 9)
@@ -75,6 +87,31 @@ class SourcesPostResourceTest < ResourceTestCase
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role)
+      end
+  
+      use "return 200 Ok"
+      doc_properties %w(title url raw id created_at updated_at categories)
+    end
+  end
+
+  %w(admin).each do |role|
+    [:id, :created_at, :updated_at, :categories].each do |invalid|
+      context "#{role} : post / but with #{invalid}" do
+        before do
+          post "/", valid_params_for(role).merge(
+            :raw    => 3,
+            invalid => 9
+          )
+        end
+  
+        use "return 400 Bad Request"
+        invalid_param invalid.to_s
+      end
+    end
+  
+    context "#{role} : post / with valid params" do
+      before do
+        post "/", valid_params_for(role).merge(:raw => 3)
       end
   
       use "return 200 Ok"
