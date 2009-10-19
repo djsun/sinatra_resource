@@ -1,0 +1,7 @@
+# To Do
+
+* Think about, perhaps write about, permissions
+
+* Make example for a plural resource (the typical kind)
+
+* Make example for a singular resource (less common)

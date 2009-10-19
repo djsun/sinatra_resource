@@ -1,0 +1,22 @@
+# CRUD
+
+    :create => POST
+    :read   => GET
+    :update => PUT
+    :delete => DELETE
+
+# Sinatra Actions
+
+    "GET    /resources    " => [:read, :many]
+    "GET    /resources/:id" => [:read, :one]
+    "POST   /resources    " => [:create, :one]
+    "POST   /resources/:id" => [nil]
+    "PUT    /resources    " => [nil]
+    "PUT    /resources/:id" => [:update, :one]
+    "DELETE /resources    " => [:delete, :many]
+    "DELETE /resources/:id" => [:delete, :one]
+
+# Other groupings:
+
+    :view   => [:read]
+    :modify => [:create, :update, :delete]
