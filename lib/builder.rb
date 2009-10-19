@@ -53,6 +53,7 @@ module SinatraResource
       @klass.put '/:id/?' do
         role = lookup_role
         check_permission(:update, role)
+        check_params(:update, role)
         id = params.delete("id")
         check_params(:update, role)
       end

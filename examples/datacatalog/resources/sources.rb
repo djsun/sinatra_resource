@@ -15,11 +15,7 @@ module DataCatalog
 
     property :title
     property :url
-    property :raw,        :w => :admin
-
-    property :id,         :w => :nobody
-    property :created_at, :w => :nobody
-    property :updated_at, :w => :nobody
+    property :raw, :w => :admin
     
     property :categories do
       categorizations.map do |categorization|

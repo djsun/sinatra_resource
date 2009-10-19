@@ -48,7 +48,7 @@ class UsersGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      doc_properties %w(name id)
+      doc_properties %w(name id created_at updated_at)
     end
   end
 

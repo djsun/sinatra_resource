@@ -15,10 +15,6 @@ module DataCatalog
     
     property :name
 
-    property :id,         :w => :nobody
-    property :created_at, :w => :nobody
-    property :updated_at, :w => :nobody
-
     property :sources do
       sources.map do |source|
         {
