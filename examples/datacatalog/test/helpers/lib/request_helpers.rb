@@ -34,6 +34,19 @@ module RequestHelpers
         end
       end
     end
+    
+    def missing_param(s)
+      test "should report missing #{s}" do
+        assert_include "can't be empty", parsed_response_body["errors"][s.to_s]
+      end
+    end
+    
+    def invalid_param(s)
+      test "should report #{s} as invalid" do
+        assert_include s.to_s, parsed_response_body["errors"]["invalid_params"]
+      end
+    end
+    
   end
   
 end

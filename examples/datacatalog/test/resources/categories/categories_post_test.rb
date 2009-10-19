@@ -49,11 +49,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
   
       use "return 400 Bad Request"
-      
-      test "should report missing name" do
-        actual = parsed_response_body["errors"]["name"]
-        assert_include "can't be empty", actual
-      end
+      missing_param "name"
     end
     
     [:id, :created_at, :updated_at, :sources].each do |invalid|
@@ -66,11 +62,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
-
-        test "should report #{invalid} as invalid" do
-          actual = parsed_response_body["errors"]["invalid_params"]
-          assert_include invalid.to_s, actual
-        end
+        invalid_param invalid
       end
     end
 

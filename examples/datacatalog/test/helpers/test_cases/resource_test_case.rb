@@ -27,5 +27,9 @@ class ResourceTestCase < Test::Unit::TestCase
     raise "API key not found" unless key
     key
   end
+
+  def valid_params_for(role)
+    @valid_params.merge(:api_key => api_key_for(role))
+  end
   
 end
