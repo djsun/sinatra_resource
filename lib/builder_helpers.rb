@@ -48,11 +48,7 @@ module SinatraResource
         end
       end
       
-      # Build a resource for +action+ with +properties+, based on a
-      # +document+.
-      #
-      # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      # Build a resource, based on +document+, appropriate for +role+.
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -62,10 +58,10 @@ module SinatraResource
       # @return [Hash<String => Object>]
       #
       # @api private
-      def build_resource(action, role, document)
+      def build_resource(role, document)
         resource = {}
         config[:properties].each_pair do |property, hash|
-          if authorized?(action, role, property)
+          if authorized?(:read, role, property)
             resource[property.to_s] = value(property, document, hash)
           end
         end
@@ -231,6 +227,18 @@ module SinatraResource
         when :delete then :modify
         else raise "Unexpected action : #{action.inspect}"
         end
+      end
+      
+      # Update a document with +id+ from params. If not valid, returns 400.
+      #
+      # @return [MongoMapper::Document]
+      def update_document!(id)
+        document = config[:model].update(id, params)
+        # puts "\n-- document : #{document.inspect}"
+        unless document.valid?
+          error 400, display(body_for(:invalid_document, document))
+        end
+        document
       end
       
       # Lookup +attribute+ in +document+

@@ -22,7 +22,7 @@ module SinatraResource
         check_permission(:read, role)
         check_params(:read, role)
         document = find_document!(id)
-        resource = build_resource(:read, role, document)
+        resource = build_resource(role, document)
         display(resource)
       end
     end
@@ -33,7 +33,7 @@ module SinatraResource
         check_permission(:read, role)
         check_params(:read, role)
         documents = find_documents!
-        # resources = build_resources(:read, role, documents)
+        # resources = build_resources(role, documents)
         display(documents)
       end
     end
@@ -44,7 +44,7 @@ module SinatraResource
         check_permission(:create, role)
         check_params(:create, role)
         document = create_document!
-        resource = build_resource(:read, role, document)
+        resource = build_resource(role, document)
         display(resource)
       end
     end
@@ -55,8 +55,13 @@ module SinatraResource
         role = get_role(id)
         check_permission(:update, role)
         check_params(:update, role)
-        # update_document!(id) # looks good... right?
-        # status code?
+        # # START TEMP
+        # doc = find_document!(id)
+        # puts "\n-- doc : #{doc.inspect}"
+        # # END TEMP
+        document = update_document!(id)
+        resource = build_resource(role, document)
+        display(resource)
       end
     end
     
