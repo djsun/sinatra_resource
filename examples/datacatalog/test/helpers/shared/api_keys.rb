@@ -8,6 +8,15 @@ class ResourceTestCase
       assert_include "no_params", parsed_response_body["errors"]
     end
   end
+
+  shared "return 400 because parameters were not empty" do
+    use "return 400 Bad Request"
+    
+    test "body should say parameters were non-empty" do
+      assert_include "errors", parsed_response_body
+      assert_include "non_empty_params", parsed_response_body["errors"]
+    end
+  end
   
   shared "return 401 because the API key is invalid" do
     use "return 401 Unauthorized"

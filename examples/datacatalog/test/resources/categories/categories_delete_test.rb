@@ -48,6 +48,26 @@ class CategoriesDeleteResourceTest < ResourceTestCase
   end
   
   %w(basic).each do |role|
+    context "#{role} : delete /:fake_id" do
+      before do
+        delete "/#{FAKE_ID}", :api_key => api_key_for(role)
+      end
+      
+      use "return 401 Unauthorized"
+      use "no change in category count"
+    end
+
+    context "#{role} : delete /:id" do
+      before do
+        delete "/#{@category.id}",
+          :api_key => api_key_for(role),
+          :key     => "value"
+      end
+      
+      use "return 401 Unauthorized"
+      use "no change in category count"
+    end
+
     context "#{role} : delete /:id" do
       before do
         delete "/#{@category.id}", :api_key => api_key_for(role)
@@ -59,6 +79,26 @@ class CategoriesDeleteResourceTest < ResourceTestCase
   end
 
   %w(curator admin).each do |role|
+    context "#{role} : delete /:fake_id" do
+      before do
+        delete "/#{FAKE_ID}", :api_key => api_key_for(role)
+      end
+      
+      use "return 404 Not Found"
+      use "no change in category count"
+    end
+
+    context "#{role} : delete /:id" do
+      before do
+        delete "/#{@category.id}",
+          :api_key => api_key_for(role),
+          :key     => "value"
+      end
+      
+      use "return 400 because parameters were not empty"
+      use "no change in category count"
+    end
+
     context "#{role} : delete /:id" do
       before do
         delete "/#{@category.id}", :api_key => api_key_for(role)
