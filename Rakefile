@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "sinatra_resource"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{RESTful actions with Sinatra and MongoMapper}
+    gem.description = %Q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
     gem.email = "djames@sunlightfoundation.com"
     gem.homepage = "http://github.com/djsun/sinatra_resource"
     gem.authors = ["David James"]
