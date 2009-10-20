@@ -1,3 +1,5 @@
+require 'uri'
+
 module DataCatalog
     
   module Resource
@@ -9,15 +11,21 @@ module DataCatalog
       includee.helpers do
         def before_authorization(action, role)
           unless role
-            error 401, display({ "errors" => ["invalid_api_key"] })
+            error 401, convert(body_for(:errors, ["invalid_api_key"]))
           end
           if role == :anonymous && minimum_role(action) != :anonymous
-            error 401, display({ "errors" => ["missing_api_key"] })
+            error 401, convert(body_for(:errors, ["missing_api_key"]))
           end
         end
 
-        def display(object)
-          object.nil? ? nil : object.to_json
+        def convert(object)
+          object == "" ? "" : object.to_json
+        end
+        
+        # TODO: TEST ME!
+        def full_uri(path)
+          base_uri = Config.environment_config["base_uri"]
+          URI.join(base_uri, path).to_s
         end
 
         def lookup_role(document=nil)

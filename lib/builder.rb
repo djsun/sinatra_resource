@@ -23,7 +23,7 @@ module SinatraResource
         check_params(:read, role)
         document = find_document!(id)
         resource = build_resource(role, document)
-        display(resource)
+        display(:read, resource)
       end
     end
 
@@ -34,7 +34,7 @@ module SinatraResource
         check_params(:read, role)
         documents = find_documents!
         resources = build_resources(documents)
-        display(resources)
+        display(:read, resources)
       end
     end
     
@@ -45,7 +45,7 @@ module SinatraResource
         check_params(:create, role)
         document = create_document!
         resource = build_resource(role, document)
-        display(resource)
+        display(:create, resource)
       end
     end
     
@@ -57,7 +57,7 @@ module SinatraResource
         check_params(:update, role)
         document = update_document!(id)
         resource = build_resource(role, document)
-        display(resource)
+        display(:update, resource)
       end
     end
     
@@ -65,9 +65,10 @@ module SinatraResource
       @klass.delete '/:id/?' do
         id = params.delete("id")
         role = get_role(id)
-        check_permission(:delete)
+        check_permission(:delete, role)
         check_params(:delete, role)
-        # status code?
+        delete_document!(id)
+        display(:delete)
       end
     end
     

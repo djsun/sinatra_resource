@@ -115,7 +115,7 @@ class UsersPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role).merge(@extra_admin_params)
       end
   
-      use "return 200 Ok"
+      use "return 201 Created"
       use "one new user"
       doc_properties %w(name email role _api_key id created_at updated_at)
 

@@ -10,10 +10,10 @@ module SinatraResource
       def create_document!
         document = config[:model].new(params)
         unless document.valid?
-          error 400, display(body_for(:invalid_document, document))
+          error 400, convert(body_for(:invalid_document, document))
         end
         unless document.save
-          error 400, display(body_for(:internal_server_error))
+          error 400, convert(body_for(:internal_server_error))
         end
         document
       end
@@ -26,7 +26,7 @@ module SinatraResource
       def find_document!(id)
         document = config[:model].find_by_id(id)
         unless document
-          error 404, display(body_for(:not_found))
+          error 404, convert(body_for(:not_found))
         end
         document
       end
@@ -47,7 +47,7 @@ module SinatraResource
       def update_document!(id)
         document = config[:model].update(id, params)
         unless document.valid?
-          error 400, display(body_for(:invalid_document, document))
+          error 400, convert(body_for(:invalid_document, document))
         end
         document
       end

@@ -110,7 +110,7 @@ class SourcesPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role)
       end
   
-      use "return 200 Ok"
+      use "return 201 Created"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
 
@@ -156,7 +156,7 @@ class SourcesPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role).merge(@extra_admin_params)
       end
   
-      use "return 200 Ok"
+      use "return 201 Created"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
 

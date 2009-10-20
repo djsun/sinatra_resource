@@ -108,7 +108,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role)
       end
   
-      use "return 200 Ok"
+      use "return 201 Created"
       use "one new category"
       doc_properties %w(name id created_at updated_at sources)
 

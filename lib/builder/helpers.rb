@@ -36,7 +36,7 @@ module SinatraResource
         end
       end
 
-      # Halt unless the current params are ok for +action+
+      # Halt unless the current params are ok for +action+ and +role+.
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
@@ -46,16 +46,8 @@ module SinatraResource
       #
       # @return [undefined]
       def check_params(action, role)
-        if action == :update && params.empty?
-          error 400, display(body_for(:no_params))
-        end
-        invalid = []
-        params.each_pair do |property, value|
-          invalid << property if !authorized?(action, role, property.intern)
-        end
-        unless invalid.empty?
-          error 400, display(body_for(:invalid_params, invalid))
-        end
+        params_check_action(action)
+        params_check_action_and_role(action, role)
       end
 
       # Halt unless the current role has permission to carry out +action+
@@ -70,21 +62,52 @@ module SinatraResource
       def check_permission(action, role)
         before_authorization(action, role)
         unless authorized?(action, role)
-          error 401, display(body_for(:unauthorized))
+          error 401, convert(body_for(:unauthorized))
         end
       end
       
       # Convert +object+ to desired format.
       #
-      # Applications must override this method.
-      #
       # For example, an application might want to convert +object+ to JSON or
       # XML.
+      #
+      # Applications must override this method.
       # 
       # @param [Object] object
       #
       # @return [String]
-      def display(object)
+      def convert
+        raise NotImplementedError
+      end
+
+      # Display +object+ as appropriate for +action+.
+      #
+      # @param [Object] object
+      #
+      # @return [String]
+      def display(action, object)
+        case action
+        when :read
+        when :create
+          response.status = 201
+          response.headers['Location'] = full_uri("")
+          # It would be nice if the resource knew its own URI!
+          # full_uri "/#{name}/#{@document.id}"
+        when :update
+        when :delete
+          response.status = 204
+        end
+        convert(object)
+      end
+
+      # Convert a path to a full URI.
+      #
+      # Applications must override this method.
+      # 
+      # @param [String] path
+      #
+      # @return [String]
+      def full_uri(path)
         raise NotImplementedError
       end
 
@@ -164,18 +187,22 @@ module SinatraResource
       # @return [String]
       def body_for(situation, object=nil)
         case situation
+        when :errors
+          { "errors" => object }
         when :internal_server_error
-          nil
+          ""
         when :invalid_document
           { "errors" => object.errors.errors }
         when :invalid_params
           { "errors" => { "invalid_params" => object } }
         when :no_params
           { "errors" => "no_params" }
+        when :non_empty_params
+          { "errors" => "non_empty_params" }
         when :not_found
-          nil
+          ""
         when :unauthorized
-          nil
+          ""
         end
       end
 
@@ -188,6 +215,52 @@ module SinatraResource
       # @return [Symbol]
       def lookup_role(document=nil)
         raise NotImplementedError
+      end
+
+      # Are the params suitable for +action+? Raise 400 Bad Request if not.
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @return [undefined]
+      def params_check_action(action)
+        case action
+        when :read
+          unless params.empty?
+            error 400, convert(body_for(:non_empty_params))
+          end
+        when :create
+          # No need to complain. If there are problems,
+          # params_check_action_and_role will catch them.
+        when :update
+          if params.empty?
+            error 400, convert(body_for(:no_params))
+          end
+        when :delete
+          unless params.empty?
+            error 400, convert(body_for(:non_empty_params))
+          end
+        end
+      end
+
+      # Checks each parameter to make sure it is authorized for +action+ and
+      # +role+. Raises a 400 Bad Request if not authorized.
+      #
+      # @param [Symbol] action
+      #   :read, :create, :update, or :delete
+      #
+      # @param [Symbol] role
+      #   a role (such as :anonymous, :basic, or :admin)
+      #
+      # @return [undefined]
+      def params_check_action_and_role(action, role)
+        invalid = []
+        params.each_pair do |property, value|
+          invalid << property if !authorized?(action, role, property.intern)
+        end
+        unless invalid.empty?
+          error 400, convert(body_for(:invalid_params, invalid))
+        end
       end
 
       # Converts +action+ to :r or :w (i.e. read or write).
