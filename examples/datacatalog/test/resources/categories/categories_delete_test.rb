@@ -30,21 +30,21 @@ class CategoriesDeleteResourceTest < ResourceTestCase
   context "delete /" do
     context "anonymous" do
       before do
-        delete "/#{@category.id}", @valid_params
+        delete "/#{@category.id}"
       end
     
       use "return 401 because the API key is missing"
       use "no change in category count"
     end
 
-    # context "incorrect API key" do
-    #   before do
-    #     delete "/", @valid_params.merge(:api_key => BAD_API_KEY)
-    #   end
-    #   
-    #   use "return 401 because the API key is invalid"
-    #   use "no change in category count"
-    # end
+    context "incorrect API key" do
+      before do
+        delete "/#{@category.id}", :api_key => BAD_API_KEY
+      end
+      
+      use "return 401 because the API key is invalid"
+      use "no change in category count"
+    end
   end
   
 end
