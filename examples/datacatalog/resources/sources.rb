@@ -17,8 +17,8 @@ module DataCatalog
     property :url
     property :raw, :w => :admin
     
-    property :categories do
-      categorizations.map do |categorization|
+    property :categories do |source|
+      source.categorizations.map do |categorization|
         {
           "id"   => categorization.category.id,
           "href" => "/categories/#{categorization.category.id}",

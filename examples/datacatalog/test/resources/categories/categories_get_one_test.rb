@@ -42,11 +42,28 @@ class CategoriesGetOneResourceTest < ResourceTestCase
 
     context "#{role} : get /:id" do
       before do
+        @source = create_source
+        create_categorization(
+          :source_id   => @source.id,
+          :category_id => @category.id
+        )
         get "/#{@category.id}", :api_key => api_key_for(role)
       end
 
       use "return 200 Ok"
       doc_properties %w(name id created_at updated_at sources)
+      
+      test "body should have correct sources" do
+        expected = [
+          {
+            "id"    => @source.id,
+            "href"  => "/sources/#{@source.id}",
+            "title" => @source.title,
+            "url"   => @source.url,
+          }
+        ]
+        assert_equal expected, parsed_response_body["sources"]
+      end
     end
   end
 

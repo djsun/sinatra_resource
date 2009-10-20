@@ -15,8 +15,8 @@ module DataCatalog
     
     property :name
 
-    property :sources do
-      sources.map do |source|
+    property :sources do |category|
+      category.sources.map do |source|
         {
           "id"    => source.id,
           "href"  => "/sources/#{source.id}",

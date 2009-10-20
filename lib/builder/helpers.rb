@@ -232,10 +232,9 @@ module SinatraResource
       #
       # @return [undefined]
       def value(attribute, document, property_hash)
-        if property_hash[:read_proc]
-          proc = property_hash[:read_proc]
-          # TODO
-          # proc.call
+        proc = property_hash[:read_proc]
+        if proc
+          proc.call(document)
         else
           document[attribute == :id ? :_id : attribute]
         end
