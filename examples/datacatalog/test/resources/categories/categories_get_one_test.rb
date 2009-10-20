@@ -43,11 +43,16 @@ class CategoriesGetOneResourceTest < ResourceTestCase
     context "#{role} : get /:id" do
       before do
         @source = create_source
-        create_categorization(
+        @categorization = create_categorization(
           :source_id   => @source.id,
           :category_id => @category.id
         )
         get "/#{@category.id}", :api_key => api_key_for(role)
+      end
+      
+      after do
+        @source.destroy
+        @categorization.destroy
       end
 
       use "return 200 Ok"
