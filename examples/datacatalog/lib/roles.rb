@@ -13,10 +13,3 @@ module DataCatalog
   end
 
 end
-
-# role :owner => :basic do
-#   # ???
-#   # do we define here when this
-#   # role happens?
-# end
-
