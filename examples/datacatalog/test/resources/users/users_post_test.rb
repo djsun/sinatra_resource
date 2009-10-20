@@ -29,6 +29,15 @@ class UsersPostResourceTest < ResourceTestCase
       assert_equal @user_count + 1, User.all.length
     end
   end
+
+  shared "correct Location header" do
+    test "should set Location header correctly" do
+      base_uri = Config.environment_config["base_uri"]
+      path = %(/users/#{parsed_response_body["id"]})
+      expected = URI.join(base_uri, path).to_s
+      assert_equal expected, last_response.headers['Location']
+    end
+  end
   
   context "post /" do
     context "anonymous" do
@@ -116,6 +125,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
   
       use "return 201 Created"
+      use "correct Location header"
       use "one new user"
       doc_properties %w(name email role _api_key id created_at updated_at)
 
@@ -125,13 +135,6 @@ class UsersPostResourceTest < ResourceTestCase
         @valid_params.merge(@extra_admin_params).each_pair do |key, value|
           assert_equal value, user[key]
         end
-      end
-      
-      test "should set Location header correctly" do
-        base_uri = Config.environment_config["base_uri"]
-        path = %(/users/#{parsed_response_body["id"]})
-        expected = URI.join(base_uri, path).to_s
-        assert_equal expected, last_response.headers['Location']
       end
     end
   end

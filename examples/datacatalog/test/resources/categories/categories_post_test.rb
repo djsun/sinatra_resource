@@ -25,6 +25,15 @@ class CategoriesPostResourceTest < ResourceTestCase
     end
   end
 
+  shared "correct Location header" do
+    test "should set Location header correctly" do
+      base_uri = Config.environment_config["base_uri"]
+      path = %(/categories/#{parsed_response_body["id"]})
+      expected = URI.join(base_uri, path).to_s
+      assert_equal expected, last_response.headers['Location']
+    end
+  end
+
   context "post /" do
     context "anonymous" do
       before do
@@ -109,6 +118,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       end
   
       use "return 201 Created"
+      use "correct Location header"
       use "one new category"
       doc_properties %w(name id created_at updated_at sources)
 
