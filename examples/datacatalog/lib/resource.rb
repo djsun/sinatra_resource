@@ -22,7 +22,6 @@ module DataCatalog
           object == "" ? "" : object.to_json
         end
         
-        # TODO: TEST ME!
         def full_uri(path)
           base_uri = Config.environment_config["base_uri"]
           URI.join(base_uri, path).to_s

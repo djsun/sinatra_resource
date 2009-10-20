@@ -90,9 +90,8 @@ module SinatraResource
         when :read
         when :create
           response.status = 201
-          response.headers['Location'] = full_uri("")
-          # It would be nice if the resource knew its own URI!
-          # full_uri "/#{name}/#{@document.id}"
+          path = config[:path] + %(/#{object["id"]})
+          response.headers['Location'] = full_uri(path)
         when :update
         when :delete
           response.status = 204
@@ -139,7 +138,7 @@ module SinatraResource
         end || :anonymous
       end
       
-      private
+      protected
 
       # Is +role+ authorized for +action+, and, if specified, +property+?
       #
