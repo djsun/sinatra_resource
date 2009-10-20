@@ -8,8 +8,9 @@ class ResourceTestCase < Test::Unit::TestCase
     @users_by_role = {}
     %w(basic curator admin).map do |role|
       @users_by_role[role] = create_user(
-        :name => "#{role} User",
-        :role => role
+        :name  => "#{role} User",
+        :email => "#{role}-user@inter.net",
+        :role  => role
       )
     end
   end

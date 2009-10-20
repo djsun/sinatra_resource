@@ -13,6 +13,8 @@ class SourcesGetManyResourceTest < ResourceTestCase
   after do
     @sources.each { |x| x.destroy }
   end
+  
+  SOURCES = ["Source 0", "Source 1", "Source 2"].sort
 
   context "get /" do
     context "anonymous" do
@@ -46,11 +48,10 @@ class SourcesGetManyResourceTest < ResourceTestCase
       
       test "body should have correct source titles" do
         actual = parsed_response_body.map { |e| e["title"] }
-        expected = ["Source 0", "Source 1", "Source 2"]
-        assert_equal expected, actual.sort
+        assert_equal SOURCES, actual.sort
       end
       
-      docs_properties %w(title url raw id created_at updated_at)
+      docs_properties %w(title url raw categories id created_at updated_at)
     end
   end
 

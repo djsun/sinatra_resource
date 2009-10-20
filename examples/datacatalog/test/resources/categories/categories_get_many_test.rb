@@ -13,6 +13,8 @@ class CategoriesGetManyResourceTest < ResourceTestCase
   after do
     @categories.each { |x| x.destroy }
   end
+  
+  CATEGORIES = ["Category 0", "Category 1", "Category 2"].sort
 
   context "get /" do
     context "anonymous" do
@@ -46,11 +48,10 @@ class CategoriesGetManyResourceTest < ResourceTestCase
       
       test "body should have correct category names" do
         actual = parsed_response_body.map { |e| e["name"] }
-        expected = ["Category 0", "Category 1", "Category 2"]
-        assert_equal expected, actual.sort
+        assert_equal CATEGORIES, actual.sort
       end
       
-      docs_properties %w(name id created_at updated_at)
+      docs_properties %w(name sources id created_at updated_at)
     end
   end
 

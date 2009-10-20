@@ -6,13 +6,13 @@ module DataCatalog
     end
     
     helpers do
-      def lookup_role(document=nil)
-        api_key = params.delete("api_key")
-        return :anonymous unless api_key
-        role_for(api_key, document)
+      def lookup_api_key
+        @api_key ||= params.delete("api_key")
       end
-      
-      def role_for(api_key, document=nil)
+
+      def role_for(document=nil)
+        api_key = lookup_api_key
+        return :anonymous unless api_key
         user = user_for(api_key)
         return nil unless user
         return :owner if document && owner?(user, document)

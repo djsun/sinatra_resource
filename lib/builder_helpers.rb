@@ -70,6 +70,22 @@ module SinatraResource
         resource
       end
 
+      # Builds a list of resources, based on +documents+, using the
+      # appropriate role for each document. (Delegates to +role_for+.)
+      #
+      # @param [Array<MongoMapper::Document>] documents
+      #
+      # @param [String] api_key
+      #
+      # @return [Array<Hash<String => Object>>]
+      #
+      # @api private
+      def build_resources(documents)
+        documents.map do |document|
+          build_resource(role_for(document), document)
+        end
+      end
+
       # Halt unless the current params are ok for +action+
       #
       # @param [Symbol] action
@@ -82,17 +98,15 @@ module SinatraResource
       #
       # @api private
       def check_params(action, role)
+        if action == :update && params.empty?
+          error 400, display(body_for(:no_params))
+        end
         invalid = []
         params.each_pair do |property, value|
-          unless authorized?(action, role, property.intern)
-            invalid << property
-          end
+          invalid << property if !authorized?(action, role, property.intern)
         end
         unless invalid.empty?
           error 400, display(body_for(:invalid_params, invalid))
-        end
-        if action == :update && params.empty?
-          error 400, display(body_for(:no_params))
         end
       end
 
@@ -136,7 +150,8 @@ module SinatraResource
       #
       # @api private
       def display(object)
-        # raise NotImplemented
+        # TODO: defer this implementation to the application
+        # TODO: perhaps by doing `raise NotImplemented`?
         object.nil? ? nil : object.to_json
       end
 
@@ -167,7 +182,7 @@ module SinatraResource
         config[:model].find(:all)
       end
       
-      # Get role, using +id+ if specified. Delegates to +lookup_role+.
+      # Get role, using +id+ if specified. Delegates to +role_for+.
       #
       # When +id+ is present, it can help determine 'relative' roles such
       # as 'ownership' of the current user of a particular document.
@@ -178,8 +193,7 @@ module SinatraResource
       #
       # @api private
       def get_role(id=nil)
-        document = id ? config[:model].find_by_id(id) : nil
-        lookup_role(document)
+        role_for(id ? config[:model].find_by_id(id) : nil)
       end
 
       # Return the minimum role required for +action+, and, if specified,

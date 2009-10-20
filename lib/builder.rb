@@ -33,8 +33,8 @@ module SinatraResource
         check_permission(:read, role)
         check_params(:read, role)
         documents = find_documents!
-        # resources = build_resources(role, documents)
-        display(documents)
+        resources = build_resources(documents)
+        display(resources)
       end
     end
     
