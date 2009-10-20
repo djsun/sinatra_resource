@@ -1,7 +1,6 @@
 module DataCatalog
 
   class Sources < Base
-    include SinatraResource::Resource
     include Resource
 
     model Source

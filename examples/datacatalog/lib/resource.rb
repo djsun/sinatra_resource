@@ -3,6 +3,9 @@ module DataCatalog
   module Resource
     
     def self.included(includee)
+      includee.instance_eval do
+        include SinatraResource::Resource
+      end
       includee.helpers do
         def before_authorization(action, role)
           unless role

@@ -1,7 +1,6 @@
 module DataCatalog
 
   class Categories < Base
-    include SinatraResource::Resource
     include Resource
 
     model Category

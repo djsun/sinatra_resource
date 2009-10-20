@@ -1,7 +1,6 @@
 module DataCatalog
 
   class Users < Base
-    include SinatraResource::Resource
     include Resource
 
     model User
