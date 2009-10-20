@@ -74,6 +74,7 @@ module SinatraResource
     def build_helpers
       @klass.helpers do
         include Helpers
+        include MongoHelpers
       end
     end
     
