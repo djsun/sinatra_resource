@@ -68,7 +68,7 @@ module SinatraResource
         check_permission(:delete, role)
         check_params(:delete, role)
         delete_document!(id)
-        display(:delete)
+        display(:delete, "")
       end
     end
     

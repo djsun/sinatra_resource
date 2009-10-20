@@ -18,6 +18,16 @@ class ResourceTestCase
     end
   end
 
+  shared "return 204 No Content" do
+    test "status should be 204 No Content" do
+      assert_equal 204, last_response.status
+    end
+    
+    test "body should be empty" do
+      assert_equal "", last_response.body
+    end
+  end
+
   shared "return 400 Bad Request" do
     test "status should be 400 Bad Request" do
       assert_equal 400, last_response.status

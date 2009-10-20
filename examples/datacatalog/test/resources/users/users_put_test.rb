@@ -28,7 +28,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
   end
   
-  context "put /" do
+  context "put /:id" do
     context "anonymous" do
       before do
         put "/#{@user.id}", @valid_params
@@ -74,7 +74,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
 
     [:name, :role].each do |missing|
-      context "#{role} : put / without #{missing}" do
+      context "#{role} : put /:id without #{missing}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
@@ -85,7 +85,7 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put / with valid params" do
+    context "#{role} : put /:id with valid params" do
       before do
         put "/#{@user.id}", valid_params_for(role).merge(@extra_admin_params)
       end
@@ -122,7 +122,7 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put / with no parameters" do
+    context "#{role} : put /:id with no parameters" do
       before do
         put "/#{@user.id}", :api_key => api_key_for(role)
       end
@@ -132,7 +132,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
 
     [:name, :role].each do |missing|
-      context "#{role} : put / without #{missing}" do
+      context "#{role} : put /:id without #{missing}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
@@ -151,7 +151,7 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put / with valid params" do
+    context "#{role} : put /:id with valid params" do
       before do
         put "/#{@user.id}", valid_params_for(role).merge(@extra_admin_params)
       end

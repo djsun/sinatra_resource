@@ -24,7 +24,7 @@ class CategoriesPutResourceTest < ResourceTestCase
     end
   end
   
-  context "put /" do
+  context "put /:id" do
     context "anonymous" do
       before do
         put "/#{@category.id}", @valid_params
@@ -46,7 +46,7 @@ class CategoriesPutResourceTest < ResourceTestCase
 
   %w(basic).each do |role|
     [:created_at, :updated_at, :sources].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@category.id}", valid_params_for(role).merge(invalid => 9)
         end
@@ -57,7 +57,7 @@ class CategoriesPutResourceTest < ResourceTestCase
     end
 
     [:name].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@category.id}", valid_params_for(role).merge(erase => "")
         end
@@ -67,7 +67,7 @@ class CategoriesPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put / with no parameters" do
+    context "#{role} : put /:id with no parameters" do
       before do
         put "/#{@category.id}", :api_key => api_key_for(role)
       end
@@ -76,7 +76,7 @@ class CategoriesPutResourceTest < ResourceTestCase
       use "category unchanged"
     end
 
-    context "#{role} : put / with valid params" do
+    context "#{role} : put /:id with valid params" do
       before do
         put "/#{@category.id}", valid_params_for(role)
       end
@@ -111,7 +111,7 @@ class CategoriesPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put / with no parameters" do
+    context "#{role} : put /:id with no parameters" do
       before do
         put "/#{@category.id}", :api_key => api_key_for(role)
       end
@@ -120,7 +120,7 @@ class CategoriesPutResourceTest < ResourceTestCase
       use "category unchanged"
     end
 
-    context "#{role} : put / with valid params" do
+    context "#{role} : put /:id with valid params" do
       before do
         put "/#{@category.id}", valid_params_for(role)
       end

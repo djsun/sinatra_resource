@@ -18,7 +18,18 @@ module SinatraResource
         document
       end
       
-      # Find a document using +id+. If not found, returns 404.
+      # Delete a document with +id+.
+      #
+      # @param [String] id
+      #
+      # @return [MongoMapper::Document]
+      def delete_document!(id)
+        document = find_document!(id)
+        document.destroy
+        document
+      end
+
+      # Find a document with +id+. If not found, returns 404.
       #
       # @param [String] id
       #

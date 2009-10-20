@@ -27,7 +27,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
     end
   end
   
-  context "delete /" do
+  context "delete /:id" do
     context "anonymous" do
       before do
         delete "/#{@category.id}"
@@ -44,6 +44,28 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       
       use "return 401 because the API key is invalid"
       use "no change in category count"
+    end
+  end
+  
+  %w(basic).each do |role|
+    context "#{role} : delete /:id" do
+      before do
+        delete "/#{@category.id}", :api_key => api_key_for(role)
+      end
+      
+      use "return 401 Unauthorized"
+      use "no change in category count"
+    end
+  end
+
+  %w(curator admin).each do |role|
+    context "#{role} : delete /:id" do
+      before do
+        delete "/#{@category.id}", :api_key => api_key_for(role)
+      end
+      
+      use "return 204 No Content"
+      use "one less category"
     end
   end
   
