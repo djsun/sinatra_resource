@@ -29,8 +29,15 @@ module SinatraResource
         end
       else
         @klass.get "/:parent_id/#{path}/:id/?" do
-          basic_get_one
-          # ...
+          parent_id = params.delete("parent_id")
+          parent_role = get_role(parent_id)
+          parent_document = document_for_get_one(parent_role, parent_id)
+          # ---
+          id = params.delete("id")
+          role = get_role(id)
+          document = document_for_get_one(role, id)
+          resource = build_resource(role, document)
+          display(:read, resource)
         end
       end
     end
