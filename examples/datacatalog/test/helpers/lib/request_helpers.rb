@@ -48,6 +48,16 @@ module RequestHelpers
         assert_include "can't be empty", parsed_response_body["errors"][s.to_s]
       end
     end
+
+    def location_header(path)
+      test "should set Location header correctly" do
+        base_uri = Config.environment_config["base_uri"]
+        path = %(#{path}/#{parsed_response_body["id"]})
+        expected = URI.join(base_uri, path).to_s
+        assert_equal expected, last_response.headers['Location']
+      end
+    end
+
   end
   
 end

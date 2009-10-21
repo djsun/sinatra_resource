@@ -30,15 +30,6 @@ class UsersPostResourceTest < ResourceTestCase
     end
   end
 
-  shared "correct Location header" do
-    test "should set Location header correctly" do
-      base_uri = Config.environment_config["base_uri"]
-      path = %(/users/#{parsed_response_body["id"]})
-      expected = URI.join(base_uri, path).to_s
-      assert_equal expected, last_response.headers['Location']
-    end
-  end
-  
   context "post /" do
     context "anonymous" do
       before do
@@ -125,7 +116,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
   
       use "return 201 Created"
-      use "correct Location header"
+      location_header "users"
       use "one new user"
       doc_properties %w(name email role _api_key id created_at updated_at)
 

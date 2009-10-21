@@ -27,15 +27,6 @@ class SourcesPostResourceTest < ResourceTestCase
     end
   end
   
-  shared "correct Location header" do
-    test "should set Location header correctly" do
-      base_uri = Config.environment_config["base_uri"]
-      path = %(/sources/#{parsed_response_body["id"]})
-      expected = URI.join(base_uri, path).to_s
-      assert_equal expected, last_response.headers['Location']
-    end
-  end
-  
   context "post /" do
     context "anonymous" do
       before do
@@ -120,7 +111,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 201 Created"
-      use "correct Location header"
+      location_header "sources"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
 
@@ -167,7 +158,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 201 Created"
-      use "correct Location header"
+      location_header "sources"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at categories)
 
