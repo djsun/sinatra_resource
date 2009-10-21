@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../lib/sinatra_resource'
+require File.expand_path(File.dirname(__FILE__) + '/../../../lib/sinatra_resource')
 
 module DataCatalog
   
