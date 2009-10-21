@@ -58,6 +58,18 @@ module SinatraResource
         # config[:route_prefix]
       end
       
+      # Specify the path. If not specified, SinatraResource will infer the path
+      # from the resource class (see the +default_path+ method.)
+      #
+      # This method is also useful for nested resources.
+      #
+      # @param [String] name
+      #
+      # @return [undefined]
+      def path(name)
+        @resource_config[:path] = name
+      end
+      
       # Specify the minimal role needed to access this resource for reading
       # or writing.
       #
