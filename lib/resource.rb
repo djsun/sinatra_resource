@@ -46,6 +46,15 @@ module SinatraResource
         default_properties
       end
       
+      # Specify the parent +resource+. Only used for nested resources.
+      #
+      # @param [Class] resource
+      #
+      # @return []
+      def parent(resource)
+        @resource_config[:parent] = resource
+      end
+      
       # Specify the minimal role needed to access this resource for reading
       # or writing.
       #
