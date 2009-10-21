@@ -146,6 +146,7 @@ module SinatraResource
           :permission => {},
           :properties => {},
           :roles      => nil,
+          :parent     => nil,
           :path       => default_path,
         }
       end
