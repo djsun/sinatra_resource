@@ -53,6 +53,9 @@ module SinatraResource
       # @return []
       def parent(resource)
         @resource_config[:parent] = resource
+        # TODO...
+        # config[:path]
+        # config[:route_prefix]
       end
       
       # Specify the minimal role needed to access this resource for reading
