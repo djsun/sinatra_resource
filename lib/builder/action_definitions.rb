@@ -4,33 +4,33 @@ module SinatraResource
 
     module ActionDefinitions
 
-      def document_for_get_one(role, model, id)
-        check_permission(:read, role)
-        check_params(:read, role)
+      def document_for_get_one(role, model, resource_config, id)
+        check_permission(:read, role, resource_config)
+        check_params(:read, role, resource_config)
         find_document!(model, id)
       end
       
-      def documents_for_get_many(role, model)
-        check_permission(:read, role)
-        check_params(:read, role)
+      def documents_for_get_many(role, model, resource_config)
+        check_permission(:read, role, resource_config)
+        check_params(:read, role, resource_config)
         find_documents!(model)
       end
       
-      def document_for_post(role, model)
-        check_permission(:create, role)
-        check_params(:create, role)
+      def document_for_post(role, model, resource_config)
+        check_permission(:create, role, resource_config)
+        check_params(:create, role, resource_config)
         create_document!(model)
       end
       
-      def document_for_put(role, model, id)
-        check_permission(:update, role)
-        check_params(:update, role)
+      def document_for_put(role, model, resource_config, id)
+        check_permission(:update, role, resource_config)
+        check_params(:update, role, resource_config)
         update_document!(model, id)
       end
       
-      def document_for_delete(role, model, id)
-        check_permission(:delete, role)
-        check_params(:delete, role)
+      def document_for_delete(role, model, resource_config, id)
+        check_permission(:delete, role, resource_config)
+        check_params(:delete, role, resource_config)
         delete_document!(model, id)
       end
 

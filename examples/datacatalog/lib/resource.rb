@@ -9,11 +9,11 @@ module DataCatalog
         include SinatraResource::Resource
       end
       includee.helpers do
-        def before_authorization(action, role)
+        def before_authorization(action, role, resource_config)
           unless role
             error 401, convert(body_for(:errors, ["invalid_api_key"]))
           end
-          if role == :anonymous && minimum_role(action) != :anonymous
+          if role == :anonymous && minimum_role(action, resource_config) != :anonymous
             error 401, convert(body_for(:errors, ["missing_api_key"]))
           end
         end
