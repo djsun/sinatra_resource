@@ -3,7 +3,10 @@ module SinatraResource
   class Builder
     
     def initialize(klass)
-      @klass = klass
+      @klass  = klass
+      @parent = @klass.config[:parent] # class
+      @simple = !@parent
+      @path   = @klass.config[:path]
     end
     
     def build
@@ -16,64 +19,70 @@ module SinatraResource
     end
     
     def build_get_one
-      @klass.get '/:id/?' do
-        id = params.delete("id")
-        role = get_role(id)
-        check_permission(:read, role)
-        check_params(:read, role)
-        document = find_document!(id)
-        resource = build_resource(role, document)
-        display(:read, resource)
+      if @simple
+        @klass.get '/:id/?' do
+          id = params.delete("id")
+          role = get_role(id)
+          document = document_for_get_one(role, id)
+          resource = build_resource(role, document)
+          display(:read, resource)
+        end
+      else
+        @klass.get "/:parent_id/#{path}/:id/?" do
+          basic_get_one
+          # ...
+        end
       end
     end
 
     def build_get_many
-      @klass.get '/?' do
-        role = get_role
-        check_permission(:read, role)
-        check_params(:read, role)
-        documents = find_documents!
-        resources = build_resources(documents)
-        display(:read, resources)
+      if @simple
+        @klass.get '/?' do
+          role = get_role
+          documents = documents_for_get_many(role)
+          resources = build_resources(documents)
+          display(:read, resources)
+        end
       end
     end
     
     def build_post
-      @klass.post '/?' do
-        role = get_role
-        check_permission(:create, role)
-        check_params(:create, role)
-        document = create_document!
-        resource = build_resource(role, document)
-        display(:create, resource)
+      if @simple
+        @klass.post '/?' do
+          role = get_role
+          document = document_for_post(role)
+          resource = build_resource(role, document)
+          display(:create, resource)
+        end
       end
     end
     
     def build_put
-      @klass.put '/:id/?' do
-        id = params.delete("id")
-        role = get_role(id)
-        check_permission(:update, role)
-        check_params(:update, role)
-        document = update_document!(id)
-        resource = build_resource(role, document)
-        display(:update, resource)
+      if @simple
+        @klass.put '/:id/?' do
+          id = params.delete("id")
+          role = get_role(id)
+          document = document_for_put(role, id)
+          resource = build_resource(role, document)
+          display(:update, resource)
+        end
       end
     end
     
     def build_delete
-      @klass.delete '/:id/?' do
-        id = params.delete("id")
-        role = get_role(id)
-        check_permission(:delete, role)
-        check_params(:delete, role)
-        delete_document!(id)
-        display(:delete, "")
+      if @simple
+        @klass.delete '/:id/?' do
+          id = params.delete("id")
+          role = get_role(id)
+          document_for_delete(role, id)
+          display(:delete, "")
+        end
       end
     end
     
     def build_helpers
       @klass.helpers do
+        include ActionDefinitions
         include Helpers
         include MongoHelpers
       end
