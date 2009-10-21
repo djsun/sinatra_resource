@@ -50,7 +50,7 @@ module SinatraResource
       #
       # @param [Class] resource
       #
-      # @return []
+      # @return [undefined]
       def parent(resource)
         @resource_config[:parent] = resource
         # TODO...
