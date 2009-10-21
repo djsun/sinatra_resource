@@ -7,8 +7,8 @@ module SinatraResource
       # Create a document from params. If not valid, returns 400.
       #
       # @return [MongoMapper::Document]
-      def create_document!
-        document = config[:model].new(params)
+      def create_document!(model)
+        document = model.new(params)
         unless document.valid?
           error 400, convert(body_for(:invalid_document, document))
         end
@@ -23,8 +23,8 @@ module SinatraResource
       # @param [String] id
       #
       # @return [MongoMapper::Document]
-      def delete_document!(id)
-        document = find_document!(id)
+      def delete_document!(model, id)
+        document = find_document!(model, id)
         document.destroy
         document
       end
@@ -34,8 +34,8 @@ module SinatraResource
       # @param [String] id
       #
       # @return [MongoMapper::Document]
-      def find_document!(id)
-        document = config[:model].find_by_id(id)
+      def find_document!(model, id)
+        document = model.find_by_id(id)
         unless document
           error 404, convert(body_for(:not_found))
         end
@@ -48,15 +48,15 @@ module SinatraResource
       #   a class that includes MongoMapper::Document
       #
       # @return [Array<MongoMapper::Document>]
-      def find_documents!
-        config[:model].find(:all)
+      def find_documents!(model)
+        model.find(:all)
       end
 
       # Update a document with +id+ from params. If not valid, returns 400.
       #
       # @return [MongoMapper::Document]
-      def update_document!(id)
-        document = config[:model].update(id, params)
+      def update_document!(model, id)
+        document = model.update(id, params)
         unless document.valid?
           error 400, convert(body_for(:invalid_document, document))
         end

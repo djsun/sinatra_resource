@@ -6,11 +6,13 @@ module SinatraResource
       includee.setup
     end
     
-    def config
-      self.class.instance_variable_get("@resource_config")
+    def resource_config
+      self.class.resource_config
     end
-    
+
     module ClassMethods
+      
+      attr_reader :resource_config
       
       # Build the Sinatra actions based on the DSL statements in this class.
       # You will want to do this last.
@@ -54,8 +56,8 @@ module SinatraResource
       def parent(resource)
         @resource_config[:parent] = resource
         # TODO...
-        # config[:path]
-        # config[:route_prefix]
+        # resource_config[:path]
+        # resource_config[:route_prefix]
       end
       
       # Specify the path. If not specified, SinatraResource will infer the path

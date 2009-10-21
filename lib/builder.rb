@@ -4,9 +4,13 @@ module SinatraResource
     
     def initialize(klass)
       @klass  = klass
-      @parent = @klass.config[:parent] # class
+
+      config = @klass.resource_config
+      @parent = config[:parent]
       @simple = !@parent
-      @path   = @klass.config[:path]
+      @path   = config[:path]
+      @model  = config[:model]
+      @parent_model = @model # FIXME!!!
     end
     
     def build
@@ -19,23 +23,24 @@ module SinatraResource
     end
     
     def build_get_one
+      model, path, parent_model = @model, @path, @parent_model
       if @simple
         @klass.get '/:id/?' do
           id = params.delete("id")
-          role = get_role(id)
-          document = document_for_get_one(role, id)
+          role = get_role(model, id)
+          document = document_for_get_one(role, model, id)
           resource = build_resource(role, document)
           display(:read, resource)
         end
       else
         @klass.get "/:parent_id/#{path}/:id/?" do
           parent_id = params.delete("parent_id")
-          parent_role = get_role(parent_id)
-          parent_document = document_for_get_one(parent_role, parent_id)
+          parent_role = get_role(parent_model, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_id)
           # ---
           id = params.delete("id")
-          role = get_role(id)
-          document = document_for_get_one(role, id)
+          role = get_role(model, id)
+          document = document_for_get_one(role, model, id)
           resource = build_resource(role, document)
           display(:read, resource)
         end
@@ -43,10 +48,11 @@ module SinatraResource
     end
 
     def build_get_many
+      model, path, parent_model = @model, @path, @parent_model
       if @simple
         @klass.get '/?' do
-          role = get_role
-          documents = documents_for_get_many(role)
+          role = get_role(model)
+          documents = documents_for_get_many(role, model)
           resources = build_resources(documents)
           display(:read, resources)
         end
@@ -54,10 +60,11 @@ module SinatraResource
     end
     
     def build_post
+      model, path, parent_model = @model, @path, @parent_model
       if @simple
         @klass.post '/?' do
-          role = get_role
-          document = document_for_post(role)
+          role = get_role(model)
+          document = document_for_post(role, model)
           resource = build_resource(role, document)
           display(:create, resource)
         end
@@ -65,11 +72,12 @@ module SinatraResource
     end
     
     def build_put
+      model, path, parent_model = @model, @path, @parent_model
       if @simple
         @klass.put '/:id/?' do
           id = params.delete("id")
-          role = get_role(id)
-          document = document_for_put(role, id)
+          role = get_role(model, id)
+          document = document_for_put(role, model, id)
           resource = build_resource(role, document)
           display(:update, resource)
         end
@@ -77,11 +85,12 @@ module SinatraResource
     end
     
     def build_delete
+      model, path, parent_model = @model, @path, @parent_model
       if @simple
         @klass.delete '/:id/?' do
           id = params.delete("id")
-          role = get_role(id)
-          document_for_delete(role, id)
+          role = get_role(model, id)
+          document_for_delete(role, model, id)
           display(:delete, "")
         end
       end

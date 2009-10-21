@@ -14,7 +14,7 @@ module SinatraResource
       # @return [Hash<String => Object>]
       def build_resource(role, document)
         resource = {}
-        config[:properties].each_pair do |property, hash|
+        resource_config[:properties].each_pair do |property, hash|
           if authorized?(:read, role, property)
             resource[property.to_s] = value(property, document, hash)
           end
@@ -90,7 +90,7 @@ module SinatraResource
         when :read
         when :create
           response.status = 201
-          path = config[:path] + %(/#{object["id"]})
+          path = resource_config[:path] + %(/#{object["id"]})
           response.headers['Location'] = full_uri(path)
         when :update
         when :delete
@@ -118,8 +118,8 @@ module SinatraResource
       # @param [String, nil] id
       #
       # @return [Symbol]
-      def get_role(id=nil)
-        lookup_role(id ? config[:model].find_by_id(id) : nil)
+      def get_role(model, id=nil)
+        lookup_role(id ? model.find_by_id(id) : nil)
       end
 
       # Return the minimum role required for +action+, and, if specified,
@@ -132,9 +132,9 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       def minimum_role(action, property=nil)
         if property.nil?
-          config[:permission][to_read_or_modify(action)]
+          resource_config[:permission][to_read_or_modify(action)]
         else
-          config[:properties][property][to_r_or_w(action)]
+          resource_config[:properties][property][to_r_or_w(action)]
         end || :anonymous
       end
       
@@ -153,7 +153,7 @@ module SinatraResource
       #
       # @return [Boolean]
       def authorized?(action, role, property=nil)
-        klass = config[:roles]
+        klass = resource_config[:roles]
         klass.validate_role(role)
         klass.satisfies?(role, minimum_role(action, property))
       end
