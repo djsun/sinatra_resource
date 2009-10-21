@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/exceptions'
-require File.dirname(__FILE__) + '/builder/helpers'
-require File.dirname(__FILE__) + '/builder/mongo_helpers'
-require File.dirname(__FILE__) + '/builder'
-require File.dirname(__FILE__) + '/resource'
-require File.dirname(__FILE__) + '/roles'
+base = File.dirname(__FILE__)
+require base + '/exceptions'
+Dir.glob(base + '/builder/*.rb').each { |f| require f }
+require base + '/builder'
+require base + '/resource'
+require base + '/roles'
