@@ -2,7 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class SourcesGetOneResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Sources end
+  include DataCatalog
+
+  def app; Sources end
   
   before do
     @source = create_source

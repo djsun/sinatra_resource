@@ -2,7 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class UsersGetOneResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Users end
+  include DataCatalog
+
+  def app; Users end
   
   before do
     @user = create_user

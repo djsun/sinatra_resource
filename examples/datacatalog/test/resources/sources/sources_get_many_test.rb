@@ -2,7 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class SourcesGetManyResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Sources end
+  include DataCatalog
+
+  def app; Sources end
 
   before do
     @sources = 3.times.map do |i|
