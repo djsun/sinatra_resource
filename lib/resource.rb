@@ -54,10 +54,10 @@ module SinatraResource
       #
       # @return [undefined]
       def parent(resource)
+        if @resource_config[:parent]
+          raise DefinitionError, "parent already declared in #{self}"
+        end
         @resource_config[:parent] = resource
-        # TODO...
-        # resource_config[:path]
-        # resource_config[:route_prefix]
       end
       
       # Specify the path. If not specified, SinatraResource will infer the path
