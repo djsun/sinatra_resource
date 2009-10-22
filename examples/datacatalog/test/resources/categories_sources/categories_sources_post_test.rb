@@ -106,6 +106,11 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       location_header "sources"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at)
+      
+      test "source connected to category" do
+        source = Source.find_by_id(parsed_response_body["id"])
+        assert_equal [@category], source.categories
+      end
     end
   end
   
