@@ -78,6 +78,8 @@ module SinatraResource
           # ------
           role = get_role(model)
           documents = documents_for_get_many(role, model, resource_config)
+          # TODO: A better way would be to modify documents_for_get_many
+          # so that it returns the correct results in one query.
           documents = select_related(parent_document, association, documents)
           resources = build_resources(documents, resource_config)
           display(:read, resources)
