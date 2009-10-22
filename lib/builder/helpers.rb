@@ -222,7 +222,7 @@ module SinatraResource
         when :not_found
           ""
         when :unauthorized
-          ""
+          { "errors" => "unauthorized_api_key" }
         end
       end
 
