@@ -111,6 +111,16 @@ module SinatraResource
         end
         convert(object)
       end
+      
+      def do_callback(name, resource_config, document)
+        proc = resource_config[:callbacks][name]
+        return unless proc
+        if document
+          proc.call(self, document)
+        else
+          proc.call(self)
+        end
+      end
 
       # Convert a path to a full URI.
       #

@@ -54,7 +54,7 @@ class CategoriesGetManyResourceTest < ResourceTestCase
         assert_equal CATEGORIES, actual.sort
       end
       
-      docs_properties %w(name sources id created_at updated_at)
+      docs_properties %w(name log sources id created_at updated_at)
     end
   end
 

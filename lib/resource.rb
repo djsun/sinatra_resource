@@ -14,6 +14,22 @@ module SinatraResource
       
       attr_reader :resource_config
       
+      # Specify a callback.
+      #
+      # @param [Symbol] method
+      #   A symbol that refers to a method on the parent.
+      #
+      # @return [undefined]
+      def callback(name, &block)
+        unless @resource_config[:callbacks].include?(name)
+          raise DefinitionError, "callback #{name.inspect} is not supported #{self}"
+        end
+        if @resource_config[:callbacks][name]
+          raise DefinitionError, "callback #{name.inspect} already declared in #{self}"
+        end
+        @resource_config[:callbacks][name] = block
+      end
+      
       # Specify the association +method+ on +parent+ that points to the
       # current (child) +model+.
       #
@@ -188,13 +204,24 @@ module SinatraResource
       # For internal use. Initializes internal data structure.
       def setup
         @resource_config = {
+          :callbacks         => {
+            :before_create   => nil,
+            :after_create    => nil,
+            :before_update   => nil,
+            :after_update    => nil,
+            :before_destroy  => nil,
+            :after_destroy   => nil,
+          },
           :child_association => nil,
           :model             => nil,
           :parent            => nil,
           :path              => nil, # default_path,
           :permission        => {},
           :properties        => {},
-          :relation          => { :create => nil, :delete => nil },
+          :relation          => {
+            :create          => nil,
+            :delete          => nil,
+          },
           :roles             => nil,
         }
       end

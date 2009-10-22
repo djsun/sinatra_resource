@@ -94,6 +94,11 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       
       use "return 204 No Content"
       use "one less category"
+      
+      test "callbacks should work" do
+        actual = last_response.headers['X-Test-Callbacks']
+        assert_equal "before_destroy after_destroy", actual
+      end
     end
   end
   

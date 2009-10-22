@@ -103,7 +103,7 @@ class CategoriesPostResourceTest < ResourceTestCase
       use "return 201 Created"
       location_header "categories"
       use "one new category"
-      doc_properties %w(name id created_at updated_at sources)
+      doc_properties %w(name log id created_at updated_at sources)
       
       test "should set all fields in database" do
         category = Category.find_by_id(parsed_response_body["id"])
@@ -111,6 +111,10 @@ class CategoriesPostResourceTest < ResourceTestCase
         @valid_params.each_pair do |key, value|
           assert_equal value, category[key]
         end
+      end
+      
+      test "callbacks should work" do
+        assert_equal "before_create after_create", parsed_response_body["log"]
       end
     end
   end

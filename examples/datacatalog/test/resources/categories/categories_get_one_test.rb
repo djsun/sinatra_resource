@@ -57,7 +57,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      doc_properties %w(name id created_at updated_at sources)
+      doc_properties %w(name log id created_at updated_at sources)
       
       test "body should have correct sources" do
         expected = [
