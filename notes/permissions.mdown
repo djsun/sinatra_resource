@@ -68,11 +68,11 @@ In other words, if you know the user type, action, and resource, you
 know whether to allow or disallow.
 
     def allow?(user_type, action, resource)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
     
     def disallow?(user_type, action, resource)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
 
 ## Document-level use cases:
@@ -145,21 +145,21 @@ The nice thing about the {can | can't} style is that it allows for one or both
 Which brings us back to the 'allow?' and 'disallow?' methods:
 
     def allow?(user_type, user, action, resource, instance, relation)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
     
     def disallow?(user_type, user, action, resource, instance, relation)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
 
 I would expect that user_type can be derived from user, so we can simplify:
 
     def allow?(user, action, resource, instance, relation)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
     
     def disallow?(user, action, resource, instance, relation)
-      # logic depends solely on parameters
+      # logic depends solely on params
     end
 
 It is tempting to try to simplify further. For example, why not assume that resource can be inferred from instance? That may be so, but I'm not so convinced that there is only one resource for each instance. For example,

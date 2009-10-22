@@ -22,12 +22,6 @@ class UsersPutResourceTest < ResourceTestCase
     @user.destroy
   end
   
-  shared "user unchanged" do
-    test "should not change user in database" do
-      assert_equal @user_copy, User.find_by_id(@user.id)
-    end
-  end
-  
   context "put /:id" do
     context "anonymous" do
       before do
@@ -50,25 +44,23 @@ class UsersPutResourceTest < ResourceTestCase
   
   %w(basic curator).each do |role|
     [:created_at, :updated_at].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
-          put "/#{@user.id}", valid_params_for(role).
-            merge(@extra_admin_params).merge(invalid => 9)
+          put "/#{@user.id}", valid_params_for(role).merge(invalid => 9)
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
 
     [:name, :role].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
-          put "/#{@user.id}", valid_params_for(role).
-            merge(@extra_admin_params).merge(erase => "")
+          put "/#{@user.id}", valid_params_for(role).merge(erase => "")
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
@@ -77,27 +69,27 @@ class UsersPutResourceTest < ResourceTestCase
       context "#{role} : put /:id without #{missing}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
-            merge(@extra_admin_params).delete_if { |k, v| k == missing }
+            delete_if { |k, v| k == missing }
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
 
     context "#{role} : put /:id with valid params" do
       before do
-        put "/#{@user.id}", valid_params_for(role).merge(@extra_admin_params)
+        put "/#{@user.id}", valid_params_for(role)
       end
-
-      use "return 401 Unauthorized"
+    
+      use "return 401 because the API key is unauthorized"
       use "user unchanged"
     end
   end
 
   %w(admin).each do |role|
     [:created_at, :updated_at].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
@@ -110,7 +102,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
 
     [:name, :role].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")
@@ -122,12 +114,12 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put /:id with no parameters" do
+    context "#{role} : put /:id with no params" do
       before do
         put "/#{@user.id}", :api_key => api_key_for(role)
       end
 
-      use "return 400 because no parameters were given"
+      use "return 400 because no params were given"
       use "user unchanged"
     end
 

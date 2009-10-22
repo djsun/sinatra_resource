@@ -6,11 +6,27 @@ module SinatraResource
       includee.setup
     end
     
-    def config
-      self.class.instance_variable_get("@resource_config")
+    def resource_config
+      self.class.resource_config
     end
-    
+
     module ClassMethods
+      
+      attr_reader :resource_config
+      
+      # Specify the association +method+ on +parent+ that points to the
+      # current (child) +model+.
+      #
+      # @param [Symbol] method
+      #   A symbol that refers to a method on the parent.
+      #
+      # @return [undefined]
+      def child_association(method)
+        if @resource_config[:child_association]
+          raise DefinitionError, "child_association already declared in #{self}"
+        end
+        @resource_config[:child_association] = method
+      end
       
       # Build the Sinatra actions based on the DSL statements in this class.
       # You will want to do this last.
@@ -20,10 +36,11 @@ module SinatraResource
       #
       # @return [undefined]
       def build
+        deferred_defaults
         validate
         Builder.new(self).build
       end
-
+      
       # Specify the underlying +model+
       #
       # @example
@@ -43,7 +60,33 @@ module SinatraResource
           raise DefinitionError, "model already declared in #{self}"
         end
         @resource_config[:model] = model
-        default_properties
+      end
+      
+      # Specify the parent +resource+. Only used for nested resources.
+      #
+      # @param [Class] resource
+      #
+      # @return [undefined]
+      def parent(resource)
+        if @resource_config[:parent]
+          raise DefinitionError, "parent already declared in #{self}"
+        end
+        @resource_config[:parent] = resource
+      end
+      
+      # Specify the path. If not specified, SinatraResource will infer the path
+      # from the resource class (see the +default_path+ method.)
+      #
+      # This method is also useful for nested resources.
+      #
+      # @param [String] name
+      #
+      # @return [undefined]
+      def path(name)
+        if @resource_config[:path]
+          raise DefinitionError, "path already declared in #{self}"
+        end
+        @resource_config[:path] = name
       end
       
       # Specify the minimal role needed to access this resource for reading
@@ -78,7 +121,7 @@ module SinatraResource
       # @return [undefined]
       def property(name, access_rules={}, &block)
         if @resource_config[:properties][name]
-          raise DefinitionError, "property #{name} already declared in #{self}"
+          raise DefinitionError, "property #{name.inspect} already declared in #{self}"
         end
         @resource_config[:properties][name] = {}
         if block
@@ -89,6 +132,33 @@ module SinatraResource
             @resource_config[:properties][name][kind] = role
           end
         end
+      end
+      
+      # Declare a relation with a block of code.
+      #
+      # Only needed with nested resources. 
+      #
+      # For example:
+      #   relation :create do |parent, child|
+      #     Categorization.create(
+      #       :category_id => parent.id,
+      #       :source_id   => child.id
+      #     )
+      #   end
+      #
+      # This runs after a POST to automatically connect parent with child.
+      #
+      # Is useful to create a document that joins a category (the parent)
+      # to the source (the child).
+      #
+      # @param [Symbol] name
+      #
+      # @return [undefined]
+      def relation(name, &block)
+        if @resource_config[:relation][name]
+          raise DefinitionError, "relation #{name.inspect} already declared in #{self}"
+        end
+        @resource_config[:relation][name] = block
       end
       
       # Specify the role definitions for this resource.
@@ -118,28 +188,41 @@ module SinatraResource
       # For internal use. Initializes internal data structure.
       def setup
         @resource_config = {
-          :model      => nil,
-          :permission => {},
-          :properties => {},
-          :roles      => nil,
-          :path       => default_path,
+          :child_association => nil,
+          :model             => nil,
+          :parent            => nil,
+          :path              => nil, # default_path,
+          :permission        => {},
+          :properties        => {},
+          :relation          => { :create => nil, :delete => nil },
+          :roles             => nil,
         }
       end
       
       protected
       
-      # Return the default relative path for a resource.
+      # Set some defaults, only if they haven't been set already.
       #
-      # @return [String]
-      def default_path
-        self.to_s.split('::').last.downcase
+      # @return [undefined]
+      def deferred_defaults
+        set_default_path
+        set_default_properties
+      end
+      
+      # Set the default relative path for a resource.
+      #
+      # @return [undefined]
+      def set_default_path
+        unless @resource_config[:path]
+          @resource_config[:path] = self.to_s.split('::').last.downcase
+        end
       end
 
       # Define some default properties to mirror common keys in the
       # model
       #
       # @return [undefined]
-      def default_properties
+      def set_default_properties
         keys = @resource_config[:model].keys
         if keys.include?("_id")
           property :id, :w => :nobody

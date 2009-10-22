@@ -14,18 +14,6 @@ class SourcesDeleteResourceTest < ResourceTestCase
   after do
     @source.destroy
   end
-
-  shared "no change in source count" do
-    test "should not change number of source documents in database" do
-      assert_equal @source_count, Source.all.length
-    end
-  end
-
-  shared "one less source" do
-    test "should remove one source document from database" do
-      assert_equal @source_count - 1, Source.all.length
-    end
-  end
   
   context "delete /:id" do
     context "anonymous" do
@@ -53,7 +41,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
 
@@ -64,7 +52,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
 
@@ -73,7 +61,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{@source.id}", :api_key => api_key_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
   end
@@ -84,7 +72,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
       
-      use "return 404 Not Found"
+      use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
 
@@ -95,7 +83,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 400 because parameters were not empty"
+      use "return 400 because params were not empty"
       use "no change in source count"
     end
 

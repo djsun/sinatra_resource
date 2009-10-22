@@ -7,13 +7,14 @@ class CategoriesGetManyResourceTest < ResourceTestCase
   def app; Categories end
 
   before do
+    raise "Unexpected Category count" unless Category.count == 0
     @categories = 3.times.map do |i|
       create_category(:name => "Category #{i}")
     end
   end
   
   after do
-    @categories.each { |x| x.destroy }
+    @categories.each { |x| x.destroy } if @categories
   end
   
   CATEGORIES = ["Category 0", "Category 1", "Category 2"].sort

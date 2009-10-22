@@ -11,11 +11,13 @@ module SinatraResource
       #
       # @param [MongoMapper::Document] document
       #
+      # @param [Hash] resource_config
+      #
       # @return [Hash<String => Object>]
-      def build_resource(role, document)
+      def build_resource(role, document, resource_config)
         resource = {}
-        config[:properties].each_pair do |property, hash|
-          if authorized?(:read, role, property)
+        resource_config[:properties].each_pair do |property, hash|
+          if authorized?(:read, role, resource_config, property)
             resource[property.to_s] = value(property, document, hash)
           end
         end
@@ -29,10 +31,12 @@ module SinatraResource
       #
       # @param [String] api_key
       #
+      # @param [Hash] resource_config
+      #
       # @return [Array<Hash<String => Object>>]
-      def build_resources(documents)
+      def build_resources(documents, resource_config)
         documents.map do |document|
-          build_resource(lookup_role(document), document)
+          build_resource(lookup_role(document), document, resource_config)
         end
       end
 
@@ -44,10 +48,17 @@ module SinatraResource
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
       #
+      # @param [Hash] resource_config
+      #
+      # @param [Boolean] leaf
+      #   If a simple resource, should be true.
+      #   If a nested resource, are we at the 'end' (the leaf)?
+      #
       # @return [undefined]
-      def check_params(action, role)
+      def check_params(action, role, resource_config, leaf)
+        return unless leaf
         params_check_action(action)
-        params_check_action_and_role(action, role)
+        params_check_action_and_role(action, role, resource_config)
       end
 
       # Halt unless the current role has permission to carry out +action+
@@ -58,10 +69,12 @@ module SinatraResource
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
       #
+      # @param [Hash] resource_config
+      #
       # @return [undefined]
-      def check_permission(action, role)
-        before_authorization(action, role)
-        unless authorized?(action, role)
+      def check_permission(action, role, resource_config)
+        before_authorization(action, role, resource_config)
+        unless authorized?(action, role, resource_config)
           error 401, convert(body_for(:unauthorized))
         end
       end
@@ -85,12 +98,12 @@ module SinatraResource
       # @param [Object] object
       #
       # @return [String]
-      def display(action, object)
+      def display(action, object, resource_config)
         case action
         when :read
         when :create
           response.status = 201
-          path = config[:path] + %(/#{object["id"]})
+          path = resource_config[:path] + %(/#{object["id"]})
           response.headers['Location'] = full_uri(path)
         when :update
         when :delete
@@ -118,8 +131,8 @@ module SinatraResource
       # @param [String, nil] id
       #
       # @return [Symbol]
-      def get_role(id=nil)
-        lookup_role(id ? config[:model].find_by_id(id) : nil)
+      def get_role(model, id=nil)
+        lookup_role(id ? model.find_by_id(id) : nil)
       end
 
       # Return the minimum role required for +action+, and, if specified,
@@ -128,13 +141,17 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
+      # @param [Hash] resource_config
+      #
+      # @param [Symbol, nil] property
+      #
       # @return [Symbol]
       #   a role (such as :anonymous, :basic, or :admin)
-      def minimum_role(action, property=nil)
+      def minimum_role(action, resource_config, property=nil)
         if property.nil?
-          config[:permission][to_read_or_modify(action)]
+          resource_config[:permission][to_read_or_modify(action)]
         else
-          config[:properties][property][to_r_or_w(action)]
+          resource_config[:properties][property][to_r_or_w(action)]
         end || :anonymous
       end
       
@@ -148,18 +165,20 @@ module SinatraResource
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
       #
-      # @param [Symbol] property
+      # @param [Hash] resource_config
+      #
+      # @param [Symbol, nil] property
       #   a property of a resource
       #
       # @return [Boolean]
-      def authorized?(action, role, property=nil)
-        klass = config[:roles]
+      def authorized?(action, role, resource_config, property=nil)
+        klass = resource_config[:roles]
         klass.validate_role(role)
-        klass.satisfies?(role, minimum_role(action, property))
+        klass.satisfies?(role, minimum_role(action, resource_config, property))
       end
 
       # Application-level hook that runs as part of +check_permission+,
-      # before +authorized?(action, role)+ is called.
+      # before +authorized?(action, role, resource_config)+ is called.
       #
       # For example, an application might want to throw custom errors
       # in certain situations before +authorized?+ runs.
@@ -172,8 +191,10 @@ module SinatraResource
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
       #
+      # @param [Hash] resource_config
+      #
       # @return [String]
-      def before_authorization(action, role)
+      def before_authorization(action, role, resource_config)
         raise NotImplementedError
       end
 
@@ -201,7 +222,7 @@ module SinatraResource
         when :not_found
           ""
         when :unauthorized
-          ""
+          { "errors" => "unauthorized_api_key" }
         end
       end
 
@@ -220,6 +241,10 @@ module SinatraResource
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
+      #
+      # @param [Boolean] leaf
+      #   If a simple resource, should be true.
+      #   If a nested resource, are we at the 'end' (the leaf)?
       #
       # @return [undefined]
       def params_check_action(action)
@@ -251,11 +276,13 @@ module SinatraResource
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
       #
+      # @param [Hash] resource_config
+      #
       # @return [undefined]
-      def params_check_action_and_role(action, role)
+      def params_check_action_and_role(action, role, resource_config)
         invalid = []
         params.each_pair do |property, value|
-          invalid << property if !authorized?(action, role, property.intern)
+          invalid << property if !authorized?(action, role, resource_config, property.intern)
         end
         unless invalid.empty?
           error 400, convert(body_for(:invalid_params, invalid))

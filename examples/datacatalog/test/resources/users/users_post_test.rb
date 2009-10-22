@@ -18,18 +18,6 @@ class UsersPostResourceTest < ResourceTestCase
     }
   end
 
-  shared "no new users" do
-    test "should not change number of user documents in database" do
-      assert_equal @user_count, User.all.length
-    end
-  end
-
-  shared "one new user" do
-    test "should add one user document to database" do
-      assert_equal @user_count + 1, User.all.length
-    end
-  end
-
   context "post /" do
     context "anonymous" do
       before do
@@ -37,7 +25,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
     
       use "return 401 because the API key is missing"
-      use "no new users"
+      use "no change in user count"
     end
 
     context "incorrect API key" do
@@ -46,7 +34,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
   
       use "return 401 because the API key is invalid"
-      use "no new users"
+      use "no change in user count"
     end
   end
 
@@ -57,8 +45,8 @@ class UsersPostResourceTest < ResourceTestCase
           post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
   
-        use "return 401 Unauthorized"
-        use "no new users"
+        use "return 401 because the API key is unauthorized"
+        use "no change in user count"
       end
     end
   
@@ -68,8 +56,8 @@ class UsersPostResourceTest < ResourceTestCase
           post "/", valid_params_for(role).merge(invalid => 9)
         end
   
-        use "return 401 Unauthorized"
-        use "no new users"
+        use "return 401 because the API key is unauthorized"
+        use "no change in user count"
       end
     end
   
@@ -78,8 +66,8 @@ class UsersPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role)
       end
       
-      use "return 401 Unauthorized"
-      use "no new users"
+      use "return 401 because the API key is unauthorized"
+      use "no change in user count"
     end
   end
 
@@ -92,7 +80,7 @@ class UsersPostResourceTest < ResourceTestCase
         end
         
         use "return 400 Bad Request"
-        use "no new users"
+        use "no change in user count"
         missing_param missing
       end
     end
@@ -105,7 +93,7 @@ class UsersPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
-        use "no new users"
+        use "no change in user count"
         invalid_param invalid
       end
     end
@@ -113,6 +101,10 @@ class UsersPostResourceTest < ResourceTestCase
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role).merge(@extra_admin_params)
+      end
+
+      after do
+        User.find_by_id(parsed_response_body["id"]).destroy
       end
   
       use "return 201 Created"

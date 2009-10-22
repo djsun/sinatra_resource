@@ -7,13 +7,14 @@ class SourcesGetManyResourceTest < ResourceTestCase
   def app; Sources end
 
   before do
+    raise "Unexpected Source count" unless Source.count == 0
     @sources = 3.times.map do |i|
       create_source(:title => "Source #{i}")
     end
   end
   
   after do
-    @sources.each { |x| x.destroy }
+    @sources.each { |x| x.destroy } if @sources
   end
   
   SOURCES = ["Source 0", "Source 1", "Source 2"].sort

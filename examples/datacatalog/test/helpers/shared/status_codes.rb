@@ -23,9 +23,7 @@ class ResourceTestCase
       assert_equal 204, last_response.status
     end
     
-    test "body should be empty" do
-      assert_equal "", last_response.body
-    end
+    use "return an empty response body"
   end
 
   shared "return 400 Bad Request" do
@@ -50,6 +48,12 @@ class ResourceTestCase
     test "status should be 404 Not Found" do
       assert_equal 404, last_response.status
     end
+  end
+
+  shared "return 404 Not Found with empty response body" do
+    use "return 404 Not Found"
+    
+    use "return an empty response body"
   end
 
   shared "return 409 Conflict" do

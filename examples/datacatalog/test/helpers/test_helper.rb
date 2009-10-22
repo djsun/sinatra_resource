@@ -20,9 +20,8 @@ Dir.glob(base + '/test_cases/*.rb').each { |f| require f }
 Dir.glob(base + '/assertions/*.rb').each { |f| require f }
 Dir.glob(base + '/shared/*.rb'    ).each { |f| require f }
 
-require File.expand_path(File.dirname(__FILE__) + '/../../config/config')
+require File.expand_path(base + '/../../config/config')
 Config.environment = 'test'
-
 class Test::Unit::TestCase
   include RR::Adapters::TestUnit
 end
