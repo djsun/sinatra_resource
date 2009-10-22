@@ -20,6 +20,12 @@ class ResourceTestCase
     end
   end
 
+  shared "category unchanged" do
+    test "should not change category in database" do
+      assert_equal @category_copy, DataCatalog::Category.find_by_id(@category.id)
+    end
+  end
+
   # == sources
 
   shared "no change in source count" do
@@ -40,6 +46,12 @@ class ResourceTestCase
     end
   end
 
+  shared "source unchanged" do
+    test "should not change source in database" do
+      assert_equal @source_copy, DataCatalog::Source.find_by_id(@source.id)
+    end
+  end
+
   # == users
 
   shared "no change in user count" do
@@ -57,6 +69,12 @@ class ResourceTestCase
   shared "one new user" do
     test "should add one user document to database" do
       assert_equal @user_count + 1, DataCatalog::User.all.length
+    end
+  end
+
+  shared "user unchanged" do
+    test "should not change user in database" do
+      assert_equal @user_copy, DataCatalog::User.find_by_id(@user.id)
     end
   end
 

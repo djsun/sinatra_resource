@@ -44,7 +44,7 @@ class UsersPutResourceTest < ResourceTestCase
   
   %w(basic curator).each do |role|
     [:created_at, :updated_at].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).merge(invalid => 9)
         end
@@ -55,7 +55,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
 
     [:name, :role].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@user.id}", valid_params_for(role).merge(erase => "")
         end
@@ -89,7 +89,7 @@ class UsersPutResourceTest < ResourceTestCase
 
   %w(admin).each do |role|
     [:created_at, :updated_at].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
@@ -102,7 +102,7 @@ class UsersPutResourceTest < ResourceTestCase
     end
 
     [:name, :role].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")

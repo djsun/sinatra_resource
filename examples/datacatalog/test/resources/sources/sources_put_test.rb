@@ -20,12 +20,6 @@ class SourcesPutResourceTest < ResourceTestCase
     @source.destroy
   end
   
-  shared "source unchanged" do
-    test "should not change source in database" do
-      assert_equal @source_copy, Source.find_by_id(@source.id)
-    end
-  end
-  
   context "put /:id" do
     context "anonymous" do
       before do
@@ -48,7 +42,7 @@ class SourcesPutResourceTest < ResourceTestCase
   
   %w(basic).each do |role|
     [:id, :created_at, :updated_at, :categories].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(invalid => 9)
         end
@@ -59,7 +53,7 @@ class SourcesPutResourceTest < ResourceTestCase
     end
   
     [:title, :url].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(erase => "")
         end
@@ -92,7 +86,7 @@ class SourcesPutResourceTest < ResourceTestCase
   
   %w(curator).each do |role|
     [:raw, :created_at, :updated_at, :categories].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(invalid => 9)
         end
@@ -104,7 +98,7 @@ class SourcesPutResourceTest < ResourceTestCase
     end
 
     [:title, :url].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(erase => "")
         end
@@ -153,7 +147,7 @@ class SourcesPutResourceTest < ResourceTestCase
   
   %w(admin).each do |role|
     [:created_at, :updated_at, :categories].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@source.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
@@ -166,7 +160,7 @@ class SourcesPutResourceTest < ResourceTestCase
     end
 
     [:title, :url].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@source.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")

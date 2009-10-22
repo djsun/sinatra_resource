@@ -47,15 +47,14 @@ class CategoriesSourcesGetOneResourceTest < ResourceTestCase
       use "return 401 because the API key is invalid"
     end
   end
-
+  
   %w(basic curator admin).each do |role|
     context "#{role} : get /:fake_id/sources/:fake_id" do
       before do
         get "/#{FAKE_ID}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
     
-      use "return 404 Not Found"
-      use "return an empty response body"
+      use "return 404 Not Found with empty response body"
     end
     
     context "#{role} : get /:fake_id/sources/:id" do
@@ -63,8 +62,7 @@ class CategoriesSourcesGetOneResourceTest < ResourceTestCase
         get "/#{FAKE_ID}/sources/#{@source.id}", :api_key => api_key_for(role)
       end
     
-      use "return 404 Not Found"
-      use "return an empty response body"
+      use "return 404 Not Found with empty response body"
     end
     
     context "#{role} : get /:id/sources/:fake_id" do
@@ -72,20 +70,18 @@ class CategoriesSourcesGetOneResourceTest < ResourceTestCase
         get "/#{@category.id}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
     
-      use "return 404 Not Found"
-      use "return an empty response body"
+      use "return 404 Not Found with empty response body"
     end
-
+  
     context "#{role} : get /:id/sources/:not_related_id" do
       before do
         get "/#{@category.id}/sources/#{@other_source.id}",
           :api_key => api_key_for(role)
       end
       
-      use "return 404 Not Found"
-      use "return an empty response body"
+      use "return 404 Not Found with empty response body"
     end
-
+  
     context "#{role} : get /:id/sources/:id" do
       before do
         get "/#{@category.id}/sources/#{@source.id}", :api_key => api_key_for(role)
@@ -95,5 +91,5 @@ class CategoriesSourcesGetOneResourceTest < ResourceTestCase
       doc_properties %w(title url raw id created_at updated_at)
     end
   end
-
+  
 end

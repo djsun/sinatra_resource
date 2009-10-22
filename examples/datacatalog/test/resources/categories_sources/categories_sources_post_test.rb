@@ -53,9 +53,8 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         post "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
       end
   
-      use "return 404 Not Found"
+      use "return 404 Not Found with empty response body"
       use "no change in source count"
-      use "return an empty response body"
     end
   
     context "#{role} : post /:id/sources" do
@@ -63,7 +62,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         post "/#{@category.id}/sources/", :api_key => api_key_for(role)
       end
     
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
   end
@@ -75,13 +74,12 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         post "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
       end
     
-      use "return 404 Not Found"
+      use "return 404 Not Found with empty response body"
       use "no change in source count"
-      use "return an empty response body"
     end
   
     [:title, :url].each do |missing|
-      context "#{role} : post / but missing #{missing}" do
+      context "#{role} : post /:id/sources/ but missing #{missing}" do
         before do
           post "/#{@category.id}/sources/",
             valid_params_for(role).delete_if { |k, v| k == missing }

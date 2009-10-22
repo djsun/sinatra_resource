@@ -4,32 +4,45 @@ module SinatraResource
 
     module ActionDefinitions
 
-      def document_for_get_one(role, model, resource_config, leaf, id)
+      def document_for_get_one(role, model, resource_config, leaf, id, parent_document, association)
         check_permission(:read, role, resource_config)
+        if resource_config[:parent]
+          check_related?(parent_document, association, id)
+        end
         check_params(:read, role, resource_config, leaf)
         find_document!(model, id)
       end
       
-      def documents_for_get_many(role, model, resource_config, leaf)
+      def documents_for_get_many(role, model, resource_config, leaf, parent_document, association)
         check_permission(:read, role, resource_config)
         check_params(:read, role, resource_config, leaf)
-        find_documents!(model)
+        documents = find_documents!(model)
+        # TODO: A more performant approach would be to modify find_documents!
+        # so that it returns the correct results in one query.
+        select_related(parent_document, association, documents)
       end
       
-      def document_for_post(role, model, resource_config, leaf)
+      def document_for_post(role, model, resource_config, leaf, parent_document, association)
         check_permission(:create, role, resource_config)
         check_params(:create, role, resource_config, leaf)
-        create_document!(model)
+        document = create_document!(model)
+        make_related(parent_document, document, resource_config)
       end
       
-      def document_for_put(role, model, resource_config, leaf, id)
+      def document_for_put(role, model, resource_config, leaf, id, parent_document, association)
         check_permission(:update, role, resource_config)
+        if resource_config[:parent]
+          check_related?(parent_document, association, id)
+        end
         check_params(:update, role, resource_config, leaf)
         update_document!(model, id)
       end
       
-      def document_for_delete(role, model, resource_config, leaf, id)
+      def document_for_delete(role, model, resource_config, leaf, id, parent_document, association)
         check_permission(:delete, role, resource_config)
+        if resource_config[:parent]
+          check_related?(parent_document, association, id)
+        end
         check_params(:delete, role, resource_config, leaf)
         delete_document!(model, id)
       end

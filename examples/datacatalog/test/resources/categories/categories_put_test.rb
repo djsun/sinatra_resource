@@ -18,12 +18,6 @@ class CategoriesPutResourceTest < ResourceTestCase
     @category.destroy
   end
   
-  shared "category unchanged" do
-    test "should not change category in database" do
-      assert_equal @category_copy, Category.find_by_id(@category.id)
-    end
-  end
-  
   context "put /:id" do
     context "anonymous" do
       before do
@@ -88,7 +82,7 @@ class CategoriesPutResourceTest < ResourceTestCase
   
   %w(curator admin).each do |role|
     [:created_at, :updated_at, :sources].each do |invalid|
-      context "#{role} : put / but with #{invalid}" do
+      context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@category.id}", valid_params_for(role).merge(invalid => 9)
         end
@@ -100,7 +94,7 @@ class CategoriesPutResourceTest < ResourceTestCase
     end
 
     [:name].each do |erase|
-      context "#{role} : put / but blanking out #{erase}" do
+      context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@category.id}", valid_params_for(role).merge(erase => "")
         end
