@@ -53,7 +53,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).merge(invalid => 9)
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
     end
@@ -64,7 +64,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).merge(erase => "")
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
     end
@@ -75,7 +75,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).delete_if { |k, v| k == missing }
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
     end
@@ -85,7 +85,7 @@ class SourcesPutResourceTest < ResourceTestCase
         put "/#{@source.id}", valid_params_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "source unchanged"
     end
   end
