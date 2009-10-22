@@ -56,7 +56,7 @@ class UsersPutResourceTest < ResourceTestCase
             merge(@extra_admin_params).merge(invalid => 9)
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
@@ -68,7 +68,7 @@ class UsersPutResourceTest < ResourceTestCase
             merge(@extra_admin_params).merge(erase => "")
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
@@ -80,7 +80,7 @@ class UsersPutResourceTest < ResourceTestCase
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
     end
@@ -90,7 +90,7 @@ class UsersPutResourceTest < ResourceTestCase
         put "/#{@user.id}", valid_params_for(role).merge(@extra_admin_params)
       end
 
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "user unchanged"
     end
   end
