@@ -19,7 +19,7 @@ class CategoriesSourceGetOneResourceTest < ResourceTestCase
     @category.destroy
   end
 
-  context "get /:id" do
+  context "get /:id/sources/:id" do
     context "anonymous" do
       before do
         get "/#{@category.id}/sources/#{@source.id}"
@@ -38,7 +38,25 @@ class CategoriesSourceGetOneResourceTest < ResourceTestCase
   end
   
   %w(basic curator admin).each do |role|
-    context "#{role} : get /:fake_id" do
+    context "#{role} : get /:fake_id/sources/:fake_id" do
+      before do
+        get "/#{FAKE_ID}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
+      end
+    
+      use "return 404 Not Found"
+      use "return an empty response body"
+    end
+
+    context "#{role} : get /:fake_id/sources/:id" do
+      before do
+        get "/#{FAKE_ID}/sources/#{@source.id}", :api_key => api_key_for(role)
+      end
+    
+      use "return 404 Not Found"
+      use "return an empty response body"
+    end
+
+    context "#{role} : get /:id/sources/:fake_id" do
       before do
         get "/#{@category.id}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
@@ -47,7 +65,7 @@ class CategoriesSourceGetOneResourceTest < ResourceTestCase
       use "return an empty response body"
     end
 
-    context "#{role} : get /:id" do
+    context "#{role} : get /:id/sources/:id" do
       before do
         get "/#{@category.id}/sources/#{@source.id}", :api_key => api_key_for(role)
       end
