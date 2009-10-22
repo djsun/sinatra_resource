@@ -7,6 +7,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
   def app; Categories end
 
   before do
+    raise "Unexpected Source count" unless Source.count == 0
     @category = create_category
     @sources = 3.times.map do |i|
       create_source(:title => "Source #{i}")

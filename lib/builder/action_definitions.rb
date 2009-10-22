@@ -19,14 +19,20 @@ module SinatraResource
         documents = find_documents!(model)
         # TODO: A more performant approach would be to modify find_documents!
         # so that it returns the correct results in one query.
-        select_related(parent_document, association, documents)
+        if resource_config[:parent]
+          documents = select_related(parent_document, association, documents)
+        end
+        documents
       end
       
       def document_for_post(role, model, resource_config, leaf, parent_document, association)
         check_permission(:create, role, resource_config)
         check_params(:create, role, resource_config, leaf)
         document = create_document!(model)
-        make_related(parent_document, document, resource_config)
+        if resource_config[:parent]
+          make_related(parent_document, document, resource_config)
+        end
+        document
       end
       
       def document_for_put(role, model, resource_config, leaf, id, parent_document, association)
