@@ -51,7 +51,7 @@ class CategoriesPutResourceTest < ResourceTestCase
           put "/#{@category.id}", valid_params_for(role).merge(invalid => 9)
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "category unchanged"
       end
     end
@@ -62,7 +62,7 @@ class CategoriesPutResourceTest < ResourceTestCase
           put "/#{@category.id}", valid_params_for(role).merge(erase => "")
         end
       
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "category unchanged"
       end
     end
@@ -72,7 +72,7 @@ class CategoriesPutResourceTest < ResourceTestCase
         put "/#{@category.id}", :api_key => api_key_for(role)
       end
 
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "category unchanged"
     end
 
@@ -81,7 +81,7 @@ class CategoriesPutResourceTest < ResourceTestCase
         put "/#{@category.id}", valid_params_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "category unchanged"
     end
   end
