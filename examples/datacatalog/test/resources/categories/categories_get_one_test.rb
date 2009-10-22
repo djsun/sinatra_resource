@@ -2,7 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class CategoriesGetOneResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Categories end
+  include DataCatalog
+
+  def app; Categories end
   
   before do
     @category = create_category

@@ -1,8 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
-class CategoriesSourceGetOneResourceTest < ResourceTestCase
+class CategoriesSourcesGetOneResourceTest < ResourceTestCase
+  
+  include DataCatalog
 
-  def app; DataCatalog::Categories end
+  def app; Categories end
   
   before do
     @category = create_category

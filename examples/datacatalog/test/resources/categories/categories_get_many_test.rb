@@ -2,7 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_
 
 class CategoriesGetManyResourceTest < ResourceTestCase
 
-  def app; DataCatalog::Categories end
+  include DataCatalog
+
+  def app; Categories end
 
   before do
     @categories = 3.times.map do |i|
