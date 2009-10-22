@@ -9,8 +9,8 @@ module SinatraResource
       # by way of +association+. If not, return 404 Not Found.
       #
       # @return [MongoMapper::Document]
-      def check_related?(parent, association, child)
-        unless parent.send(association).find { |x| x.id == child.id }
+      def check_related?(parent, association, child_id)
+        unless parent.send(association).find { |x| x.id == child_id }
           error 404, convert(body_for(:not_found))
         end
       end
@@ -61,6 +61,18 @@ module SinatraResource
       # @return [Array<MongoMapper::Document>]
       def find_documents!(model)
         model.find(:all)
+      end
+
+      # Select only the +children+ that are related to the +parent+ by
+      # way of the +association+.
+      #
+      # @return [MongoMapper::Document]
+      def select_related(parent, association, children)
+        children.select do |child|
+          parent.send(association).find { |x| x.id == child.id }
+        end
+        # TODO: this has O^2 complexity because of the nesting.
+        # I think it is reducible to O.
       end
 
       # Update a document with +id+ from params. If not valid, returns 400.
