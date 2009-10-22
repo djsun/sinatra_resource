@@ -66,8 +66,7 @@ class CategoriesPostResourceTest < ResourceTestCase
     end
   end
 
-  %w(curator).each do |role|
-  # %w(curator admin).each do |role|
+  %w(curator admin).each do |role|
     [:name].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
