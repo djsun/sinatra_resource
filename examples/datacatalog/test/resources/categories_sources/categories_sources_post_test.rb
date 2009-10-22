@@ -67,7 +67,6 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
     end
   end
 
-  # # %w(curator admin).each do |role|
   %w(curator).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
@@ -91,9 +90,82 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
     end
 
+    [:raw, :id, :created_at, :updated_at].each do |invalid|
+      context "#{role} : post /:id/sources/ but with #{invalid}" do
+        before do
+          post "/#{@category.id}/sources/", valid_params_for(role).
+            merge(invalid => 9)
+        end
+      
+        use "return 400 Bad Request"
+        use "no change in source count"
+        invalid_param invalid
+      end
+    end
+
     context "#{role} : post /:id/sources with valid params" do
       before do
         post "/#{@category.id}/sources/", valid_params_for(role)
+      end
+
+      after do
+        Source.find_by_id(parsed_response_body["id"]).destroy
+      end
+      
+      use "return 201 Created"
+      location_header "sources"
+      use "one new source"
+      doc_properties %w(title url raw id created_at updated_at)
+      
+      test "source connected to category" do
+        source = Source.find_by_id(parsed_response_body["id"])
+        assert_equal [@category], source.categories
+      end
+    end
+  end
+
+  %w(admin).each do |role|
+    context "#{role} : post /:fake_id/sources" do
+      before do
+        post "/#{FAKE_ID}/sources/",
+          valid_params_for(role).merge(@extra_admin_params)
+      end
+    
+      use "return 404 Not Found with empty response body"
+      use "no change in source count"
+    end
+  
+    [:title, :url].each do |missing|
+      context "#{role} : post /:id/sources/ but missing #{missing}" do
+        before do
+          post "/#{@category.id}/sources/",
+            valid_params_for(role).merge(@extra_admin_params).
+              delete_if { |k, v| k == missing }
+        end
+        
+        use "return 400 Bad Request"
+        use "no change in source count"
+        missing_param missing
+      end
+    end
+
+    [:id, :created_at, :updated_at].each do |invalid|
+      context "#{role} : post /:id/sources/ but with #{invalid}" do
+        before do
+          post "/#{@category.id}/sources/", valid_params_for(role).
+            merge(@extra_admin_params).merge(invalid => 9)
+        end
+      
+        use "return 400 Bad Request"
+        use "no change in source count"
+        invalid_param invalid
+      end
+    end
+
+    context "#{role} : post /:id/sources with valid params" do
+      before do
+        post "/#{@category.id}/sources/",
+          valid_params_for(role).merge(@extra_admin_params)
       end
 
       after do
