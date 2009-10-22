@@ -41,7 +41,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
 
@@ -52,7 +52,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
 
@@ -61,7 +61,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{@source.id}", :api_key => api_key_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
   end
@@ -72,7 +72,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
       
-      use "return 404 Not Found"
+      use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
 
