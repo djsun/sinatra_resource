@@ -42,7 +42,7 @@ class SourcesPostResourceTest < ResourceTestCase
           post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
 
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "no change in source count"
       end
     end
@@ -53,7 +53,7 @@ class SourcesPostResourceTest < ResourceTestCase
           post "/", valid_params_for(role).merge(invalid => 9)
         end
   
-        use "return 401 Unauthorized"
+        use "return 401 because the API key is unauthorized"
         use "no change in source count"
       end
     end
@@ -63,7 +63,7 @@ class SourcesPostResourceTest < ResourceTestCase
         post "/", valid_params_for(role)
       end
       
-      use "return 401 Unauthorized"
+      use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
   end
