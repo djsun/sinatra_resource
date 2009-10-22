@@ -15,18 +15,6 @@ class SourcesPostResourceTest < ResourceTestCase
     @extra_admin_params = { :raw => { "key" => "value" } }
   end
 
-  shared "no new sources" do
-    test "should not change number of source documents in database" do
-      assert_equal @source_count, Source.all.length
-    end
-  end
-
-  shared "one new source" do
-    test "should add one source document to database" do
-      assert_equal @source_count + 1, Source.all.length
-    end
-  end
-  
   context "post /" do
     context "anonymous" do
       before do
@@ -34,7 +22,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
     
       use "return 401 because the API key is missing"
-      use "no new sources"
+      use "no change in source count"
     end
 
     context "incorrect API key" do
@@ -43,7 +31,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
   
       use "return 401 because the API key is invalid"
-      use "no new sources"
+      use "no change in source count"
     end
   end
 
@@ -55,7 +43,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 401 Unauthorized"
-        use "no new sources"
+        use "no change in source count"
       end
     end
 
@@ -66,7 +54,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 401 Unauthorized"
-        use "no new sources"
+        use "no change in source count"
       end
     end
   
@@ -76,7 +64,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
       
       use "return 401 Unauthorized"
-      use "no new sources"
+      use "no change in source count"
     end
   end
   
@@ -88,7 +76,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
-        use "no new sources"
+        use "no change in source count"
         missing_param missing
       end
     end
@@ -100,7 +88,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
-        use "no new sources"
+        use "no change in source count"
         invalid_param invalid
       end
     end
@@ -108,6 +96,10 @@ class SourcesPostResourceTest < ResourceTestCase
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role)
+      end
+
+      after do
+        Source.find_by_id(parsed_response_body["id"]).destroy
       end
   
       use "return 201 Created"
@@ -134,7 +126,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
 
         use "return 400 Bad Request"
-        use "no new sources"
+        use "no change in source count"
         missing_param missing
       end
     end
@@ -147,7 +139,7 @@ class SourcesPostResourceTest < ResourceTestCase
         end
   
         use "return 400 Bad Request"
-        use "no new sources"
+        use "no change in source count"
         invalid_param invalid
       end
     end
@@ -155,6 +147,10 @@ class SourcesPostResourceTest < ResourceTestCase
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role).merge(@extra_admin_params)
+      end
+
+      after do
+        Source.find_by_id(parsed_response_body["id"]).destroy
       end
   
       use "return 201 Created"

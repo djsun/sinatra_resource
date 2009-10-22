@@ -15,18 +15,6 @@ class CategoriesDeleteResourceTest < ResourceTestCase
     @category.destroy
   end
 
-  shared "no change in category count" do
-    test "should not change number of category documents in database" do
-      assert_equal @category_count, Category.all.length
-    end
-  end
-
-  shared "one less category" do
-    test "should remove one category document from database" do
-      assert_equal @category_count - 1, Category.all.length
-    end
-  end
-  
   context "delete /:id" do
     context "anonymous" do
       before do
@@ -95,7 +83,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 400 because parameters were not empty"
+      use "return 400 because params were not empty"
       use "no change in category count"
     end
 

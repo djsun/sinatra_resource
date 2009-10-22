@@ -50,8 +50,13 @@ module SinatraResource
       #
       # @param [Hash] resource_config
       #
+      # @param [Boolean] leaf
+      #   If a simple resource, should be true.
+      #   If a nested resource, are we at the 'end' (the leaf)?
+      #
       # @return [undefined]
-      def check_params(action, role, resource_config)
+      def check_params(action, role, resource_config, leaf)
+        return unless leaf
         params_check_action(action)
         params_check_action_and_role(action, role, resource_config)
       end
@@ -93,7 +98,7 @@ module SinatraResource
       # @param [Object] object
       #
       # @return [String]
-      def display(action, object)
+      def display(action, object, resource_config)
         case action
         when :read
         when :create
@@ -236,6 +241,10 @@ module SinatraResource
       #
       # @param [Symbol] action
       #   :read, :create, :update, or :delete
+      #
+      # @param [Boolean] leaf
+      #   If a simple resource, should be true.
+      #   If a nested resource, are we at the 'end' (the leaf)?
       #
       # @return [undefined]
       def params_check_action(action)

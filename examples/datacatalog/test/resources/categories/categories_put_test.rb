@@ -67,7 +67,7 @@ class CategoriesPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put /:id with no parameters" do
+    context "#{role} : put /:id with no params" do
       before do
         put "/#{@category.id}", :api_key => api_key_for(role)
       end
@@ -111,12 +111,12 @@ class CategoriesPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put /:id with no parameters" do
+    context "#{role} : put /:id with no params" do
       before do
         put "/#{@category.id}", :api_key => api_key_for(role)
       end
 
-      use "return 400 because no parameters were given"
+      use "return 400 because no params were given"
       use "category unchanged"
     end
 

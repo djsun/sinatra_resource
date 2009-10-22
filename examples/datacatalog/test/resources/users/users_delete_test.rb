@@ -14,18 +14,6 @@ class UsersDeleteResourceTest < ResourceTestCase
   after do
     @user.destroy
   end
-
-  shared "no change in user count" do
-    test "should not change number of user documents in database" do
-      assert_equal @user_count, User.all.length
-    end
-  end
-
-  shared "one less user" do
-    test "should remove one user document from database" do
-      assert_equal @user_count - 1, User.all.length
-    end
-  end
   
   context "delete /:id" do
     context "anonymous" do
@@ -86,7 +74,7 @@ class UsersDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 400 because parameters were not empty"
+      use "return 400 because params were not empty"
       use "no change in user count"
     end
 
@@ -117,7 +105,7 @@ class UsersDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
       
-      use "return 400 because parameters were not empty"
+      use "return 400 because params were not empty"
       use "no change in user count"
     end
 

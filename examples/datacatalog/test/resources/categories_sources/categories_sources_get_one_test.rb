@@ -20,7 +20,7 @@ class CategoriesSourcesGetOneResourceTest < ResourceTestCase
       :category_id => @other_category.id
     )
   end
-  
+
   after do
     @other_categorization.destroy
     @other_source.destroy

@@ -8,6 +8,12 @@ module SinatraResource
       # Make sure that +parent+ document is related to the +child+ document
       # by way of +association+. If not, return 404 Not Found.
       #
+      # @param [MongoMapper::Document] parent
+      #
+      # @param [Symbol] association
+      #
+      # @param [String] child_id
+      #
       # @return [MongoMapper::Document]
       def check_related?(parent, association, child_id)
         unless parent.send(association).find { |x| x.id == child_id }
@@ -62,9 +68,29 @@ module SinatraResource
       def find_documents!(model)
         model.find(:all)
       end
-
+      
+      # ...
+      #
+      # @param [MongoMapper::Document] parent
+      #
+      # @param [MongoMapper::Document] child
+      #
+      # @param [Hash] resource_config
+      #
+      # @return [undefined]
+      def make_related(parent, child, resource_config)
+        proc = resource_config[:relation][:create]
+        proc.call(parent, child) if proc
+      end
+      
       # Select only the +children+ that are related to the +parent+ by
       # way of the +association+.
+      #
+      # @param [MongoMapper::Document] parent
+      #
+      # @param [Symbol] association
+      #
+      # @param [Array<MongoMapper::Document>] children
       #
       # @return [MongoMapper::Document]
       def select_related(parent, association, children)

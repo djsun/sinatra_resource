@@ -32,9 +32,9 @@ module SinatraResource
         @klass.get '/:id/?' do
           id = params.delete("id")
           role = get_role(model, id)
-          document = document_for_get_one(role, model, resource_config, id)
+          document = document_for_get_one(role, model, resource_config, true, id)
           resource = build_resource(role, document, resource_config)
-          display(:read, resource)
+          display(:read, resource, resource_config)
         end
       else
         association            = @association
@@ -45,13 +45,13 @@ module SinatraResource
           id = params.delete("id")
           parent_id = params.delete("parent_id")
           parent_role = get_role(parent_model, parent_id)
-          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id)
           # ------
           role = get_role(model, id)
           check_related?(parent_document, association, id)
-          document = document_for_get_one(role, model, resource_config, id)
+          document = document_for_get_one(role, model, resource_config, true, id)
           resource = build_resource(role, document, resource_config)
-          display(:read, resource)
+          display(:read, resource, resource_config)
         end
       end
     end
@@ -62,9 +62,9 @@ module SinatraResource
       if !@parent
         @klass.get '/?' do
           role = get_role(model)
-          documents = documents_for_get_many(role, model, resource_config)
+          documents = documents_for_get_many(role, model, resource_config, true)
           resources = build_resources(documents, resource_config)
-          display(:read, resources)
+          display(:read, resources, resource_config)
         end
       else
         association            = @association
@@ -74,15 +74,15 @@ module SinatraResource
         @parent.get "/:parent_id/#{path}/?" do
           parent_id = params.delete("parent_id")
           parent_role = get_role(parent_model, parent_id)
-          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id)
           # ------
           role = get_role(model)
-          documents = documents_for_get_many(role, model, resource_config)
+          documents = documents_for_get_many(role, model, resource_config, true)
           # TODO: A better way would be to modify documents_for_get_many
           # so that it returns the correct results in one query.
           documents = select_related(parent_document, association, documents)
           resources = build_resources(documents, resource_config)
-          display(:read, resources)
+          display(:read, resources, resource_config)
         end
       end
     end
@@ -93,9 +93,9 @@ module SinatraResource
       if !@parent
         @klass.post '/?' do
           role = get_role(model)
-          document = document_for_post(role, model, resource_config)
+          document = document_for_post(role, model, resource_config, true)
           resource = build_resource(role, document, resource_config)
-          display(:create, resource)
+          display(:create, resource, resource_config)
         end
       else
         association            = @association
@@ -105,14 +105,14 @@ module SinatraResource
         @parent.post "/:parent_id/#{path}/?" do
           parent_id = params.delete("parent_id")
           parent_role = get_role(parent_model, parent_id)
-          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id)
           # ------
           role = get_role(model)
-          # TODO : Add params as appropriate...
-          # make_related!(parent_document, association, document)
-          document = document_for_post(role, model, resource_config)
+          document = document_for_post(role, model, resource_config, true)
+          # TODO : perhaps merge make_related and document_for_post.
+          make_related(parent_document, document, resource_config)
           resource = build_resource(role, document, resource_config)
-          display(:create, resource)
+          display(:create, resource, resource_config)
         end
       end
     end
@@ -124,9 +124,9 @@ module SinatraResource
         @klass.put '/:id/?' do
           id = params.delete("id")
           role = get_role(model, id)
-          document = document_for_put(role, model, resource_config, id)
+          document = document_for_put(role, model, resource_config, true, id)
           resource = build_resource(role, document, resource_config)
-          display(:update, resource)
+          display(:update, resource, resource_config)
         end
       else
         association            = @association
@@ -137,15 +137,15 @@ module SinatraResource
           id = params.delete("id")
           parent_id = params.delete("parent_id")
           parent_role = get_role(parent_model, parent_id)
-          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id)
           # ------
           role = get_role(model, id)
           check_related?(parent_document, association, id)
-          document = document_for_put(role, model, resource_config, id)
+          document = document_for_put(role, model, resource_config, true, id)
           # No need to check the association. It may or may not be intact
           # after the modify operation above: either is acceptable.
           resource = build_resource(role, document, resource_config)
-          display(:update, resource)
+          display(:update, resource, resource_config)
         end
       end
     end
@@ -157,8 +157,8 @@ module SinatraResource
         @klass.delete '/:id/?' do
           id = params.delete("id")
           role = get_role(model, id)
-          document_for_delete(role, model, resource_config, id)
-          display(:delete, "")
+          document_for_delete(role, model, resource_config, true, id)
+          display(:delete, "", resource_config)
         end
       else
         association            = @association
@@ -169,12 +169,12 @@ module SinatraResource
           id = params.delete("id")
           parent_id = params.delete("parent_id")
           parent_role = get_role(parent_model, parent_id)
-          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, parent_id)
+          parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id)
           # ------
           role = get_role(model, id)
           check_related?(parent_document, association, id)
-          document_for_delete(role, model, resource_config, id)
-          display(:delete, "")
+          document_for_delete(role, model, resource_config, true, id)
+          display(:delete, "", resource_config)
         end
       end
     end

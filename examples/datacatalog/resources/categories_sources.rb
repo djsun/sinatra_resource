@@ -8,6 +8,13 @@ module DataCatalog
     model Source
     path "sources"
 
+    relation :create do |parent, child|
+      Categorization.create(
+        :category_id => parent.id,
+        :source_id   => child.id
+      )
+    end
+
     # == Permissions
 
     roles Roles
@@ -21,6 +28,7 @@ module DataCatalog
     property :raw, :w => :admin
 
     # == Callbacks
+    
   end
   
   CategoriesSources.build
