@@ -27,10 +27,4 @@ class Test::Unit::TestCase
   include RR::Adapters::TestUnit
 end
 
-# If you use `rake test` the database will automatically get dropped.
-# But if you are running inside TextMate, it is handy to automatically drop the
-# database here:
-if ENV["TM_APP_PATH"]
-  puts "TextMate environment detected. Dropping test database..."
-  Config.drop_database
-end
+Config.drop_database
