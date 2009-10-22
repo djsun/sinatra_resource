@@ -4,7 +4,7 @@ module DataCatalog
     include Resource
 
     parent Categories
-    association :sources
+    child_association :sources
     model Source
     path "sources"
 
@@ -13,6 +13,13 @@ module DataCatalog
         :category_id => parent.id,
         :source_id   => child.id
       )
+    end
+    
+    relation :delete do |parent, child|
+      Categorization.find(:conditions => {
+        :category_id => parent.id,
+        :source_id   => child.id
+      }).destroy
     end
 
     # == Permissions

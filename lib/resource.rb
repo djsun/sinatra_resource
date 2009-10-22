@@ -21,11 +21,11 @@ module SinatraResource
       #   A symbol that refers to a method on the parent.
       #
       # @return [undefined]
-      def association(method)
-        if @resource_config[:association]
-          raise DefinitionError, "association already declared in #{self}"
+      def child_association(method)
+        if @resource_config[:child_association]
+          raise DefinitionError, "child_association already declared in #{self}"
         end
-        @resource_config[:association] = method
+        @resource_config[:child_association] = method
       end
       
       # Build the Sinatra actions based on the DSL statements in this class.
@@ -188,14 +188,14 @@ module SinatraResource
       # For internal use. Initializes internal data structure.
       def setup
         @resource_config = {
-          :association => nil,
-          :model       => nil,
-          :parent      => nil,
-          :path        => nil, # default_path,
-          :permission  => {},
-          :properties  => {},
-          :relation    => { :create => nil },
-          :roles       => nil,
+          :child_association => nil,
+          :model             => nil,
+          :parent            => nil,
+          :path              => nil, # default_path,
+          :permission        => {},
+          :properties        => {},
+          :relation          => { :create => nil, :delete => nil },
+          :roles             => nil,
         }
       end
       

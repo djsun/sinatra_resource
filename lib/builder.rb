@@ -5,11 +5,11 @@ module SinatraResource
     def initialize(klass)
       @klass  = klass
 
-      @resource_config = @klass.resource_config
-      @association     = @resource_config[:association]
-      @model           = @resource_config[:model]
-      @parent          = @resource_config[:parent]
-      @path            = @resource_config[:path]
+      @resource_config   = @klass.resource_config
+      @child_association = @resource_config[:child_association]
+      @model             = @resource_config[:model]
+      @parent            = @resource_config[:parent]
+      @path              = @resource_config[:path]
       if @parent
         @parent_resource_config = @parent.resource_config
         @parent_model           = @parent_resource_config[:model]
@@ -37,7 +37,7 @@ module SinatraResource
           display(:read, resource, resource_config)
         end
       else
-        association            = @association
+        association            = @child_association
         parent_model           = @parent_model
         parent_resource_config = @parent_resource_config
         path                   = @path
@@ -67,7 +67,7 @@ module SinatraResource
           display(:read, resources, resource_config)
         end
       else
-        association            = @association
+        association            = @child_association
         parent_model           = @parent_model
         parent_resource_config = @parent_resource_config
         path                   = @path
@@ -98,7 +98,7 @@ module SinatraResource
           display(:create, resource, resource_config)
         end
       else
-        association            = @association
+        association            = @child_association
         parent_model           = @parent_model
         parent_resource_config = @parent_resource_config
         path                   = @path
@@ -129,7 +129,7 @@ module SinatraResource
           display(:update, resource, resource_config)
         end
       else
-        association            = @association
+        association            = @child_association
         parent_model           = @parent_model
         parent_resource_config = @parent_resource_config
         path                   = @path
@@ -161,7 +161,7 @@ module SinatraResource
           display(:delete, "", resource_config)
         end
       else
-        association            = @association
+        association            = @child_association
         parent_model           = @parent_model
         parent_resource_config = @parent_resource_config
         path                   = @path
