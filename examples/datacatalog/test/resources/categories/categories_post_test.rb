@@ -32,19 +32,19 @@ class CategoriesPostResourceTest < ResourceTestCase
       use "no change in category count"
     end
   end
-
+  
   %w(basic).each do |role|
     [:name].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
           post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
-
+  
         use "return 401 because the API key is unauthorized"
         use "no change in category count"
       end
     end
-
+  
     [:id, :created_at, :updated_at, :sources].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
@@ -55,7 +55,7 @@ class CategoriesPostResourceTest < ResourceTestCase
         use "no change in category count"
       end
     end
-
+  
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role)
@@ -66,45 +66,46 @@ class CategoriesPostResourceTest < ResourceTestCase
     end
   end
 
-  %w(curator admin).each do |role|
+  %w(curator).each do |role|
+  # %w(curator admin).each do |role|
     [:name].each do |missing|
       context "#{role} : post / but missing #{missing}" do
         before do
           post "/", valid_params_for(role).delete_if { |k, v| k == missing }
         end
-
+  
         use "return 400 Bad Request"
         use "no change in category count"
         missing_param missing
       end
     end
-
+  
     [:id, :created_at, :updated_at, :sources].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).merge(invalid => 9)
         end
-  
+      
         use "return 400 Bad Request"
         use "no change in category count"
         invalid_param invalid
       end
     end
-
+      
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role)
       end
-
+      
       after do
         Category.find_by_id(parsed_response_body["id"]).destroy
       end
-  
+      
       use "return 201 Created"
       location_header "categories"
       use "one new category"
       doc_properties %w(name id created_at updated_at sources)
-
+      
       test "should set all fields in database" do
         category = Category.find_by_id(parsed_response_body["id"])
         raise "Cannot find category" unless category

@@ -69,7 +69,8 @@ module SinatraResource
         model.find(:all)
       end
       
-      # ...
+      # Delegates to application, who should use custom logic to related
+      # +parent+ and +child+.
       #
       # @param [MongoMapper::Document] parent
       #
@@ -77,10 +78,11 @@ module SinatraResource
       #
       # @param [Hash] resource_config
       #
-      # @return [undefined]
+      # @return [MongoMapper::Document] child document
       def make_related(parent, child, resource_config)
         proc = resource_config[:relation][:create]
         proc.call(parent, child) if proc
+        child
       end
       
       # Select only the +children+ that are related to the +parent+ by
