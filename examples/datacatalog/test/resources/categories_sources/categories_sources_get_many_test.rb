@@ -65,8 +65,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
         get "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
       end
     
-      use "return 404 Not Found"
-      use "return an empty response body"
+      use "return 404 Not Found with empty response body"
     end
 
     context "#{role} : get /:id/sources" do
