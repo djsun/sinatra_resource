@@ -158,12 +158,13 @@ module SinatraResource
       # For internal use. Initializes internal data structure.
       def setup
         @resource_config = {
-          :model      => nil,
-          :permission => {},
-          :properties => {},
-          :roles      => nil,
-          :parent     => nil,
-          :path       => default_path,
+          :association => nil,
+          :model       => nil,
+          :parent      => nil,
+          :path        => default_path,
+          :permission  => {},
+          :properties  => {},
+          :roles       => nil,
         }
       end
       

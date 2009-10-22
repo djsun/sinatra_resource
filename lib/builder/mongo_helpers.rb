@@ -3,6 +3,17 @@ module SinatraResource
   class Builder
 
     module MongoHelpers
+
+
+      # Make sure that +parent+ document is related to the +child+ document
+      # by way of +association+. If not, return 404 Not Found.
+      #
+      # @return [MongoMapper::Document]
+      def check_related?(parent, association, child)
+        unless parent.send(association).find { |x| x.id == child.id }
+          error 404, convert(body_for(:not_found))
+        end
+      end
       
       # Create a document from params. If not valid, returns 400.
       #
