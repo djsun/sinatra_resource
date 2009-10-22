@@ -47,6 +47,10 @@ module SinatraResource
           # ------
           role = get_role(model, id)
           document = document_for_get_one(role, model, resource_config, id)
+          unless parent_document.sources.include?(document)
+            error 404, convert(body_for(:not_found))
+          end
+          document.xxxx == parent_document
           resource = build_resource(role, document, resource_config)
           display(:read, resource)
         end

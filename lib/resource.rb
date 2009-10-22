@@ -14,6 +14,20 @@ module SinatraResource
       
       attr_reader :resource_config
       
+      # Specify the association +method+ on +parent+ that points to the
+      # current (child) +model+.
+      #
+      # @param [Symbol] method
+      #   A symbol that refers to a method on the parent.
+      #
+      # @return [undefined]
+      def association(method)
+        if @resource_config[:association]
+          raise DefinitionError, "association already declared in #{self}"
+        end
+        @resource_config[:association] = method
+      end
+      
       # Build the Sinatra actions based on the DSL statements in this class.
       # You will want to do this last.
       #

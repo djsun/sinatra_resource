@@ -4,8 +4,9 @@ module DataCatalog
     include Resource
 
     parent Categories
-    path "sources"
+    association :sources
     model Source
+    path "sources"
 
     # == Permissions
 
