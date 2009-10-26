@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2009-10-22}
+  s.date = %q{2009-10-26}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -166,7 +166,7 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<djsun-mongo_mapper>, ["= 0.5.5.3"])
+      s.add_runtime_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
       s.add_runtime_dependency(%q<mongo>, [">= 0.15.1"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0.9.4"])
       s.add_development_dependency(%q<crack>, [">= 0.1.4"])
@@ -175,7 +175,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<yard>, [">= 0"])
     else
-      s.add_dependency(%q<djsun-mongo_mapper>, ["= 0.5.5.3"])
+      s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
       s.add_dependency(%q<mongo>, [">= 0.15.1"])
       s.add_dependency(%q<sinatra>, [">= 0.9.4"])
       s.add_dependency(%q<crack>, [">= 0.1.4"])
@@ -185,7 +185,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<yard>, [">= 0"])
     end
   else
-    s.add_dependency(%q<djsun-mongo_mapper>, ["= 0.5.5.3"])
+    s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
     s.add_dependency(%q<mongo>, [">= 0.15.1"])
     s.add_dependency(%q<sinatra>, [">= 0.9.4"])
     s.add_dependency(%q<crack>, [">= 0.1.4"])
