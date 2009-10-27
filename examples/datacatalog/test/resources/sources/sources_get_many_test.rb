@@ -7,7 +7,7 @@ class SourcesGetManyResourceTest < ResourceTestCase
   def app; Sources end
 
   before do
-    raise "Unexpected Source count" unless Source.count == 0
+    Source.destroy_all unless Source.count == 0
     @sources = 3.times.map do |i|
       create_source(:title => "Source #{i}")
     end

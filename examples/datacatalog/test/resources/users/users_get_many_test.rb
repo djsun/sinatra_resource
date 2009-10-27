@@ -7,7 +7,9 @@ class UsersGetManyResourceTest < ResourceTestCase
   def app; Users end
 
   before do
-    raise "Unexpected Source count" unless User.count == 3
+    unless 3 == (c = User.count)
+      raise "Expected 3 for User.count, found #{c}"
+    end
     @users = 3.times.map do |i|
       create_user(
         :name  => "User #{i}",
