@@ -4,6 +4,8 @@ class ResourceTestCase
     test "status should be 200 Ok" do
       assert_equal 200, last_response.status
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 201 Created" do
@@ -16,6 +18,8 @@ class ResourceTestCase
       generic_uri = %r{^http://localhost}
       assert_match generic_uri, last_response.headers["Location"]
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 204 No Content" do
@@ -24,30 +28,39 @@ class ResourceTestCase
     end
     
     use "return an empty response body"
+    use "content type header not set"
   end
 
   shared "return 400 Bad Request" do
     test "status should be 400 Bad Request" do
       assert_equal 400, last_response.status
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 401 Unauthorized" do
     test "status should be 401 Unauthorized" do
       assert_equal 401, last_response.status
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 403 Forbidden" do
     test "status should be 403 Forbidden" do
       assert_equal 403, last_response.status
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 404 Not Found" do
     test "status should be 404 Not Found" do
       assert_equal 404, last_response.status
     end
+
+    use "content type header indicates JSON"
   end
 
   shared "return 404 Not Found with empty response body" do
