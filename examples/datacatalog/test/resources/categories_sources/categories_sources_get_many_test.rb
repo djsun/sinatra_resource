@@ -29,6 +29,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
         :category_id => @other_category.id
       )
     end
+    @source_titles = ["Source 0", "Source 1", "Source 2"].sort
   end
   
   after do
@@ -39,8 +40,6 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
     @sources.each { |x| x.destroy }
     @category.destroy
   end
-
-  SOURCES = ["Source 0", "Source 1", "Source 2"].sort
 
   context "get /:id/sources/" do
     context "anonymous" do
@@ -82,7 +81,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
 
       test "body should have correct source titles" do
         actual = parsed_response_body.map { |e| e["title"] }
-        assert_equal SOURCES, actual.sort
+        assert_equal @source_titles, actual.sort
       end
       
       docs_properties %w(title url raw id created_at updated_at)
