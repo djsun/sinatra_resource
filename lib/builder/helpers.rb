@@ -4,6 +4,8 @@ module SinatraResource
 
     module Helpers
       
+      FILTER_KEY = "filter"
+      
       # Build a resource, based on +document+, appropriate for +role+.
       #
       # @param [Symbol] role
@@ -159,9 +161,13 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       def minimum_role(action, resource_config, property=nil)
         if property.nil?
-          resource_config[:permission][to_read_or_modify(action)]
+          hash = resource_config[:permission][to_read_or_modify(action)]
         else
-          resource_config[:properties][property][to_r_or_w(action)]
+          hash = resource_config[:properties][property]
+          unless hash
+            raise Error, "bad configuration for #{property.inspect}"
+          end
+          hash[to_r_or_w(action)]
         end || :anonymous
       end
       
@@ -246,7 +252,7 @@ module SinatraResource
       def lookup_role(document=nil)
         raise NotImplementedError
       end
-
+      
       # Are the params suitable for +action+? Raise 400 Bad Request if not.
       #
       # @param [Symbol] action
@@ -260,7 +266,7 @@ module SinatraResource
       def params_check_action(action)
         case action
         when :read
-          unless params.empty?
+          unless params.reject { |k, v| k == FILTER_KEY }.empty?
             error 400, convert(body_for(:non_empty_params))
           end
         when :create
@@ -292,7 +298,10 @@ module SinatraResource
       def params_check_action_and_role(action, role, resource_config)
         invalid = []
         params.each_pair do |property, value|
-          invalid << property if !authorized?(action, role, resource_config, property.intern)
+          next if property == FILTER_KEY
+          if !authorized?(action, role, resource_config, property.intern)
+            invalid << property
+          end 
         end
         unless invalid.empty?
           error 400, convert(body_for(:invalid_params, invalid))

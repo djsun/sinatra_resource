@@ -1,9 +1,11 @@
+gem 'query_string_filter', '>= 0.1.1'
+require 'query_string_filter'
+
 module SinatraResource
   
   class Builder
 
     module MongoHelpers
-
 
       # Make sure that +parent+ document is related to the +child+ document
       # by way of +association+. If not, return 404 Not Found.
@@ -59,14 +61,16 @@ module SinatraResource
         document
       end
 
-      # Find all +model+ documents.
+      # Find +model+ documents: find all documents if no params, otherwise
+      # find selected documents.
       #
       # @param [Class] model
       #   a class that includes MongoMapper::Document
       #
       # @return [Array<MongoMapper::Document>]
       def find_documents!(model)
-        model.find(:all)
+        return(model.all) if params.empty?
+        model.all(make_conditions(params, model))
       end
       
       # Delegates to application, who should use custom logic to related
@@ -105,6 +109,10 @@ module SinatraResource
 
       # Update a document with +id+ from params. If not valid, returns 400.
       #
+      # @param [Hash] model
+      #
+      # @param [String] id
+      #
       # @return [MongoMapper::Document]
       def update_document!(model, id)
         document = model.update(id, params)
@@ -112,6 +120,41 @@ module SinatraResource
           error 400, convert(body_for(:invalid_document, document))
         end
         document
+      end
+      
+      protected
+
+      PATTERNS = [
+        [ %r{^<=(.*)} , '$lte' ],
+        [ %r{^<(.*)}  , '$lt'  ],
+        [ %r{^>=(.*)} , '$gte' ],
+        [ %r{^>(.*)}  , '$gt'  ]
+      ]
+      
+      QS_FILTER = QueryStringFilter.new
+      
+      # Build conditions hash based on +params+.
+      #
+      # @param [Hash] params
+      #
+      # @param [Class] model
+      #   a class that includes MongoMapper::Document
+      #
+      # @return [Hash]
+      def make_conditions(params, model)
+        filter_string = params["filter"]
+        return {} unless filter_string
+        QS_FILTER.parse(filter_string)
+      end
+
+      # Returns a typecasted +value+. (Uses +model+ and +key_string+ to
+      # figure out how to typecast it.)
+      #
+      # @return [Object]
+      def typecast(model, key_string, value)
+        dummy = model.new
+        dummy.send(:"#{key_string}=", value)
+        dummy.send(:"#{key_string}")
       end
 
     end
