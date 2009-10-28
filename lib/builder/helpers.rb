@@ -161,7 +161,7 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       def minimum_role(action, resource_config, property=nil)
         if property.nil?
-          hash = resource_config[:permission][to_read_or_modify(action)]
+          resource_config[:permission][to_read_or_modify(action)]
         else
           hash = resource_config[:properties][property]
           unless hash
