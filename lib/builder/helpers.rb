@@ -324,15 +324,17 @@ module SinatraResource
       # Converts +action+ to :r or :w (i.e. read or write).
       #
       # @param [Symbol] action
-      #   :read, :create, or :update
+      #   :list, :read, :create, :update, or :delete
       #
       # @return [Symbol]
       #   :r or :w
       def to_r_or_w(action)
         case action
+        when :list   then :r
         when :read   then :r
         when :create then :w
         when :update then :w
+        when :delete then :w
         else raise "Unexpected action : #{action.inspect}"
         end
       end
