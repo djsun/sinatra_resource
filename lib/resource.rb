@@ -119,6 +119,7 @@ module SinatraResource
       # @return [undefined]
       def permission(access_rules)
         access_rules.each_pair do |verb, role|
+          @resource_config[:roles].validate_role(role)
           @resource_config[:permission][verb] = role
         end
       end
@@ -145,6 +146,7 @@ module SinatraResource
           @resource_config[:properties][name][:read_proc] = block
         else
           access_rules.each_pair do |kind, role|
+            @resource_config[:roles].validate_role(role)
             @resource_config[:properties][name][kind] = role
           end
         end

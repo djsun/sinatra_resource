@@ -71,13 +71,18 @@ module SinatraResource
       def setup
         @role_config = {}
         @satisfies_cache = {}
+        create_role(:nobody)
       end
 
-      # Halt if +role+ is undefined.
+      # Return +role+ if it is defined, raise exception otherwise.
       #
       # @raise [UndefinedRole] if role undefined
+      #
+      # @return [Symbol]
       def validate_role(role)
-        unless @role_config.include?(role)
+        if @role_config.include?(role)
+          role
+        else
           raise UndefinedRole, "#{role.inspect} not defined"
         end
       end
