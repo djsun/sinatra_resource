@@ -110,6 +110,8 @@ module SinatraResource
         when :update
         when :delete
           response.status = 204
+        else
+          raise Error, "Unexpected: #{action.inspect}"
         end
         convert(object)
       end
@@ -277,6 +279,8 @@ module SinatraResource
           unless params.empty?
             error 400, convert(body_for(:non_empty_params))
           end
+        else
+          raise Error, "Unexpected: #{action.inspect}"
         end
       end
 

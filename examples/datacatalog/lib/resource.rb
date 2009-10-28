@@ -62,7 +62,7 @@ module DataCatalog
         def user_for(api_key)
           user = User.first(:conditions => { :_api_key => api_key })
           return nil unless user
-          raise "API key found, but user has no role" unless user.role
+          raise Error, "API key found, but user has no role" unless user.role
           user
         end
       end
