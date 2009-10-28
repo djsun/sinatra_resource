@@ -26,6 +26,32 @@ class ResourceTestCase
     end
   end
 
+  # == notes
+
+  shared "no change in note count" do
+    test "should not change number of note documents in database" do
+      assert_equal @note_count, DataCatalog::Note.all.length
+    end
+  end
+
+  shared "one less note" do
+    test "should remove one note document from database" do
+      assert_equal @note_count - 1, DataCatalog::Note.all.length
+    end
+  end
+
+  shared "one new note" do
+    test "should add one note document to database" do
+      assert_equal @note_count + 1, DataCatalog::Note.all.length
+    end
+  end
+
+  shared "note unchanged" do
+    test "should not change note in database" do
+      assert_equal @note_copy, DataCatalog::Note.find_by_id(@note.id)
+    end
+  end
+
   # == sources
 
   shared "no change in source count" do

@@ -19,6 +19,13 @@ module ModelFactories
       :category_id => "",
     })
   end
+  
+  def create_note(custom={})
+    create_model!(DataCatalog::Note, custom, {
+      :text    => "Sample Note",
+      :user_id => "",
+    })
+  end
 
   def create_user(custom={})
     create_model!(DataCatalog::User, custom, {
