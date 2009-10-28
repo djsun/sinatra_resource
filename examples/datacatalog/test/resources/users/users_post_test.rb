@@ -50,7 +50,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
     end
   
-    [:role, :_api_key, :id, :created_at, :updated_at].each do |invalid|
+    [:role, :_api_key, :id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).merge(invalid => 9)
@@ -85,7 +85,7 @@ class UsersPostResourceTest < ResourceTestCase
       end
     end
   
-    [:id, :created_at, :updated_at].each do |invalid|
+    [:id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).

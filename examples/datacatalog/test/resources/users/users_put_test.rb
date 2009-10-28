@@ -43,7 +43,7 @@ class UsersPutResourceTest < ResourceTestCase
   end
   
   %w(basic curator).each do |role|
-    [:created_at, :updated_at].each do |invalid|
+    [:created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).merge(invalid => 9)
@@ -88,7 +88,7 @@ class UsersPutResourceTest < ResourceTestCase
   end
 
   %w(admin).each do |role|
-    [:created_at, :updated_at].each do |invalid|
+    [:created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).

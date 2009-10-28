@@ -164,10 +164,7 @@ module SinatraResource
           resource_config[:permission][to_read_or_modify(action)]
         else
           hash = resource_config[:properties][property]
-          unless hash
-            raise Error, "bad configuration for #{property.inspect}"
-          end
-          hash[to_r_or_w(action)]
+          hash ? hash[to_r_or_w(action)] : :nobody
         end || :anonymous
       end
       

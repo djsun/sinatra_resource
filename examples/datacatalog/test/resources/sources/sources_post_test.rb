@@ -47,7 +47,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
     end
 
-    [:id, :created_at, :updated_at, :categories].each do |invalid|
+    [:id, :created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).merge(invalid => 9)
@@ -57,7 +57,7 @@ class SourcesPostResourceTest < ResourceTestCase
         use "no change in source count"
       end
     end
-  
+
     context "#{role} : post / with valid params" do
       before do
         post "/", valid_params_for(role)
@@ -81,7 +81,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
     end
 
-    [:raw, :id, :created_at, :updated_at, :categories].each do |invalid|
+    [:raw, :id, :created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).merge(invalid => 9)
@@ -131,7 +131,7 @@ class SourcesPostResourceTest < ResourceTestCase
       end
     end
 
-    [:id, :created_at, :updated_at, :categories].each do |invalid|
+    [:id, :created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : post / but with #{invalid}" do
         before do
           post "/", valid_params_for(role).

@@ -142,7 +142,7 @@ class CategoriesSourcesPutResourceTest < ResourceTestCase
       use "source unchanged"
     end
 
-    [:raw, :created_at, :updated_at].each do |invalid|
+    [:raw, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id/sources/:id with #{invalid}" do
         before do
           put "/#{@category.id}/sources/#{@source.id}",
@@ -246,7 +246,7 @@ class CategoriesSourcesPutResourceTest < ResourceTestCase
       use "source unchanged"
     end
     
-    [:created_at, :updated_at].each do |invalid|
+    [:created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id/sources/:id but with #{invalid}" do
         before do
           put "/#{@category.id}/sources/#{@source.id}",

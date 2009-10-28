@@ -90,7 +90,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
     end
 
-    [:raw, :id, :created_at, :updated_at].each do |invalid|
+    [:raw, :id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post /:id/sources/ but with #{invalid}" do
         before do
           post "/#{@category.id}/sources/", valid_params_for(role).
@@ -149,7 +149,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
     end
 
-    [:id, :created_at, :updated_at].each do |invalid|
+    [:id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post /:id/sources/ but with #{invalid}" do
         before do
           post "/#{@category.id}/sources/", valid_params_for(role).
