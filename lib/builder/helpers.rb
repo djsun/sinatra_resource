@@ -273,9 +273,11 @@ module SinatraResource
       def params_check_action(action)
         case action
         when :list
-          # TODO: is anything needed here?
-        when :read
           unless params.reject { |k, v| k == FILTER_KEY }.empty?
+            error 400, convert(body_for(:non_empty_params))
+          end
+        when :read
+          unless params.empty?
             error 400, convert(body_for(:non_empty_params))
           end
         when :create
