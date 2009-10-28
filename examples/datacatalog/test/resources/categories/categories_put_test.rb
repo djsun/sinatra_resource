@@ -90,6 +90,16 @@ class CategoriesPutResourceTest < ResourceTestCase
   end
   
   %w(curator admin).each do |role|
+    context "#{role} : put /:fake_id with no params" do
+      before do
+        put "/#{FAKE_ID}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no params were given"
+      # (The 400 'takes precedence' over the 404.)
+      use "category unchanged"
+    end
+
     context "#{role} : put /:id with no params" do
       before do
         put "/#{@category.id}", :api_key => api_key_for(role)
@@ -110,6 +120,18 @@ class CategoriesPutResourceTest < ResourceTestCase
         invalid_param invalid
       end
     end
+
+    [:name].each do |erase|
+      context "#{role} : put /:fake_id but blanking out #{erase}" do
+        before do
+          put "/#{FAKE_ID}", valid_params_for(role).merge(erase => "")
+        end
+      
+        use "return 404 Not Found with empty response body"
+        # (The 404 'takes precedence' over the 400.)
+        use "category unchanged"
+      end
+    end  
 
     [:name].each do |erase|
       context "#{role} : put /:id but blanking out #{erase}" do

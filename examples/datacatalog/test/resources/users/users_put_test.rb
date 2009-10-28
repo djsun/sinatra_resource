@@ -97,6 +97,16 @@ class UsersPutResourceTest < ResourceTestCase
   end
 
   %w(admin).each do |role|
+    context "#{role} : put /:fake_id with no params" do
+      before do
+        put "/#{FAKE_ID}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no params were given"
+      # (The 400 'takes precedence' over the 404.)
+      use "user unchanged"
+    end
+
     context "#{role} : put /:id with no params" do
       before do
         put "/#{@user.id}", :api_key => api_key_for(role)
@@ -132,6 +142,15 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
+    [:name, :role].each do |missing|
+      context "#{role} : put /:fake_id without #{missing}" do
+        before do
+          put "/#{FAKE_ID}", valid_params_for(role).
+            merge(@extra_admin_params).delete_if { |k, v| k == missing }
+        end
+      
+        use "return 404 Not Found with empty response body"
+        use "user unchanged"
       end
     end
 
