@@ -8,8 +8,11 @@ module DataCatalog
     # == Permissions
 
     roles Roles
+    permission :list   => :basic
     permission :read   => :basic
-    permission :modify => :curator
+    permission :create => :curator
+    permission :update => :curator
+    permission :delete => :curator
 
     # == Properties
     

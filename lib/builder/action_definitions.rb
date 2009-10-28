@@ -14,9 +14,11 @@ module SinatraResource
       end
       
       def documents_for_get_many(role, model, resource_config, leaf, parent_document, association)
-        check_permission(:read, role, resource_config)
-        check_params(:read, role, resource_config, leaf)
-        documents = find_documents!(model)
+        check_permission(:list, role, resource_config)
+        check_params(:list, role, resource_config, leaf)
+        documents = find_documents!(model).select do |document|
+          authorized?(:read, lookup_role(document), resource_config)
+        end
         # TODO: A more performant approach would be to modify find_documents!
         # so that it returns the correct results in one query.
         if resource_config[:parent]

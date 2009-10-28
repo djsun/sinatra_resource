@@ -63,7 +63,7 @@ module SinatraResource
           role = get_role(model)
           documents = documents_for_get_many(role, model, resource_config, true, nil, nil)
           resources = build_resources(documents, resource_config)
-          display(:read, resources, resource_config)
+          display(:list, resources, resource_config)
         end
       else
         association            = @child_association
@@ -78,7 +78,7 @@ module SinatraResource
           role = get_role(model)
           documents = documents_for_get_many(role, model, resource_config, true, parent_document, association)
           resources = build_resources(documents, resource_config)
-          display(:read, resources, resource_config)
+          display(:list, resources, resource_config)
         end
       end
     end

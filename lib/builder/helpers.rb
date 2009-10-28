@@ -45,7 +45,7 @@ module SinatraResource
       # Halt unless the current params are ok for +action+ and +role+.
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -66,7 +66,7 @@ module SinatraResource
       # Halt unless the current role has permission to carry out +action+
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -97,11 +97,17 @@ module SinatraResource
 
       # Display +object+ as appropriate for +action+.
       #
+      # @param [Symbol] action
+      #   :list, :read, :create, :update, or :delete
+      #
       # @param [Object] object
+      #
+      # @param [Hash] resource_config
       #
       # @return [String]
       def display(action, object, resource_config)
         case action
+        when :list
         when :read
         when :create
           response.status = 201
@@ -153,7 +159,7 @@ module SinatraResource
       # +property+.
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Hash] resource_config
       #
@@ -163,7 +169,9 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       def minimum_role(action, resource_config, property=nil)
         if property.nil?
-          resource_config[:permission][to_read_or_modify(action)]
+          p = resource_config[:permission]
+          raise Error, "undefined #{action.inspect} permission" unless p
+          p[action]
         else
           hash = resource_config[:properties][property]
           hash ? hash[to_r_or_w(action)] : :nobody
@@ -178,7 +186,7 @@ module SinatraResource
       #   a role (such as :anonymous, :basic, or :admin)
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Hash] resource_config
       #
@@ -201,7 +209,7 @@ module SinatraResource
       # Applications must override this method.
       # 
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -255,7 +263,7 @@ module SinatraResource
       # Are the params suitable for +action+? Raise 400 Bad Request if not.
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Boolean] leaf
       #   If a simple resource, should be true.
@@ -264,6 +272,8 @@ module SinatraResource
       # @return [undefined]
       def params_check_action(action)
         case action
+        when :list
+          # TODO: is anything needed here?
         when :read
           unless params.reject { |k, v| k == FILTER_KEY }.empty?
             error 400, convert(body_for(:non_empty_params))
@@ -288,7 +298,7 @@ module SinatraResource
       # +role+. Raises a 400 Bad Request if not authorized.
       #
       # @param [Symbol] action
-      #   :read, :create, :update, or :delete
+      #   :list, :read, :create, :update, or :delete
       #
       # @param [Symbol] role
       #   a role (such as :anonymous, :basic, or :admin)
@@ -321,23 +331,6 @@ module SinatraResource
         when :read   then :r
         when :create then :w
         when :update then :w
-        else raise "Unexpected action : #{action.inspect}"
-        end
-      end
-
-      # Converts +action+ to (:read or :modify).
-      #
-      # @param [Symbol] action
-      #   :read, :create, :update, or :delete
-      #
-      # @return [Symbol]
-      #   :read or :modify
-      def to_read_or_modify(action)
-        case action
-        when :read   then :read
-        when :create then :modify
-        when :update then :modify
-        when :delete then :modify
         else raise "Unexpected action : #{action.inspect}"
         end
       end

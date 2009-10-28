@@ -109,11 +109,15 @@ module SinatraResource
       # or writing.
       #
       # @example
+      #   permission :list   => :basic
       #   permission :read   => :basic
-      #   permission :modify => :owner
+      #   permission :create => :basic
+      #   permission :update => :owner
+      #   permission :delete => :owner
       #
       # @param [Hash<Symbol => Symbol>] access_rules
-      #   valid keys are :read or :modify
+      #   valid keys are:
+      #     :list, :read, :create, :update, :delete
       #   values should be a role (such as :admin)
       #
       # @return [undefined]
