@@ -77,6 +77,15 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role)
+      end
+    
+      use "return 401 because the API key is unauthorized"
+      use "user unchanged"
+    end
+
     context "#{role} : put /:id with valid params" do
       before do
         put "/#{@user.id}", valid_params_for(role)
@@ -141,6 +150,15 @@ class UsersPutResourceTest < ResourceTestCase
           assert_equal @user_copy[missing], user[missing]
         end
       end
+    end
+
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role).merge(@extra_admin_params)
+      end
+    
+      use "return 404 Not Found with empty response body"
+      use "user unchanged"
     end
 
     context "#{role} : put /:id with valid params" do

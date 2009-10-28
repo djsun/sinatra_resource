@@ -70,6 +70,15 @@ class CategoriesPutResourceTest < ResourceTestCase
       use "category unchanged"
     end
 
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role)
+      end
+      
+      use "return 401 because the API key is unauthorized"
+      use "category unchanged"
+    end
+
     context "#{role} : put /:id with valid params" do
       before do
         put "/#{@category.id}", valid_params_for(role)
@@ -111,6 +120,15 @@ class CategoriesPutResourceTest < ResourceTestCase
       end
 
       use "return 400 because no params were given"
+      use "category unchanged"
+    end
+
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role)
+      end
+      
+      use "return 404 Not Found with empty response body"
       use "category unchanged"
     end
 

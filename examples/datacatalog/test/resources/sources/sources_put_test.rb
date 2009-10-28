@@ -73,6 +73,15 @@ class SourcesPutResourceTest < ResourceTestCase
         use "source unchanged"
       end
     end
+
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role)
+      end
+      
+      use "return 401 because the API key is unauthorized"
+      use "source unchanged"
+    end
   
     context "#{role} : put /:id with valid params" do
       before do
@@ -126,6 +135,15 @@ class SourcesPutResourceTest < ResourceTestCase
           assert_equal @source_copy[missing], source[missing]
         end
       end
+    end
+
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role)
+      end
+      
+      use "return 404 Not Found with empty response body"
+      use "source unchanged"
     end
 
     context "#{role} : put /:id with valid params" do
@@ -199,6 +217,15 @@ class SourcesPutResourceTest < ResourceTestCase
           assert_equal @source_copy[missing], source[missing]
         end
       end
+    end
+
+    context "#{role} : put /:fake_id with valid params" do
+      before do
+        put "/#{FAKE_ID}", valid_params_for(role).merge(@extra_admin_params)
+      end
+      
+      use "return 404 Not Found with empty response body"
+      use "source unchanged"
     end
 
     context "#{role} : put /:id with valid params" do
