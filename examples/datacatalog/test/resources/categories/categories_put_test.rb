@@ -39,6 +39,15 @@ class CategoriesPutResourceTest < ResourceTestCase
   end
 
   %w(basic).each do |role|
+    context "#{role} : put /:id with no params" do
+      before do
+        put "/#{@category.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 401 because the API key is unauthorized"
+      use "category unchanged"
+    end
+
     [:created_at, :updated_at, :sources, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
@@ -59,15 +68,6 @@ class CategoriesPutResourceTest < ResourceTestCase
         use "return 401 because the API key is unauthorized"
         use "category unchanged"
       end
-    end
-
-    context "#{role} : put /:id with no params" do
-      before do
-        put "/#{@category.id}", :api_key => api_key_for(role)
-      end
-
-      use "return 401 because the API key is unauthorized"
-      use "category unchanged"
     end
 
     context "#{role} : put /:fake_id with valid params" do
@@ -90,6 +90,15 @@ class CategoriesPutResourceTest < ResourceTestCase
   end
   
   %w(curator admin).each do |role|
+    context "#{role} : put /:id with no params" do
+      before do
+        put "/#{@category.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no params were given"
+      use "category unchanged"
+    end
+
     [:created_at, :updated_at, :sources, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
@@ -112,15 +121,6 @@ class CategoriesPutResourceTest < ResourceTestCase
         use "category unchanged"
         missing_param erase
       end
-    end
-
-    context "#{role} : put /:id with no params" do
-      before do
-        put "/#{@category.id}", :api_key => api_key_for(role)
-      end
-
-      use "return 400 because no params were given"
-      use "category unchanged"
     end
 
     context "#{role} : put /:fake_id with valid params" do

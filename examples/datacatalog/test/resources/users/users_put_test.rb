@@ -97,6 +97,15 @@ class UsersPutResourceTest < ResourceTestCase
   end
 
   %w(admin).each do |role|
+    context "#{role} : put /:id with no params" do
+      before do
+        put "/#{@user.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no params were given"
+      use "user unchanged"
+    end
+
     [:created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
@@ -123,13 +132,7 @@ class UsersPutResourceTest < ResourceTestCase
       end
     end
 
-    context "#{role} : put /:id with no params" do
-      before do
-        put "/#{@user.id}", :api_key => api_key_for(role)
       end
-
-      use "return 400 because no params were given"
-      use "user unchanged"
     end
 
     [:name, :role].each do |missing|

@@ -164,6 +164,15 @@ class SourcesPutResourceTest < ResourceTestCase
   end
   
   %w(admin).each do |role|
+    context "#{role} : put /:id with no params" do
+      before do
+        put "/#{@source.id}", :api_key => api_key_for(role)
+      end
+
+      use "return 400 because no params were given"
+      use "source unchanged"
+    end
+
     [:created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
@@ -189,15 +198,6 @@ class SourcesPutResourceTest < ResourceTestCase
         missing_param erase
       end
     end  
-
-    context "#{role} : put /:id with no params" do
-      before do
-        put "/#{@source.id}", :api_key => api_key_for(role)
-      end
-
-      use "return 400 because no params were given"
-      use "source unchanged"
-    end
 
     [:title, :url].each do |missing|
       context "#{role} : put /:id without #{missing}" do
