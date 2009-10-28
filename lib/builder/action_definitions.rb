@@ -43,7 +43,7 @@ module SinatraResource
           check_related?(parent_document, association, id)
         end
         check_params(:update, role, resource_config, leaf)
-        do_callback(:before_update, resource_config, nil)
+        do_callback(:before_update, resource_config, find_document!(model, id))
         document = update_document!(model, id)
         do_callback(:after_update, resource_config, document)
         document
@@ -55,7 +55,7 @@ module SinatraResource
           check_related?(parent_document, association, id)
         end
         check_params(:delete, role, resource_config, leaf)
-        do_callback(:before_destroy, resource_config, nil)
+        do_callback(:before_destroy, resource_config, find_document!(model, id))
         document = delete_document!(model, id)
         do_callback(:after_destroy, resource_config, document)
         document

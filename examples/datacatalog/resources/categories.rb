@@ -37,7 +37,7 @@ module DataCatalog
       category.log += " after_create"
     end
 
-    callback :before_update do |action|
+    callback :before_update do |action, category|
       action.params["log"] = "before_update"
     end
     
@@ -45,7 +45,7 @@ module DataCatalog
       category.log += " after_update"
     end
 
-    callback :before_destroy do |action|
+    callback :before_destroy do |action, category|
       action.headers 'X-Test-Callbacks' => 'before_destroy'
     end
     
