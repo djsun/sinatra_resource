@@ -110,7 +110,8 @@ class UsersPostResourceTest < ResourceTestCase
       use "return 201 Created"
       location_header "users"
       use "one new user"
-      doc_properties %w(name email role _api_key id created_at updated_at)
+      doc_properties %w(name email role _api_key token
+        id created_at updated_at)
 
       test "should set all fields in database" do
         user = User.find_by_id(parsed_response_body["id"])

@@ -162,7 +162,8 @@ class UsersPutResourceTest < ResourceTestCase
         end
       
         use "return 200 Ok"
-        doc_properties %w(name email role _api_key id created_at updated_at)
+        doc_properties %w(name email role _api_key token
+          id created_at updated_at)
   
         test "should change correct fields in database" do
           user = User.find_by_id(@user.id)
@@ -189,7 +190,8 @@ class UsersPutResourceTest < ResourceTestCase
       end
       
       use "return 200 Ok"
-      doc_properties %w(name email role _api_key id created_at updated_at)
+      doc_properties %w(name email role _api_key token
+        id created_at updated_at)
   
       test "should change all fields in database" do
         user = User.find_by_id(@user.id)

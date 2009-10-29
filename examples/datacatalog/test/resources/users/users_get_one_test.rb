@@ -47,29 +47,31 @@ class UsersGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@user.id}", :api_key => api_key_for(role)
       end
-
+  
       use "return 200 Ok"
       doc_properties %w(name id created_at updated_at)
     end
   end
-  
+
   context "owner : get /:id" do
     before do
       get "/#{@user.id}", :api_key => @user._api_key
     end
-
+  
     use "return 200 Ok"
-    doc_properties %w(name email role _api_key id created_at updated_at)
+    doc_properties %w(name email role _api_key token
+      id created_at updated_at)
   end
-
+  
   %w(admin).each do |role|
     context "#{role} : get /:id" do
       before do
         get "/#{@user.id}", :api_key => api_key_for(role)
       end
-
+  
       use "return 200 Ok"
-      doc_properties %w(name email role _api_key id created_at updated_at)
+      doc_properties %w(name email role _api_key token
+        id created_at updated_at)
     end
   end
 

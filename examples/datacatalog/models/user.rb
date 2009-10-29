@@ -45,6 +45,12 @@ module DataCatalog
       s = "#{Time.now.to_f}#{salt}#{rand(100_000_000)}#{name}#{email}"
       Digest::SHA1.hexdigest(s)
     end
+    
+    # == Various Instance Methods
+    
+    def token
+      Digest::SHA1.hexdigest("#{id}/#{email}/123456789")
+    end
 
   end
 

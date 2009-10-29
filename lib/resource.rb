@@ -145,14 +145,19 @@ module SinatraResource
           raise DefinitionError, "property #{name.inspect} already declared in #{self}"
         end
         @resource_config[:properties][name] = {}
+
         if block
           @resource_config[:properties][name][:w] = :nobody
           @resource_config[:properties][name][:read_proc] = block
-        else
-          access_rules.each_pair do |kind, role|
-            @resource_config[:roles].validate_role(role)
-            @resource_config[:properties][name][kind] = role
+          if access_rules[:w] && access_rules[:w] != :nobody
+            raise DefinitionError, "property #{name.inspect} is using block " +
+              "form. :w => :nobody is assumed and cannot be overridden."
           end
+        end
+
+        access_rules.each_pair do |kind, role|
+          @resource_config[:roles].validate_role(role)
+          @resource_config[:properties][name][kind] = role
         end
       end
       
