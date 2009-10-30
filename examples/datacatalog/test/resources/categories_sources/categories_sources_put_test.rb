@@ -245,32 +245,6 @@ class CategoriesSourcesPutResourceTest < ResourceTestCase
       use "return 404 Not Found with empty response body"
       use "source unchanged"
     end
-    
-    [:created_at, :updated_at, :junk].each do |invalid|
-      context "#{role} : put /:id/sources/:id but with #{invalid}" do
-        before do
-          put "/#{@category.id}/sources/#{@source.id}",
-            valid_params_for(role).merge(@extra_admin_params).merge(invalid => 9)
-        end
-      
-        use "return 400 Bad Request"
-        use "source unchanged"
-        invalid_param invalid
-      end
-    end
-    
-    [:title, :url].each do |erase|
-      context "#{role} : put /:id/sources/:id but blanking out #{erase}" do
-        before do
-          put "/#{@category.id}/sources/#{@source.id}",
-            valid_params_for(role).merge(@extra_admin_params).merge(erase => "")
-        end
-      
-        use "return 400 Bad Request"
-        use "source unchanged"
-        missing_param erase
-      end
-    end
 
     context "#{role} : put /:id/sources/:id with no params" do
       before do
@@ -281,7 +255,7 @@ class CategoriesSourcesPutResourceTest < ResourceTestCase
       use "return 400 because no params were given"
       use "source unchanged"
     end
-
+    
     [:title, :url].each do |missing|
       context "#{role} : put /:id/sources/:id without #{missing}" do
         before do
@@ -299,6 +273,32 @@ class CategoriesSourcesPutResourceTest < ResourceTestCase
           end
           assert_equal @source_copy[missing], source[missing]
         end
+      end
+    end
+
+    [:title, :url].each do |erase|
+      context "#{role} : put /:id/sources/:id but blanking out #{erase}" do
+        before do
+          put "/#{@category.id}/sources/#{@source.id}",
+            valid_params_for(role).merge(@extra_admin_params).merge(erase => "")
+        end
+      
+        use "return 400 Bad Request"
+        use "source unchanged"
+        missing_param erase
+      end
+    end
+
+    [:created_at, :updated_at, :junk].each do |invalid|
+      context "#{role} : put /:id/sources/:id but with #{invalid}" do
+        before do
+          put "/#{@category.id}/sources/#{@source.id}",
+            valid_params_for(role).merge(@extra_admin_params).merge(invalid => 9)
+        end
+      
+        use "return 400 Bad Request"
+        use "source unchanged"
+        invalid_param invalid
       end
     end
 
