@@ -30,7 +30,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   context "post /:id/sources" do
     context "anonymous" do
       before do
-        post "/#{@category.id}/sources/"
+        post "/#{@category.id}/sources"
       end
     
       use "return 401 because the API key is missing"
@@ -39,7 +39,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   
     context "incorrect API key" do
       before do
-        post "/#{@category.id}/sources/", :api_key => BAD_API_KEY
+        post "/#{@category.id}/sources", :api_key => BAD_API_KEY
       end
       
       use "return 401 because the API key is invalid"
@@ -50,7 +50,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   %w(basic).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
-        post "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
+        post "/#{FAKE_ID}/sources", :api_key => api_key_for(role)
       end
   
       use "return 404 Not Found with empty response body"
@@ -59,7 +59,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   
     context "#{role} : post /:id/sources" do
       before do
-        post "/#{@category.id}/sources/", :api_key => api_key_for(role)
+        post "/#{@category.id}/sources", :api_key => api_key_for(role)
       end
     
       use "return 401 because the API key is unauthorized"
@@ -70,7 +70,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   %w(curator).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
-        post "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
+        post "/#{FAKE_ID}/sources", :api_key => api_key_for(role)
       end
     
       use "return 404 Not Found with empty response body"
@@ -78,9 +78,9 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
     end
   
     [:title, :url].each do |missing|
-      context "#{role} : post /:id/sources/ but missing #{missing}" do
+      context "#{role} : post /:id/sources but missing #{missing}" do
         before do
-          post "/#{@category.id}/sources/",
+          post "/#{@category.id}/sources",
             valid_params_for(role).delete_if { |k, v| k == missing }
         end
         
@@ -91,9 +91,9 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
     end
 
     [:raw, :id, :created_at, :updated_at, :junk].each do |invalid|
-      context "#{role} : post /:id/sources/ but with #{invalid}" do
+      context "#{role} : post /:id/sources but with #{invalid}" do
         before do
-          post "/#{@category.id}/sources/", valid_params_for(role).
+          post "/#{@category.id}/sources", valid_params_for(role).
             merge(invalid => 9)
         end
       
@@ -105,7 +105,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
 
     context "#{role} : post /:id/sources with valid params" do
       before do
-        post "/#{@category.id}/sources/", valid_params_for(role)
+        post "/#{@category.id}/sources", valid_params_for(role)
       end
 
       after do
@@ -127,7 +127,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
   %w(admin).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
-        post "/#{FAKE_ID}/sources/",
+        post "/#{FAKE_ID}/sources",
           valid_params_for(role).merge(@extra_admin_params)
       end
     
@@ -136,9 +136,9 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
     end
   
     [:title, :url].each do |missing|
-      context "#{role} : post /:id/sources/ but missing #{missing}" do
+      context "#{role} : post /:id/sources but missing #{missing}" do
         before do
-          post "/#{@category.id}/sources/",
+          post "/#{@category.id}/sources",
             valid_params_for(role).merge(@extra_admin_params).
               delete_if { |k, v| k == missing }
         end
@@ -150,9 +150,9 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
     end
 
     [:id, :created_at, :updated_at, :junk].each do |invalid|
-      context "#{role} : post /:id/sources/ but with #{invalid}" do
+      context "#{role} : post /:id/sources but with #{invalid}" do
         before do
-          post "/#{@category.id}/sources/", valid_params_for(role).
+          post "/#{@category.id}/sources", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
         end
       
@@ -164,7 +164,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
 
     context "#{role} : post /:id/sources with valid params" do
       before do
-        post "/#{@category.id}/sources/",
+        post "/#{@category.id}/sources",
           valid_params_for(role).merge(@extra_admin_params)
       end
 

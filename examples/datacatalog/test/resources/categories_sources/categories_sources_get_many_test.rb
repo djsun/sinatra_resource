@@ -43,10 +43,10 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
     @category.destroy
   end
 
-  context "get /:id/sources/" do
+  context "get /:id/sources" do
     context "anonymous" do
       before do
-        get "/#{@category.id}/sources/"
+        get "/#{@category.id}/sources"
       end
     
       use "return 401 because the API key is missing"
@@ -54,7 +54,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
   
     context "incorrect API key" do
       before do
-        get "/#{@category.id}/sources/", :api_key => BAD_API_KEY
+        get "/#{@category.id}/sources", :api_key => BAD_API_KEY
       end
       
       use "return 401 because the API key is invalid"
@@ -64,7 +64,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
   %w(basic curator admin).each do |role|
     context "#{role} : get /:fake_id/sources" do
       before do
-        get "/#{FAKE_ID}/sources/", :api_key => api_key_for(role)
+        get "/#{FAKE_ID}/sources", :api_key => api_key_for(role)
       end
     
       use "return 404 Not Found with empty response body"
@@ -72,7 +72,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
 
     context "#{role} : get /:id/sources" do
       before do
-        get "/#{@category.id}/sources/", :api_key => api_key_for(role)
+        get "/#{@category.id}/sources", :api_key => api_key_for(role)
       end
 
       use "return 200 Ok"
