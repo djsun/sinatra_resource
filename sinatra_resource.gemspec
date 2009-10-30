@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_resource}
-  s.version = "0.3.4"
+  s.version = "0.3.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
@@ -86,6 +86,7 @@ Gem::Specification.new do |s|
      "examples/datacatalog/test/resources/sources_usages/sources_usages_delete_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_get_many_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_get_one_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_search_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_post_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_put_test.rb",
      "examples/datacatalog/test/resources/users/users_delete_test.rb",
@@ -180,6 +181,7 @@ Gem::Specification.new do |s|
      "examples/datacatalog/test/resources/sources_usages/sources_usages_delete_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_get_many_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_get_one_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_search_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_post_test.rb",
      "examples/datacatalog/test/resources/sources_usages/sources_usages_put_test.rb",
      "examples/datacatalog/test/resources/users/users_delete_test.rb",
