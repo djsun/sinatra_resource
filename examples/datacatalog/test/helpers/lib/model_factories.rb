@@ -34,6 +34,16 @@ module ModelFactories
       :role  => "basic",
     })
   end
+  
+  # -----
+  
+  def new_usage(custom={})
+    new_model!(DataCatalog::Usage, custom, {
+      :title       => "Sample Usage",
+      :url         => "http://inter.net/article/100",
+      :description => "Citation from the internet",
+    })
+  end
 
   protected
 

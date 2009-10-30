@@ -78,6 +78,38 @@ class ResourceTestCase
     end
   end
 
+  # == usages
+
+  shared "no change in usage count" do
+    test "should not change number of user documents in database" do
+      source = DataCatalog::Source.find_by_id(@source.id)
+      assert_equal @usage_count, source.usages.length
+    end
+  end
+
+  shared "one less usage" do
+    test "should remove one user document from database" do
+      source = DataCatalog::Source.find_by_id(@source.id)
+      assert_equal @usage_count - 1, source.usages.length
+    end
+  end
+
+  shared "one new usage" do
+    test "should add one user document to database" do
+      source = DataCatalog::Source.find_by_id(@source.id)
+      assert_equal @usage_count + 1, source.usages.length
+    end
+  end
+
+  shared "usage unchanged" do
+    test "should not change usage in database" do
+      source = DataCatalog::Source.find_by_id(@source.id)
+      usage = source.usages.detect { |x| x.id == @usage_id }
+      assert @usage_copy
+      assert_equal @usage_copy, usage
+    end
+  end
+
   # == users
 
   shared "no change in user count" do

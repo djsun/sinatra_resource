@@ -55,6 +55,19 @@ module RequestHelpers
         assert_equal expected, last_response.headers['Location']
       end
     end
+    
+    def nested_location_header(parent_path, parent_ivar, child_path)
+      test "should set Location header correctly" do
+        base_uri = Config.environment_config["base_uri"]
+        parent = instance_variable_get("@#{parent_ivar}")
+        raise Error unless parent
+        path = parent_path + '/' + parent.id + '/' + child_path + '/' +
+          parsed_response_body["id"]
+        expected = URI.join(base_uri, path).to_s
+        assert_equal expected, last_response.headers['Location']
+      end
+    end
+    
 
   end
   

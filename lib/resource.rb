@@ -17,7 +17,7 @@ module SinatraResource
       # Specify a callback.
       #
       # @param [Symbol] method
-      #   A symbol that refers to a method on the parent.
+      #   A symbol that refers to a method on the model.
       #
       # @return [undefined]
       def callback(name, &block)
@@ -30,18 +30,20 @@ module SinatraResource
         @resource_config[:callbacks][name] = block
       end
       
-      # Specify the association +method+ on +parent+ that points to the
-      # current (child) +model+.
+      # Specify the association +method+ of a parent model that points to
+      # its child model.
+      #
+      # Required for all nested resources.
       #
       # @param [Symbol] method
       #   A symbol that refers to a method on the parent.
       #
       # @return [undefined]
       def child_association(method)
-        if @resource_config[:child_association]
+        if @resource_config[:child_assoc]
           raise DefinitionError, "child_association already declared in #{self}"
         end
-        @resource_config[:child_association] = method
+        @resource_config[:child_assoc] = method
       end
       
       # Build the Sinatra actions based on the DSL statements in this class.
@@ -89,7 +91,7 @@ module SinatraResource
         end
         @resource_config[:parent] = resource
       end
-      
+
       # Specify the path. If not specified, SinatraResource will infer the path
       # from the resource class (see the +default_path+ method.)
       #
@@ -215,25 +217,25 @@ module SinatraResource
       # For internal use. Initializes internal data structure.
       def setup
         @resource_config = {
-          :callbacks         => {
-            :before_create   => nil,
-            :after_create    => nil,
-            :before_update   => nil,
-            :after_update    => nil,
-            :before_destroy  => nil,
-            :after_destroy   => nil,
+          :callbacks        => {
+            :before_create  => nil,
+            :after_create   => nil,
+            :before_update  => nil,
+            :after_update   => nil,
+            :before_destroy => nil,
+            :after_destroy  => nil,
           },
-          :child_association => nil,
-          :model             => nil,
-          :parent            => nil,
-          :path              => nil, # default_path,
-          :permission        => {},
-          :properties        => {},
-          :relation          => {
-            :create          => nil,
-            :delete          => nil,
+          :child_assoc      => nil,
+          :model            => nil,
+          :parent           => nil,
+          :path             => nil,
+          :permission       => {},
+          :properties       => {},
+          :relation         => {
+            :create         => nil,
+            :delete         => nil,
           },
-          :roles             => nil,
+          :roles            => nil,
         }
       end
       

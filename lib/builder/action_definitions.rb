@@ -4,34 +4,41 @@ module SinatraResource
 
     module ActionDefinitions
 
-      def document_for_get_one(role, model, resource_config, leaf, id, parent_document, association)
+      def document_for_get_one(role, model, resource_config, leaf, id, parent_document, child_assoc)
         check_permission(:read, role, resource_config)
         if resource_config[:parent]
-          check_related?(parent_document, association, id)
+          check_related?(parent_document, child_assoc, id)
         end
         check_params(:read, role, resource_config, leaf)
-        find_document!(model, id)
+        if resource_config[:parent]
+          find_nested_document!(parent_document, child_assoc, model, id)
+        else
+          find_document!(model, id)
+        end
       end
       
-      def documents_for_get_many(role, model, resource_config, leaf, parent_document, association)
+      def documents_for_get_many(role, model, resource_config, leaf, parent_document, child_assoc)
         check_permission(:list, role, resource_config)
         check_params(:list, role, resource_config, leaf)
-        documents = find_documents!(model).select do |document|
-          authorized?(:read, lookup_role(document), resource_config)
+        documents = if resource_config[:parent]
+          find_nested_documents!(parent_document, child_assoc, model)
+        else
+          find_documents!(model)
         end
-        # TODO: A more performant approach would be to modify find_documents!
-        # so that it returns the correct results in one query.
-        if resource_config[:parent]
-          documents = select_related(parent_document, association, documents)
+        documents.select do |doc|
+          authorized?(:read, lookup_role(doc), resource_config)
         end
-        documents
       end
       
-      def document_for_post(role, model, resource_config, leaf, parent_document, association)
+      def document_for_post(role, model, resource_config, leaf, parent_document, child_assoc)
         check_permission(:create, role, resource_config)
         check_params(:create, role, resource_config, leaf)
         do_callback(:before_create, resource_config, nil)
-        document = create_document!(model)
+        document = if resource_config[:parent]
+          create_nested_document!(parent_document, child_assoc, model)
+        else
+          create_document!(model)
+        end
         if resource_config[:parent]
           make_related(parent_document, document, resource_config)
         end
@@ -39,26 +46,44 @@ module SinatraResource
         document
       end
       
-      def document_for_put(role, model, resource_config, leaf, id, parent_document, association)
+      def document_for_put(role, model, resource_config, leaf, id, parent_document, child_assoc)
         check_permission(:update, role, resource_config)
         if resource_config[:parent]
-          check_related?(parent_document, association, id)
+          check_related?(parent_document, child_assoc, id)
         end
         check_params(:update, role, resource_config, leaf)
-        do_callback(:before_update, resource_config, find_document!(model, id))
-        document = update_document!(model, id)
+        document = if resource_config[:parent]
+          find_nested_document!(parent_document, child_assoc, model, id)
+        else
+          find_document!(model, id)
+        end
+        do_callback(:before_update, resource_config, document)
+        document = if resource_config[:parent]
+          update_nested_document!(parent_document, child_assoc, model, id)
+        else
+          update_document!(model, id)
+        end
         do_callback(:after_update, resource_config, document)
         document
       end
       
-      def document_for_delete(role, model, resource_config, leaf, id, parent_document, association)
+      def document_for_delete(role, model, resource_config, leaf, id, parent_document, child_assoc)
         check_permission(:delete, role, resource_config)
         if resource_config[:parent]
-          check_related?(parent_document, association, id)
+          check_related?(parent_document, child_assoc, id)
         end
         check_params(:delete, role, resource_config, leaf)
-        do_callback(:before_destroy, resource_config, find_document!(model, id))
-        document = delete_document!(model, id)
+        document = if resource_config[:parent]
+          find_nested_document!(parent_document, child_assoc, model, id)
+        else
+          find_document!(model, id)
+        end
+        do_callback(:before_destroy, resource_config, document)
+        document = if resource_config[:parent]
+          delete_nested_document!(parent_document, child_assoc, model, id)
+        else
+          delete_document!(model, id)
+        end
         do_callback(:after_destroy, resource_config, document)
         document
       end

@@ -113,7 +113,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
       
       use "return 201 Created"
-      location_header "sources"
+      nested_location_header "categories", :category, "sources"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at)
       
@@ -173,7 +173,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
       
       use "return 201 Created"
-      location_header "sources"
+      nested_location_header "categories", :category, "sources"
       use "one new source"
       doc_properties %w(title url raw id created_at updated_at)
       

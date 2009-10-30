@@ -17,6 +17,7 @@ module DataCatalog
 
     # == Associations
 
+    many :usages
     many :categorizations
 
     def categories

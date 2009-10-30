@@ -105,14 +105,14 @@ module SinatraResource
       # @param [Hash] resource_config
       #
       # @return [String]
-      def display(action, object, resource_config)
+      def display(action, object, resource_config, parent_id = nil)
         case action
         when :list
         when :read
         when :create
           response.status = 201
-          path = resource_config[:path] + %(/#{object["id"]})
-          response.headers['Location'] = full_uri(path)
+          response.headers['Location'] = location(object, resource_config,
+            parent_id)
         when :update
         when :delete
           response.status = 204
@@ -143,16 +143,36 @@ module SinatraResource
         raise NotImplementedError
       end
 
-      # Get role, using +id+ if specified. Delegates to +lookup_role+.
+      # Get role, using +model+ and +id+. Delegates to +lookup_role+.
       #
       # When +id+ is present, it can help determine 'relative' roles such
       # as 'ownership' of the current user of a particular document.
       #
-      # @param [String, nil] id
+      # @param [Class] model
+      #
+      # @param [String] id
       #
       # @return [Symbol]
-      def get_role(model, id=nil)
-        lookup_role(id ? model.find_by_id(id) : nil)
+      def role_for(model, id)
+        lookup_role(model.find_by_id(id))
+      end
+      
+      # Get role for a nested resource situation. Delegates to +lookup_role+.
+      #
+      # @params [MongoMapper::Document] parent
+      #   The parent document
+      #
+      # @params [Symbol] child_assoc
+      #   Association from the parent to the child
+      #
+      # @params [Class] child_model
+      #
+      # @params [String] child_id
+      #
+      # @return [Symbol]
+      def role_for_nested(parent, child_assoc, child_model, child_id)
+        lookup_role(
+          find_nested_document(parent, child_assoc, child_model, child_id))
       end
 
       # Return the minimum role required for +action+, and, if specified,
@@ -249,7 +269,30 @@ module SinatraResource
         end
       end
 
-      # Lookup the rol, using +document+ if specified.
+      # Return a full URI for +object+.
+      #
+      # @param [Object] object
+      #   A resource or a list of resources
+      #
+      # @param [Hash] resource_config
+      #
+      # @param [String] parent_id
+      #
+      # @return [String]
+      def location(object, resource_config, parent_id)
+        o = object
+        c = resource_config
+        path = if c[:parent]
+          raise Error, "expecting parent_id" unless parent_id
+          pc = c[:parent].resource_config
+          pc[:path] + '/' + parent_id + '/' + c[:path] + '/' + o["id"]
+        else
+          c[:path] + '/' + o["id"]
+        end
+        full_uri(path)
+      end
+
+      # Lookup the role, using +document+ if specified.
       #
       # Applications must override this method.
       #
