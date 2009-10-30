@@ -232,7 +232,7 @@ module SinatraResource
           if params.empty?
             children
           else
-            children.all(make_conditions(params, child_model))
+            select_by(children, make_conditions(params, child_model))
           end
         else
           children = if params.empty?
@@ -350,6 +350,37 @@ module SinatraResource
       # @return [Hash]
       def sanitize(conditions, model)
         conditions # TODO: incomplete
+      end
+
+      # Select +children+ that match +conditions+.
+      #
+      # This method is needed because MongoMapper does not have +all+
+      # defined on the proxy for an embedded document many association.
+      #
+      # It does not currently support conditions such as the following:
+      #   :value => { '$gte' => 3 }
+      #   :value => { '$in' => [24, 36, 48] }
+      #
+      # @params [<MongoMapper::EmbeddedDocument>] children
+      #
+      # @params [Hash] conditions
+      #
+      # @return [<MongoMapper::EmbeddedDocument>]
+      def select_by(children, conditions)
+        children.select do |child|
+          match = true
+          conditions.each_pair do |key, value|
+            match &&= case value
+            when String, Integer
+              child[key] == value
+            when Regexp
+              child[key] =~ value
+            else raise Error, "embedded document search does not " +
+              "support: #{value.inspect}"
+            end
+          end
+          match
+        end
       end
 
       # Select only the +children+ that are related to the +parent+ by
