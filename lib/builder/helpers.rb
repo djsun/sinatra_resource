@@ -122,11 +122,30 @@ module SinatraResource
         convert(object)
       end
       
-      def do_callback(name, resource_config, document)
+      # Execute a callback.
+      #
+      # @param [Symbol] name
+      #   Valid values include:
+      #     * :before_create, :before_update, :before_destroy
+      #     * :after_create,  :after_update,  :after_destroy
+      #
+      # @param [Hash] resource_config
+      #
+      # @param [MongoMapper::Document, nil] document
+      #
+      # @param [MongoMapper::Document, nil] parent_document
+      #
+      # @return [undefined]
+      def do_callback(name, resource_config, document, parent_document)
         proc = resource_config[:callbacks][name]
         return unless proc
-        if document
+
+        if document && parent_document
+          proc.call(self, document, parent_document)
+        elsif document
           proc.call(self, document)
+        elsif parent_document
+          proc.call(self, parent_document)
         else
           proc.call(self)
         end

@@ -33,7 +33,7 @@ module SinatraResource
       def document_for_post(role, model, resource_config, leaf, parent_document, child_assoc)
         check_permission(:create, role, resource_config)
         check_params(:create, role, resource_config, leaf)
-        do_callback(:before_create, resource_config, nil)
+        do_callback(:before_create, resource_config, nil, parent_document)
         document = if resource_config[:parent]
           create_nested_document!(parent_document, child_assoc, model)
         else
@@ -42,7 +42,7 @@ module SinatraResource
         if resource_config[:parent]
           make_related(parent_document, document, resource_config)
         end
-        do_callback(:after_create, resource_config, document)
+        do_callback(:after_create, resource_config, document, parent_document)
         document
       end
       
@@ -57,13 +57,13 @@ module SinatraResource
         else
           find_document!(model, id)
         end
-        do_callback(:before_update, resource_config, document)
+        do_callback(:before_update, resource_config, document, parent_document)
         document = if resource_config[:parent]
           update_nested_document!(parent_document, child_assoc, model, id)
         else
           update_document!(model, id)
         end
-        do_callback(:after_update, resource_config, document)
+        do_callback(:after_update, resource_config, document, parent_document)
         document
       end
       
@@ -78,13 +78,13 @@ module SinatraResource
         else
           find_document!(model, id)
         end
-        do_callback(:before_destroy, resource_config, document)
+        do_callback(:before_destroy, resource_config, document, parent_document)
         document = if resource_config[:parent]
           delete_nested_document!(parent_document, child_assoc, model, id)
         else
           delete_document!(model, id)
         end
-        do_callback(:after_destroy, resource_config, document)
+        do_callback(:after_destroy, resource_config, document, parent_document)
         document
       end
 
