@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_resource}
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2009-10-28}
+  s.date = %q{2009-10-29}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -35,11 +35,13 @@ Gem::Specification.new do |s|
      "examples/datacatalog/models/category.rb",
      "examples/datacatalog/models/note.rb",
      "examples/datacatalog/models/source.rb",
+     "examples/datacatalog/models/usage.rb",
      "examples/datacatalog/models/user.rb",
      "examples/datacatalog/resources/categories.rb",
      "examples/datacatalog/resources/categories_sources.rb",
      "examples/datacatalog/resources/notes.rb",
      "examples/datacatalog/resources/sources.rb",
+     "examples/datacatalog/resources/sources_usages.rb",
      "examples/datacatalog/resources/users.rb",
      "examples/datacatalog/tasks/db.rake",
      "examples/datacatalog/tasks/test.rake",
@@ -81,6 +83,11 @@ Gem::Specification.new do |s|
      "examples/datacatalog/test/resources/sources/sources_get_one_test.rb",
      "examples/datacatalog/test/resources/sources/sources_post_test.rb",
      "examples/datacatalog/test/resources/sources/sources_put_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_delete_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_many_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_one_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_post_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_put_test.rb",
      "examples/datacatalog/test/resources/users/users_delete_test.rb",
      "examples/datacatalog/test/resources/users/users_get_many_test.rb",
      "examples/datacatalog/test/resources/users/users_get_one_test.rb",
@@ -124,11 +131,13 @@ Gem::Specification.new do |s|
      "examples/datacatalog/models/category.rb",
      "examples/datacatalog/models/note.rb",
      "examples/datacatalog/models/source.rb",
+     "examples/datacatalog/models/usage.rb",
      "examples/datacatalog/models/user.rb",
      "examples/datacatalog/resources/categories.rb",
      "examples/datacatalog/resources/categories_sources.rb",
      "examples/datacatalog/resources/notes.rb",
      "examples/datacatalog/resources/sources.rb",
+     "examples/datacatalog/resources/sources_usages.rb",
      "examples/datacatalog/resources/users.rb",
      "examples/datacatalog/test/helpers/assertions/assert_include.rb",
      "examples/datacatalog/test/helpers/assertions/assert_not_include.rb",
@@ -168,6 +177,11 @@ Gem::Specification.new do |s|
      "examples/datacatalog/test/resources/sources/sources_get_one_test.rb",
      "examples/datacatalog/test/resources/sources/sources_post_test.rb",
      "examples/datacatalog/test/resources/sources/sources_put_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_delete_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_many_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_get_one_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_post_test.rb",
+     "examples/datacatalog/test/resources/sources_usages/sources_usages_put_test.rb",
      "examples/datacatalog/test/resources/users/users_delete_test.rb",
      "examples/datacatalog/test/resources/users/users_get_many_test.rb",
      "examples/datacatalog/test/resources/users/users_get_one_test.rb",
