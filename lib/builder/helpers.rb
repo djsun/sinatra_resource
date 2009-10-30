@@ -233,7 +233,7 @@ module SinatraResource
         when :errors
           { "errors" => object }
         when :internal_server_error
-          ""
+          { "errors" => "internal_server_error" }
         when :invalid_document
           { "errors" => object.errors.errors }
         when :invalid_params
