@@ -31,7 +31,7 @@ class CategorizationTest < ModelTestCase
     test "Source#categorization is correct" do
       assert_equal [@categorization], @source.categorizations
     end
-
+    
     test "Category#categorization is correct" do
       assert_equal [@categorization], @category.categorizations
     end

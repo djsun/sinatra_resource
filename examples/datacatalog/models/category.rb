@@ -14,7 +14,9 @@ module DataCatalog
 
     # == Associations
 
-    many :categorizations
+    many :categorizations,
+      :class_name  => 'DataCatalog::Categorization',
+      :foreign_key => :category_id
 
     def sources
       categorizations.map(&:source)

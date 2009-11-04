@@ -14,8 +14,8 @@ module DataCatalog
 
     # == Associations
 
-    belongs_to :source
-    belongs_to :category
+    belongs_to :source,   :class_name => 'DataCatalog::Source'
+    belongs_to :category, :class_name => 'DataCatalog::Category'
 
     # == Validations
     
