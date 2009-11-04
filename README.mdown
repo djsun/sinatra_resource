@@ -15,7 +15,7 @@ You will need gemcutter if you don't have it already:
 
 I recommend a user-level install:
 
-    gem install djsun-resource_sinatra
+    gem install resource_sinatra
     
 Note: in general, beware of `sudo gem install <project_name>` -- it gives elevated privileges. Do you trust `<project name>`? Better to be safe and use a local install to `~/.gem`.
 
