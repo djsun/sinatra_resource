@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_resource}
-  s.version = "0.3.5"
+  s.version = "0.3.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2009-10-30}
+  s.date = %q{2009-11-04}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -196,36 +196,36 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
-      s.add_runtime_dependency(%q<mongo>, [">= 0.15.1"])
-      s.add_runtime_dependency(%q<sinatra>, [">= 0.9.4"])
+      s.add_runtime_dependency(%q<djsun-mongo_mapper>, [">= 0.5.8.2", "< 0.6"])
+      s.add_runtime_dependency(%q<mongo>, [">= 0.16", "< 1.0"])
+      s.add_runtime_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
       s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_development_dependency(%q<crack>, [">= 0.1.4"])
       s.add_development_dependency(%q<djsun-context>, [">= 0.5.6"])
       s.add_development_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
-      s.add_development_dependency(%q<yard>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_development_dependency(%q<yard>, [">= 0.2.3.5"])
     else
-      s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
-      s.add_dependency(%q<mongo>, [">= 0.15.1"])
-      s.add_dependency(%q<sinatra>, [">= 0.9.4"])
+      s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.8.2", "< 0.6"])
+      s.add_dependency(%q<mongo>, [">= 0.16", "< 1.0"])
+      s.add_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
       s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_dependency(%q<crack>, [">= 0.1.4"])
       s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
       s.add_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
-      s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<yard>, [">= 0"])
+      s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<yard>, [">= 0.2.3.5"])
     end
   else
-    s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.6.3"])
-    s.add_dependency(%q<mongo>, [">= 0.15.1"])
-    s.add_dependency(%q<sinatra>, [">= 0.9.4"])
+    s.add_dependency(%q<djsun-mongo_mapper>, [">= 0.5.8.2", "< 0.6"])
+    s.add_dependency(%q<mongo>, [">= 0.16", "< 1.0"])
+    s.add_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
     s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
     s.add_dependency(%q<crack>, [">= 0.1.4"])
     s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
     s.add_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
-    s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<yard>, [">= 0"])
+    s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<yard>, [">= 0.2.3.5"])
   end
 end
 
