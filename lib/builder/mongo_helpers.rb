@@ -328,7 +328,7 @@ module SinatraResource
       #
       # @return [Hash]
       def make_conditions(params, model)
-        filter_string = params["filter"]
+        filter_string = params[FILTER_KEY]
         return {} unless filter_string
         unsafe = QS_FILTER.parse(filter_string)
         sanitize(unsafe, model)

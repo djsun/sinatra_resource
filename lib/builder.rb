@@ -2,6 +2,8 @@ module SinatraResource
 
   class Builder
     
+    FILTER_KEY = "filter"
+    
     def initialize(klass)
       @klass  = klass
 

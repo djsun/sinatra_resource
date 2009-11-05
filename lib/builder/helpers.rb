@@ -4,8 +4,6 @@ module SinatraResource
 
     module Helpers
       
-      FILTER_KEY = "filter"
-      
       # Build a resource, based on +document+, appropriate for +role+.
       #
       # @param [Symbol] role
