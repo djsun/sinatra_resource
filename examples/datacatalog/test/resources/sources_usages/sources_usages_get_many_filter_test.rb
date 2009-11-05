@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../helpers/resource_test_helper')
 
-class SourcesUsagesGetManySearchResourceTest < ResourceTestCase
+class SourcesUsagesGetManyFilterResourceTest < ResourceTestCase
 
   include DataCatalog
 
