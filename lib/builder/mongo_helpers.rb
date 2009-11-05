@@ -328,10 +328,18 @@ module SinatraResource
       #
       # @return [Hash]
       def make_conditions(params, model)
+        search_string = params[SEARCH_KEY]
         filter_string = params[FILTER_KEY]
-        return {} unless filter_string
-        unsafe = QS_FILTER.parse(filter_string)
-        sanitize(unsafe, model)
+        if search_string && filter_string
+          error 400, convert(body_for(:invalid_params, [FILTER_KEY]))
+        elsif search_string
+          { :_keywords => search_string }
+        elsif filter_string
+          unsafe = QS_FILTER.parse(filter_string)
+          sanitize(unsafe, model)
+        else
+          {}
+        end
       end
       
       # Filter out +conditions+ that do not have corresponding keys in

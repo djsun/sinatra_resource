@@ -6,9 +6,11 @@ module DataCatalog
 
     # == Attributes
 
-    key :title, String
-    key :url,   String
-    key :raw,   Hash
+    key :title,       String
+    key :description, String
+    key :url,         String
+    key :raw,         Hash
+    key :_keywords,   Array
     timestamps!
 
     # == Indices
@@ -33,6 +35,13 @@ module DataCatalog
 
     validates_presence_of :title
     validates_presence_of :url
+    
+    # == Callbacks
+    
+    before_save :update_keywords
+    def update_keywords
+      self._keywords = DataCatalog::Search.process([title, description])
+    end
 
   end
 

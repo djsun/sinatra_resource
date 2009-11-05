@@ -333,7 +333,10 @@ module SinatraResource
       def params_check_action(action)
         case action
         when :list
-          unless params.reject { |k, v| k == FILTER_KEY }.empty?
+          p = params.reject do |k, v|
+            [FILTER_KEY, SEARCH_KEY].include?(k)
+          end
+          unless p.empty?
             error 400, convert(body_for(:non_empty_params))
           end
         when :read
@@ -371,7 +374,7 @@ module SinatraResource
       def params_check_action_and_role(action, role, resource_config)
         invalid = []
         params.each_pair do |property, value|
-          next if property == FILTER_KEY
+          next if [FILTER_KEY, SEARCH_KEY].include?(property)
           if !authorized?(action, role, resource_config, property.intern)
             invalid << property
           end 

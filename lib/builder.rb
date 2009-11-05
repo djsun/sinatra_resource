@@ -3,6 +3,7 @@ module SinatraResource
   class Builder
     
     FILTER_KEY = "filter"
+    SEARCH_KEY = "search"
     
     def initialize(klass)
       @klass  = klass
