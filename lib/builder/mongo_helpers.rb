@@ -404,7 +404,7 @@ module SinatraResource
       # @return [MongoMapper::Document]
       def select_related(parent, child_assoc, children)
         children.select do |child|
-          parent.send(child_assoc).find { |x| x.id == child.id }
+          parent.send(child_assoc).detect { |x| x.id == child.id }
         end
         # Note: This has O^2 complexity because of the nesting.
         # Can it be done more quickly?
