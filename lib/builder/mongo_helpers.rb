@@ -410,16 +410,6 @@ module SinatraResource
         # Can it be done more quickly?
       end
 
-      # Returns a typecasted +value+. (Uses +model+ and +key_string+ to
-      # figure out how to typecast it.)
-      #
-      # @return [Object]
-      def typecast(model, key_string, value)
-        dummy = model.new
-        dummy.send(:"#{key_string}=", value)
-        dummy.send(:"#{key_string}")
-      end
-
     end
 
   end
