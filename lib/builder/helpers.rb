@@ -415,7 +415,7 @@ module SinatraResource
         if proc
           proc.call(document)
         else
-          document[attribute == :id ? :_id : attribute]
+          document.send(attribute == :id ? :_id : attribute)
         end
       end
 
