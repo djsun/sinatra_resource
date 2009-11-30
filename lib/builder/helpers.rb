@@ -415,7 +415,19 @@ module SinatraResource
         if proc
           proc.call(document)
         else
-          document.send(attribute == :id ? :_id : attribute)
+          document[attribute == :id ? :_id : attribute]
+          # An alternate way is:
+          #
+          #   document.send(attribute == :id ? :_id : attribute)
+          #
+          # This will work; however, it would be confusing to support
+          # properties backed by model methods here if we don't do it 
+          # everywhere. And supporting it everywhere would be tricky.
+          #
+          # For example, the filtering code relies on using MongoDB to
+          # search the database. If we supported properties backed by model
+          # methods, filtering / searching would be more complicated and
+          # expensive.
         end
       end
 
