@@ -17,13 +17,21 @@ module SinatraResource
         end
       end
       
-      def documents_for_get_many(role, model, resource_config, leaf, parent_document, child_assoc)
+      def document_count_for_get_many(model, resource_config, parent_document, child_assoc)
+        if resource_config[:parent]
+          count_nested_documents(parent_document, child_assoc, model)
+        else
+          count_documents(model)
+        end
+      end
+      
+      def documents_for_get_many(role, model, resource_config, page, items_per_page, leaf, parent_document, child_assoc)
         check_permission(:list, role, resource_config)
         check_params(:list, role, resource_config, leaf)
         documents = if resource_config[:parent]
-          find_nested_documents!(parent_document, child_assoc, model)
+          find_nested_documents!(parent_document, child_assoc, model, page, items_per_page)
         else
-          find_documents!(model)
+          find_documents!(model, page, items_per_page)
         end
         documents.select do |doc|
           authorized?(:read, lookup_role(doc), resource_config)

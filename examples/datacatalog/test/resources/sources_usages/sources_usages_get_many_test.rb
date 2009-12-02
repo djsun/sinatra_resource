@@ -56,20 +56,26 @@ class SourcesUsagesGetManyResourceTest < ResourceTestCase
     context "#{role} : get /:id/usages" do
       before do
         get "/#{@source.id}/usages", :api_key => api_key_for(role)
+        @members = parsed_response_body['members']
       end
       
       use "return 200 Ok"
       
       test "body should have 3 sources" do
-        assert_equal 3, parsed_response_body.length
+        assert_equal 3, @members.length
       end
       
       test "body should have correct source titles" do
-        actual = parsed_response_body.map { |e| e["title"] }
+        actual = @members.map { |e| e["title"] }
         assert_equal @usage_titles, actual.sort
       end
-      
-      docs_properties %w(title url description id)
+
+      test "members should only have correct attributes" do
+        correct = %w(title url description id)
+        @members.each do |member|
+          assert_properties(correct, member)
+        end
+      end
     end
   end
 

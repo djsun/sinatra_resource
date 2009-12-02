@@ -22,6 +22,41 @@ module SinatraResource
         find_child!(children, child_id)
         true
       end
+
+      # Find +model+ documents: find all documents if no params, otherwise
+      # find selected documents.
+      #
+      # @param [Class] model
+      #   a class that includes MongoMapper::Document
+      #
+      # @return [Integer]
+      def count_documents(model)
+        conditions = params.empty? ? {} : make_conditions(params, model)
+        model.count(conditions)
+      end
+      
+      def count_nested_documents(parent, child_assoc, child_model)
+        #
+        # This code needs significant improvement.
+        # It is copy and pasted from find_nested_documents!
+        #
+        documents = if child_model.embeddable?
+          children = parent.send(child_assoc)
+          if params.empty?
+            children
+          else
+            select_by(children, make_conditions(params, child_model))
+          end
+        else
+          children = if params.empty?
+            child_model.all
+          else
+            child_model.all(make_conditions(params, child_model))
+          end
+          select_related(parent, child_assoc, children)
+        end
+        documents.length
+      end
       
       # Create a document from params. If not valid, returns 400.
       #
@@ -199,7 +234,7 @@ module SinatraResource
         end
         document
       end
-
+      
       # Find +model+ documents: find all documents if no params, otherwise
       # find selected documents.
       #
@@ -207,9 +242,12 @@ module SinatraResource
       #   a class that includes MongoMapper::Document
       #
       # @return [Array<MongoMapper::Document>]
-      def find_documents!(model)
-        return(model.all) if params.empty?
-        model.all(make_conditions(params, model))
+      def find_documents!(model, page, items_per_page)
+        conditions = params.empty? ? {} : make_conditions(params, model)
+        model.all(conditions.merge({
+          :skip  => items_per_page * (page - 1),
+          :limit => items_per_page
+        }))
       end
 
       # Find nested +child_model+ documents: find all documents if no
@@ -226,7 +264,11 @@ module SinatraResource
       #     * MongoMapper::EmbeddedDocument
       #
       # @return [Array<MongoMapper::Document>]
-      def find_nested_documents!(parent, child_assoc, child_model)
+      def find_nested_documents!(parent, child_assoc, child_model, page, items_per_page)
+        #
+        # TODO: handle page parameter
+        # TODO: handle items_per_page parameter
+        #
         documents = if child_model.embeddable?
           children = parent.send(child_assoc)
           if params.empty?

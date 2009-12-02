@@ -4,6 +4,8 @@ module SinatraResource
     
     FILTER_KEY = "filter"
     SEARCH_KEY = "search"
+
+    ITEMS_PER_PAGE = 20
     
     def initialize(klass)
       @klass  = klass
@@ -64,8 +66,11 @@ module SinatraResource
       if !@parent
         @klass.get '/?' do
           role = lookup_role(nil)
-          documents = documents_for_get_many(role, model, resource_config, true, nil, nil)
-          resources = build_resources(documents, resource_config)
+          page = get_page(params)
+          documents = documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, nil, nil)
+          document_count = document_count_for_get_many(model, resource_config, nil, nil)
+          page_count = (document_count.to_f / ITEMS_PER_PAGE).ceil
+          resources = build_resources(documents, resource_config, page, page_count)
           display(:list, resources, resource_config)
         end
       else
@@ -79,8 +84,11 @@ module SinatraResource
           parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id, nil, nil)
           # ------
           role = lookup_role(nil)
-          documents = documents_for_get_many(role, model, resource_config, true, parent_document, child_assoc)
-          resources = build_resources(documents, resource_config)
+          page = get_page(params)
+          documents = documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, parent_document, child_assoc)
+          document_count = document_count_for_get_many(model, resource_config, parent_document, child_assoc)
+          page_count = (document_count.to_f / ITEMS_PER_PAGE).ceil
+          resources = build_resources(documents, resource_config, page, page_count)
           display(:list, resources, resource_config, parent_id)
         end
       end

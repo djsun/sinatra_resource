@@ -73,20 +73,26 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
+          @members = parsed_response_body['members']
         end
   
         use "return 200 Ok"
   
         test "body should have 1 source" do
-          assert_equal 1, parsed_response_body.length
+          assert_equal 1, @members.length
         end
         
         test "body should have correct source" do
           assert_equal %{2007 Crime in the United States},
-            parsed_response_body[0]['title']
+            @members[0]['title']
         end
         
-        docs_properties %w(title url raw categories id created_at updated_at)
+        test "members should only have correct attributes" do
+          correct = %w(title url raw categories id created_at updated_at)
+          @members.each do |member|
+            assert_properties(correct, member)
+          end
+        end
       end
     end
   end
@@ -100,12 +106,13 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
+          @members = parsed_response_body['members']
         end
   
         use "return 200 Ok"
         
         test "body should have correct sources" do
-          titles = parsed_response_body.map { |x| x['title'] }
+          titles = @members.map { |x| x['title'] }
           assert_equal 2, titles.length
           assert_include %{Interest Rate Statistics - Daily Treasury Yield Curve Rates (1998)}, titles
           assert_include %{Interest Rate Statistics - Daily Treasury Bills Rates (Current month)}, titles

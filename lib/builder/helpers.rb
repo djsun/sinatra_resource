@@ -33,11 +33,24 @@ module SinatraResource
       #
       # @param [Hash] resource_config
       #
+      # @param [Integer] page
+      #
+      # @param [Integer] page_count
+      #
       # @return [Array<Hash<String => Object>>]
-      def build_resources(documents, resource_config)
-        documents.map do |document|
-          build_resource(lookup_role(document), document, resource_config)
+      def build_resources(documents, resource_config, page, page_count)
+        if page > page_count
+          error 400, convert(body_for(:errors,
+            "page must be <= page_count (#{page_count} in this case)"))
         end
+        {
+          'previous'   => page > 1 ? link_to_page(page - 1) : nil,
+          'next'       => page < page_count ? link_to_page(page + 1) : nil,
+          'page_count' => page_count,
+          'members'    => documents.map do |document|
+            build_resource(lookup_role(document), document, resource_config)
+          end,
+        }
       end
 
       # Halt unless the current params are ok for +action+ and +role+.
@@ -158,6 +171,33 @@ module SinatraResource
       # @return [String]
       def full_uri(path)
         raise NotImplementedError
+      end
+
+      # Get the page parameter.
+      #
+      # @param [Hash] params
+      # 
+      # @return [Integer]
+      def get_page(params)
+        raw = params.delete('page')
+        return 1 unless raw
+        page = raw.to_i
+        if page < 1
+          error 400, convert(body_for(:errors, "page must be >= 1"))
+        end
+        page
+      end
+
+      # Build a hash that contains a URL to +page_number+.
+      #
+      # @param [Integer] page
+      #
+      # @return [Hash]
+      def link_to_page(page_number)
+        q = Rack::Utils.parse_query(request.query_string)
+        q['page'] = page_number
+        query_string = Rack::Utils.build_query(q)
+        { 'href' => "#{request.path}?#{query_string}" }
       end
 
       # Get role, using +model+ and +id+. Delegates to +lookup_role+.
