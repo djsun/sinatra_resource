@@ -309,13 +309,6 @@ module SinatraResource
       end
       
       protected
-
-      PATTERNS = [
-        [ %r{^<=(.*)} , '$lte' ],
-        [ %r{^<(.*)}  , '$lt'  ],
-        [ %r{^>=(.*)} , '$gte' ],
-        [ %r{^>(.*)}  , '$gt'  ]
-      ]
       
       QS_FILTER = QueryStringFilter.new
       
