@@ -39,9 +39,9 @@ module SinatraResource
       #
       # @return [Array<Hash<String => Object>>]
       def build_resources(documents, resource_config, page, page_count)
-        if page > page_count
+        if page_count > 0 && page > page_count
           error 400, convert(body_for(:errors,
-            "page must be <= page_count (#{page_count} in this case)"))
+            "page (#{page}) must be <= page_count (#{page_count})"))
         end
         {
           'previous'   => page > 1 ? link_to_page(page - 1) : nil,
@@ -51,6 +51,10 @@ module SinatraResource
             build_resource(lookup_role(document), document, resource_config)
           end,
         }
+      end
+
+      def calculate_page_count(document_count, items_per_page)
+        (document_count.to_f / items_per_page).ceil
       end
 
       # Halt unless the current params are ok for +action+ and +role+.
