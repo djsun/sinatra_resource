@@ -244,7 +244,7 @@ module SinatraResource
         end
       end
       
-      # Delegates to application, who should use custom logic to related
+      # Delegates to application, who should use custom logic to relate
       # +parent+ and +child+.
       #
       # @param [MongoMapper::Document] parent
