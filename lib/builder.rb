@@ -70,7 +70,7 @@ module SinatraResource
           documents = documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, nil, nil)
           document_count = document_count_for_get_many(model, resource_config, nil, nil)
           page_count = calculate_page_count(document_count, ITEMS_PER_PAGE)
-          resources = build_resources(documents, resource_config, page, page_count)
+          resources = build_resources(documents, resource_config, page, page_count, document_count)
           display(:list, resources, resource_config)
         end
       else
@@ -88,7 +88,7 @@ module SinatraResource
           documents = documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, parent_document, child_assoc)
           document_count = document_count_for_get_many(model, resource_config, parent_document, child_assoc)
           page_count = calculate_page_count(document_count, ITEMS_PER_PAGE)
-          resources = build_resources(documents, resource_config, page, page_count)
+          resources = build_resources(documents, resource_config, page, page_count, document_count)
           display(:list, resources, resource_config, parent_id)
         end
       end

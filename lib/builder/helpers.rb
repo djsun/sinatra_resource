@@ -38,16 +38,17 @@ module SinatraResource
       # @param [Integer] page_count
       #
       # @return [Array<Hash<String => Object>>]
-      def build_resources(documents, resource_config, page, page_count)
+      def build_resources(documents, resource_config, page, page_count, document_count)
         if page_count > 0 && page > page_count
           error 400, convert(body_for(:errors,
             "page (#{page}) must be <= page_count (#{page_count})"))
         end
         {
-          'previous'   => page > 1 ? link_to_page(page - 1) : nil,
-          'next'       => page < page_count ? link_to_page(page + 1) : nil,
-          'page_count' => page_count,
-          'members'    => documents.map do |document|
+          'previous'       => page > 1 ? link_to_page(page - 1) : nil,
+          'next'           => page < page_count ? link_to_page(page + 1) : nil,
+          'page_count'     => page_count,
+          'document_count' => document_count,
+          'members'        => documents.map do |document|
             build_resource(lookup_role(document), document, resource_config)
           end,
         }
