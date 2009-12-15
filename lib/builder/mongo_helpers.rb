@@ -370,8 +370,12 @@ module SinatraResource
         elsif search_string
           { :_keywords => search_string.downcase }
         elsif filter_string
-          unsafe = QS_FILTER.parse(filter_string)
-          sanitize(unsafe, model)
+          begin
+            unsafe = QS_FILTER.parse(filter_string)
+            sanitize(unsafe, model)
+          rescue QueryStringFilter::ParseError
+            error 400, convert(body_for(:invalid_filter, filter_string))
+          end
         else
           {}
         end

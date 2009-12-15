@@ -321,6 +321,8 @@ module SinatraResource
           { "errors" => object.errors.errors }
         when :invalid_params
           { "errors" => { "invalid_params" => object } }
+        when :invalid_filter
+          { "errors" => { "invalid_filter" => object } }
         when :no_params
           { "errors" => "no_params" }
         when :non_empty_params
