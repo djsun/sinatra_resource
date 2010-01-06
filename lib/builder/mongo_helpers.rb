@@ -183,7 +183,9 @@ module SinatraResource
       #
       # @return [MongoMapper::Document]
       def find_document!(model, id)
-        document = model.find_by_id(id)
+        document = log_time("#{model}.find_by_id") do
+          model.find_by_id(id)
+        end
         unless document
           error 404, convert(body_for(:not_found))
         end
@@ -244,10 +246,12 @@ module SinatraResource
       # @return [Array<MongoMapper::Document>]
       def find_documents!(model, page, items_per_page)
         conditions = params.empty? ? {} : make_conditions(params, model)
-        model.all(conditions.merge({
-          :skip  => items_per_page * (page - 1),
-          :limit => items_per_page
-        }))
+        log_time("#{model}.all") do
+          model.all(conditions.merge({
+            :skip  => items_per_page * (page - 1),
+            :limit => items_per_page
+          }))
+        end
       end
 
       # Find nested +child_model+ documents: find all documents if no
@@ -284,6 +288,14 @@ module SinatraResource
           end
           select_related(parent, child_assoc, children)
         end
+      end
+      
+      def log_time(message)
+        t0 = Time.now
+        result = yield
+        t1 = Time.now
+        puts ">>> %s : %f" % [message, t1 - t0]
+        result
       end
       
       # Delegates to application, who should use custom logic to relate
