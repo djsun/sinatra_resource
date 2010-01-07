@@ -291,14 +291,14 @@ module SinatraResource
       end
       
       def log_time(message)
+        t0 = Time.now
+        result = yield
+        t1 = Time.now
         if @log_index
           @log_index += 1
         else
           @log_index = 1
         end
-        t0 = Time.now
-        result = yield
-        t1 = Time.now
         key = "X-Sinatra-Resource-Log-#{@log_index}"
         response[key] = "%s : %f s" % [message, t1 - t0]
         result
