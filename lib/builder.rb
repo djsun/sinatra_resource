@@ -65,17 +65,21 @@ module SinatraResource
       resource_config = @resource_config
       if !@parent
         @klass.get '/?' do
-          role = lookup_role(nil)
-          page = get_page(params)
-          documents = log_time("#{model} documents_for_get_many") do
-            documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, nil, nil)
+          log_time("GET #{model}") do
+            role = lookup_role(nil)
+            page = get_page(params)
+            documents = log_time("#{model} documents_for_get_many") do
+              documents_for_get_many(role, model, resource_config, page, ITEMS_PER_PAGE, true, nil, nil)
+            end
+            document_count = document_count_for_get_many(model, resource_config, nil, nil)
+            page_count = calculate_page_count(document_count, ITEMS_PER_PAGE)
+            resources = log_time("#{model} build_resources") do
+              build_resources(documents, resource_config, page, page_count, document_count, ITEMS_PER_PAGE)
+            end
+            log_time("#{model} display") do
+              display(:list, resources, resource_config)
+            end
           end
-          document_count = document_count_for_get_many(model, resource_config, nil, nil)
-          page_count = calculate_page_count(document_count, ITEMS_PER_PAGE)
-          resources = log_time("#{model} build_resources") do
-            build_resources(documents, resource_config, page, page_count, document_count, ITEMS_PER_PAGE)
-          end
-          display(:list, resources, resource_config)
         end
       else
         child_assoc            = @child_assoc
