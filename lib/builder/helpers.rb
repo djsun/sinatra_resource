@@ -17,8 +17,12 @@ module SinatraResource
       def build_resource(role, document, resource_config)
         resource = {}
         resource_config[:properties].each_pair do |property, hash|
-          if authorized?(:read, role, resource_config, property) &&
-            !resource_config[:properties][property][:hide_by_default]
+          hide = if params[SHOW_KEY] == "all"
+            false
+          else
+            resource_config[:properties][property][:hide_by_default]
+          end
+          if authorized?(:read, role, resource_config, property) && !hide
             resource[property.to_s] = value(property, document, hash)
           end
         end
@@ -389,7 +393,12 @@ module SinatraResource
             error 400, convert(body_for(:non_empty_params))
           end
         when :read
-          unless params.empty?
+          p = params.reject { |k, v| k == SHOW_KEY }
+          unless [nil, "all"].include?(params[SHOW_KEY])
+            error 400, convert(body_for(:invalid_params,
+              { SHOW_KEY => params[SHOW_KEY] }))
+          end
+          unless p.empty?
             error 400, convert(body_for(:non_empty_params))
           end
         when :create
@@ -423,7 +432,7 @@ module SinatraResource
       def params_check_action_and_role(action, role, resource_config)
         invalid = []
         params.each_pair do |property, value|
-          next if [FILTER_KEY, SEARCH_KEY].include?(property)
+          next if [FILTER_KEY, SEARCH_KEY, SHOW_KEY].include?(property)
           if !authorized?(action, role, resource_config, property.intern)
             invalid << property
           end 

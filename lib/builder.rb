@@ -4,6 +4,7 @@ module SinatraResource
     
     FILTER_KEY = "filter"
     SEARCH_KEY = "search"
+    SHOW_KEY   = "show"
 
     ITEMS_PER_PAGE = 20
     

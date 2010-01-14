@@ -50,15 +50,15 @@ class SourcesGetOneResourceTest < ResourceTestCase
         )
         get "/#{@source.id}", :api_key => api_key_for(role)
       end
-
+    
       after do
         @category.destroy
         @categorization.destroy
       end
-
+    
       use "return 200 Ok"
       doc_properties %w(title url categories id created_at updated_at)
-
+    
       test "body should have correct categories" do
         expected = [
           {
@@ -69,6 +69,15 @@ class SourcesGetOneResourceTest < ResourceTestCase
         ]
         assert_equal expected, parsed_response_body["categories"]
       end
+    end
+    
+    context "#{role} : get /:id?show=all" do
+      before do
+        get "/#{@source.id}?show=all", :api_key => api_key_for(role)
+      end
+    
+      use "return 200 Ok"
+      doc_properties %w(title url raw categories id created_at updated_at)
     end
   end
 
