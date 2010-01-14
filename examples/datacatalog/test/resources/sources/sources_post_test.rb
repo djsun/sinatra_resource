@@ -105,7 +105,7 @@ class SourcesPostResourceTest < ResourceTestCase
       use "return 201 Created"
       location_header "sources"
       use "one new source"
-      doc_properties %w(title url raw id created_at updated_at categories)
+      doc_properties %w(title url id created_at updated_at categories)
 
       test "should set all fields in database" do
         source = Source.find_by_id(parsed_response_body["id"])
@@ -156,7 +156,7 @@ class SourcesPostResourceTest < ResourceTestCase
       use "return 201 Created"
       location_header "sources"
       use "one new source"
-      doc_properties %w(title url raw id created_at updated_at categories)
+      doc_properties %w(title url id created_at updated_at categories)
 
       test "should set all fields in database" do
         source = Source.find_by_id(parsed_response_body["id"])

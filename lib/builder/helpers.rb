@@ -17,7 +17,8 @@ module SinatraResource
       def build_resource(role, document, resource_config)
         resource = {}
         resource_config[:properties].each_pair do |property, hash|
-          if authorized?(:read, role, resource_config, property)
+          if authorized?(:read, role, resource_config, property) &&
+            !resource_config[:properties][property][:hide_by_default]
             resource[property.to_s] = value(property, document, hash)
           end
         end

@@ -137,7 +137,7 @@ class SourcesPutResourceTest < ResourceTestCase
         end
       
         use "return 200 Ok"
-        doc_properties %w(title url raw id created_at updated_at categories)
+        doc_properties %w(title url id created_at updated_at categories)
 
         test "should change correct fields in database" do
           source = Source.find_by_id(@source.id)
@@ -164,7 +164,7 @@ class SourcesPutResourceTest < ResourceTestCase
       end
       
       use "return 200 Ok"
-      doc_properties %w(title url raw id created_at updated_at categories)
+      doc_properties %w(title url id created_at updated_at categories)
 
       test "should change correct fields in database" do
         source = Source.find_by_id(@source.id)
@@ -242,7 +242,7 @@ class SourcesPutResourceTest < ResourceTestCase
         end
       
         use "return 200 Ok"
-        doc_properties %w(title url raw id created_at updated_at categories)
+        doc_properties %w(title url id created_at updated_at categories)
 
         test "should change correct fields in database" do
           source = Source.find_by_id(@source.id)
@@ -269,7 +269,7 @@ class SourcesPutResourceTest < ResourceTestCase
       end
       
       use "return 200 Ok"
-      doc_properties %w(title url raw id created_at updated_at categories)
+      doc_properties %w(title url id created_at updated_at categories)
 
       test "should change all fields in database" do
         source = Source.find_by_id(@source.id)

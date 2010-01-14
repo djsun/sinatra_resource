@@ -57,7 +57,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       end
 
       use "return 200 Ok"
-      doc_properties %w(title url raw categories id created_at updated_at)
+      doc_properties %w(title url categories id created_at updated_at)
 
       test "body should have correct categories" do
         expected = [

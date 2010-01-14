@@ -55,7 +55,7 @@ class SourcesGetManyResourceTest < ResourceTestCase
       end
 
       test "members should only have correct attributes" do
-        correct = %w(title url raw categories id created_at updated_at)
+        correct = %w(title url categories id created_at updated_at)
         @members.each do |member|
           assert_properties(correct, member)
         end

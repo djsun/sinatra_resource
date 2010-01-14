@@ -142,7 +142,9 @@ module SinatraResource
       # @param [Hash] access_rules
       #
       # @return [undefined]
-      def property(name, access_rules={}, &block)
+      def property(name, options={}, &block)
+        hide = options.delete(:hide_by_default) || false
+        access_rules = options
         if @resource_config[:properties][name]
           raise DefinitionError, "property #{name.inspect} already declared in #{self}"
         end
@@ -160,6 +162,7 @@ module SinatraResource
         access_rules.each_pair do |kind, role|
           @resource_config[:roles].validate_role(role)
           @resource_config[:properties][name][kind] = role
+          @resource_config[:properties][name][:hide_by_default] = hide
         end
       end
       

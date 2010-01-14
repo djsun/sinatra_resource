@@ -18,7 +18,7 @@ module DataCatalog
 
     property :title
     property :url
-    property :raw, :w => :admin
+    property :raw, :w => :admin, :hide_by_default => true
     
     property :categories do |source|
       source.categorizations.map do |categorization|
