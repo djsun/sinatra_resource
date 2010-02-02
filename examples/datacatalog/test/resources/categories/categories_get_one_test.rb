@@ -62,7 +62,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       test "body should have correct sources" do
         expected = [
           {
-            "id"    => @source.id,
+            "id"    => @source.id.to_s,
             "href"  => "/sources/#{@source.id}",
             "title" => @source.title,
             "url"   => @source.url,

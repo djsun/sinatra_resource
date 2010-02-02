@@ -34,7 +34,8 @@ module DataCatalog
     
     # == Callbacks
     
-    def before_create
+    before_create :assign_api_key
+    def assign_api_key
       unless _api_key
         self._api_key = generate_api_key
       end

@@ -6,8 +6,8 @@ module DataCatalog
 
     # == Attributes
 
-    key :source_id,   String
-    key :category_id, String
+    key :source_id,   Mongo::ObjectID
+    key :category_id, Mongo::ObjectID
     timestamps!
 
     # == Indices

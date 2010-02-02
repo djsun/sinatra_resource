@@ -66,7 +66,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       use "no change in source count"
     end
   end
-
+  
   %w(curator).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
@@ -89,7 +89,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         missing_param missing
       end
     end
-
+  
     [:raw, :id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post /:id/sources but with #{invalid}" do
         before do
@@ -102,12 +102,12 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         invalid_param invalid
       end
     end
-
+  
     context "#{role} : post /:id/sources with valid params" do
       before do
         post "/#{@category.id}/sources", valid_params_for(role)
       end
-
+  
       after do
         Source.find_by_id(parsed_response_body["id"]).destroy
       end
@@ -123,7 +123,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
       end
     end
   end
-
+  
   %w(admin).each do |role|
     context "#{role} : post /:fake_id/sources" do
       before do
@@ -148,7 +148,7 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         missing_param missing
       end
     end
-
+  
     [:id, :created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : post /:id/sources but with #{invalid}" do
         before do
@@ -161,13 +161,13 @@ class CategoriesSourcesPostResourceTest < ResourceTestCase
         invalid_param invalid
       end
     end
-
+  
     context "#{role} : post /:id/sources with valid params" do
       before do
         post "/#{@category.id}/sources",
           valid_params_for(role).merge(@extra_admin_params)
       end
-
+  
       after do
         Source.find_by_id(parsed_response_body["id"]).destroy
       end

@@ -62,7 +62,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       test "body should have correct categories" do
         expected = [
           {
-            "id"   => @category.id,
+            "id"   => @category.id.to_s,
             "href" => "/categories/#{@category.id}",
             "name" => @category.name,
           }

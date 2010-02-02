@@ -48,7 +48,7 @@ class CategoriesSourcesDeleteResourceTest < ResourceTestCase
       use "return 401 because the API key is invalid"
     end
   end
-
+  
   %w(basic).each do |role|
     context "#{role} : delete /:fake_id/sources/:fake_id" do
       before do
@@ -124,7 +124,7 @@ class CategoriesSourcesDeleteResourceTest < ResourceTestCase
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-  
+      
     context "#{role} : delete /:id/sources/:not_related_id" do
       before do
         delete "/#{@category.id}/sources/#{@other_source.id}",
@@ -137,7 +137,8 @@ class CategoriesSourcesDeleteResourceTest < ResourceTestCase
   
     context "#{role} : delete /:id/sources/:id" do
       before do
-        delete "/#{@category.id}/sources/#{@source.id}", :api_key => api_key_for(role)
+        delete "/#{@category.id}/sources/#{@source.id}",
+          :api_key => api_key_for(role)
       end
       
       use "return 204 No Content"

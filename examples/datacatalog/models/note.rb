@@ -7,7 +7,7 @@ module DataCatalog
     # == Attributes
 
     key :text,      String
-    key :user_id,   String
+    key :user_id,   Mongo::ObjectID
     timestamps!
   
     # == Indices

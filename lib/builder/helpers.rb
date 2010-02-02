@@ -355,9 +355,9 @@ module SinatraResource
         path = if c[:parent]
           raise Error, "expecting parent_id" unless parent_id
           pc = c[:parent].resource_config
-          pc[:path] + '/' + parent_id + '/' + c[:path] + '/' + o["id"]
+          "#{pc[:path]}/#{parent_id}/#{c[:path]}/#{o['id']}"
         else
-          c[:path] + '/' + o["id"]
+          "#{c[:path]}/#{o['id']}"
         end
         full_uri(path)
       end

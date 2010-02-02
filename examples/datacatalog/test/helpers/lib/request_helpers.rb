@@ -61,8 +61,8 @@ module RequestHelpers
         base_uri = Config.environment_config["base_uri"]
         parent = instance_variable_get("@#{parent_ivar}")
         raise Error unless parent
-        path = parent_path + '/' + parent.id + '/' + child_path + '/' +
-          parsed_response_body["id"]
+        id = parsed_response_body['id']
+        path = "#{parent_path}/#{parent.id}/#{child_path}/#{id}"
         expected = URI.join(base_uri, path).to_s
         assert_equal expected, last_response.headers['Location']
       end

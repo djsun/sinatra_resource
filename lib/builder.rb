@@ -175,7 +175,7 @@ module SinatraResource
           parent_document = document_for_get_one(parent_role, parent_model, parent_resource_config, false, parent_id, nil, nil)
           # ------
           role = role_for_nested(parent_document, child_assoc, model, id)
-          document_for_delete(role, model, resource_config, true, id, parent_document, child_assoc)
+          document = document_for_delete(role, model, resource_config, true, id, parent_document, child_assoc)
           display(:delete, "", resource_config, parent_id)
         end
       end

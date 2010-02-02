@@ -78,7 +78,7 @@ class UsersGetManyResourceTest < ResourceTestCase
 
       test "body elements should be correct" do
         @members.each do |element|
-          if element["id"] == user_for(role).id
+          if element["id"] == user_for(role).id.to_s
             assert_properties(%w(name email role _api_key token
               id created_at updated_at), element)
           else

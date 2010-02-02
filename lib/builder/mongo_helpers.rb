@@ -158,7 +158,8 @@ module SinatraResource
       # @return [MongoMapper::EmbeddedDocument]
       def find_child(children, child_id)
         raise Error, "children not true" unless children
-        children.detect { |x| x.id == child_id }
+        child_id = child_id.to_s
+        children.detect { |x| x.id.to_s == child_id }
       end
 
       # Find document with +child_id+ in +children+ or raise 404.
@@ -443,7 +444,9 @@ module SinatraResource
       # @return [MongoMapper::Document]
       def select_related(parent, child_assoc, children)
         children.select do |child|
-          parent.send(child_assoc).detect { |x| x.id == child.id }
+          parent.send(child_assoc).detect do |x|
+            x.id == child.id
+          end
         end
         # Note: This has O^2 complexity because of the nesting.
         # Can it be done more quickly?
