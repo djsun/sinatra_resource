@@ -15,7 +15,8 @@ module Config
   end
   
   def self.new_mongo_connection
-    gem 'mongo', ">= 0.16", '< 1.0'
+    gem 'mongo', "= 0.18.2", '< 1.0'
+    gem 'mongo_ext', "= 0.18.2", '< 1.0'
     require 'mongo'
     Mongo::Connection.new(environment_config["mongo_hostname"])
   end
