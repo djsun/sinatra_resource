@@ -11,8 +11,8 @@ begin
     gem.homepage = "http://github.com/djsun/sinatra_resource"
     gem.authors = ["David James"]
 
-    gem.add_dependency 'djsun-mongo_mapper', '>= 0.5.8.2', '< 0.6'
-    gem.add_dependency 'mongo', '>= 0.16', '< 1.0'
+    gem.add_dependency 'mongo_mapper', '>= 0.6.10', '< 0.7'
+    gem.add_dependency 'mongo', '>= 0.18.2', '< 1.0'
     gem.add_dependency 'sinatra', '>= 0.9.4', '< 1.0'
     gem.add_dependency 'query_string_filter', '>= 0.1.2'
 
