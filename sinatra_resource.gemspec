@@ -203,7 +203,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<mongo_mapper>, [">= 0.6.10", "< 0.7"])
-      s.add_runtime_dependency(%q<mongo>, [">= 0.18.2", "< 1.0"])
+      s.add_runtime_dependency(%q<mongo>, ["= 0.18.2", "< 1.0"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
       s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_development_dependency(%q<crack>, [">= 0.1.4"])
@@ -213,7 +213,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<yard>, [">= 0.2.3.5"])
     else
       s.add_dependency(%q<mongo_mapper>, [">= 0.6.10", "< 0.7"])
-      s.add_dependency(%q<mongo>, [">= 0.18.2", "< 1.0"])
+      s.add_dependency(%q<mongo>, ["= 0.18.2", "< 1.0"])
       s.add_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
       s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_dependency(%q<crack>, [">= 0.1.4"])
@@ -224,7 +224,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<mongo_mapper>, [">= 0.6.10", "< 0.7"])
-    s.add_dependency(%q<mongo>, [">= 0.18.2", "< 1.0"])
+    s.add_dependency(%q<mongo>, ["= 0.18.2", "< 1.0"])
     s.add_dependency(%q<sinatra>, [">= 0.9.4", "< 1.0"])
     s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
     s.add_dependency(%q<crack>, [">= 0.1.4"])
