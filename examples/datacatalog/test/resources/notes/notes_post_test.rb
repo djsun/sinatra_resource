@@ -11,7 +11,7 @@ class NotesPostResourceTest < ResourceTestCase
     @user = create_user
     @valid_params = {
       :text    => "New Note",
-      :user_id => @user.id.to_s
+      :user_id => @user.id
     }
   end
   
