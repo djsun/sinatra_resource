@@ -8,15 +8,15 @@ module Config
   end
   
   def self.setup_mongomapper
-    gem 'mongo_mapper', '= 0.6.10'
+    gem 'mongo_mapper', '>= 0.7'
     require 'mongo_mapper'
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
   end
   
   def self.new_mongo_connection
-    gem 'mongo', "= 0.18.2"
-    gem 'mongo_ext', "= 0.18.2"
+    gem 'mongo', ">= 0.18.3"
+    gem 'mongo_ext', ">= 0.18.3"
     require 'mongo'
     Mongo::Connection.new(environment_config["mongo_hostname"])
   end
