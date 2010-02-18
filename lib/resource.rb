@@ -93,7 +93,7 @@ module SinatraResource
       end
 
       # Specify the path. If not specified, SinatraResource will infer the path
-      # from the resource class (see the +default_path+ method.)
+      # from the resource class (see the +set_default_path+ method.)
       #
       # This method is also useful for nested resources.
       #
