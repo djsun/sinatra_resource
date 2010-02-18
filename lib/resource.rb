@@ -257,7 +257,8 @@ module SinatraResource
       # @return [undefined]
       def set_default_path
         unless @resource_config[:path]
-          @resource_config[:path] = self.to_s.split('::').last.downcase
+          suffix = self.to_s.split('::').last
+          @resource_config[:path] = Utility.underscore(suffix)
         end
       end
 

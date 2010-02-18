@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2010-02-16}
+  s.date = %q{2010-02-18}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -126,6 +126,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/sinatra_resource_spec.rb",
      "spec/spec_helper.rb",
+     "spec/utility_spec.rb",
      "examples/datacatalog/app.rb",
      "examples/datacatalog/config/config.rb",
      "examples/datacatalog/lib/base.rb",
