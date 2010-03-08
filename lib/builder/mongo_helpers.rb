@@ -1,4 +1,4 @@
-gem 'query_string_filter', '>= 0.1.2'
+gem 'query_string_filter', '>= 0.1.4'
 require 'query_string_filter'
 
 module SinatraResource
