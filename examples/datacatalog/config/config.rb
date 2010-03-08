@@ -1,4 +1,6 @@
 require 'rubygems'
+gem 'activesupport', '= 2.3.5' 
+require 'active_support' 
 
 # Note: mongo_mapper-0.7.0 requires 0.18.3 specifically.
 # However, there is a more recent mongo and mongo_ext (0.19).
