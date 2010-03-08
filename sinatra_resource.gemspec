@@ -212,7 +212,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_development_dependency(%q<crack>, [">= 0.1.4"])
       s.add_development_dependency(%q<djsun-context>, [">= 0.5.6"])
-      s.add_development_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
+      s.add_development_dependency(%q<pending>, [">= 0.1.1"])
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_development_dependency(%q<yard>, [">= 0.2.3.5"])
     else
@@ -223,7 +223,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
       s.add_dependency(%q<crack>, [">= 0.1.4"])
       s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
-      s.add_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
+      s.add_dependency(%q<pending>, [">= 0.1.1"])
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<yard>, [">= 0.2.3.5"])
     end
@@ -235,7 +235,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<query_string_filter>, [">= 0.1.2"])
     s.add_dependency(%q<crack>, [">= 0.1.4"])
     s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
-    s.add_dependency(%q<jeremymcanally-pending>, [">= 0.1"])
+    s.add_dependency(%q<pending>, [">= 0.1.1"])
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
     s.add_dependency(%q<yard>, [">= 0.2.3.5"])
   end
