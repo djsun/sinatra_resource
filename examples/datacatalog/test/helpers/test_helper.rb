@@ -11,7 +11,7 @@ require 'crack/json'
 gem 'djsun-context', '>= 0.5.6'
 require 'context'
 
-gem 'jeremymcanally-pending', '>= 0.1'
+gem 'pending', '>= 0.1.1'
 require 'pending'
 
 base = File.dirname(__FILE__)
