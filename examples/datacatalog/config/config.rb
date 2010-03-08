@@ -1,5 +1,16 @@
 require 'rubygems'
 
+# Note: mongo_mapper-0.7.0 requires 0.18.3 specifically.
+# However, there is a more recent mongo and mongo_ext (0.19).
+# Unless we specifically require mongo-0.18.3 and mongo_ext-0.18.3,
+# there will be a "Notice: C extension not loaded" warning.
+gem 'mongo', "= 0.18.3", '< 1.0'
+gem 'mongo_ext', "= 0.18.3", '< 1.0'
+require 'mongo'
+
+gem 'mongo_mapper', '>= 0.7', '< 0.8'
+require 'mongo_mapper'
+
 module Config
   
   def self.setup
@@ -8,16 +19,11 @@ module Config
   end
   
   def self.setup_mongomapper
-    gem 'mongo_mapper', '>= 0.7'
-    require 'mongo_mapper'
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
   end
   
   def self.new_mongo_connection
-    gem 'mongo', ">= 0.18.3"
-    gem 'mongo_ext', ">= 0.18.3"
-    require 'mongo'
     Mongo::Connection.new(environment_config["mongo_hostname"])
   end
 
