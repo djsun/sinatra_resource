@@ -14,7 +14,7 @@ begin
     gem.add_dependency 'mongo_mapper', '>= 0.7'
     gem.add_dependency 'mongo', '>= 0.18.3'
     gem.add_dependency 'mongo_ext', '>= 0.18.3'
-    gem.add_dependency 'sinatra', '>= 0.9.4', '< 1.0'
+    gem.add_dependency 'sinatra', '>= 1.0'
     gem.add_dependency 'query_string_filter', '>= 0.1.4'
 
     gem.add_development_dependency 'crack', '>= 0.1.4'
