@@ -121,4 +121,27 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
     end
   end
 
+  context "search=flight delays" do
+    before do
+      @search_params = { :search => "flight delays" }
+    end
+  
+    %w(basic).each do |role|
+      context "#{role} : get /" do
+        before do
+          get "/", @search_params.merge(:api_key => api_key_for(role))
+          @members = parsed_response_body['members']
+        end
+  
+        use "return 200 Ok"
+        
+        test "body should have correct sources" do
+          titles = @members.map { |x| x['title'] }
+          assert_equal 1, titles.length
+          assert_include %{Airline On-Time Performance and Causes of Flight Delays}, titles
+        end
+      end
+    end
+  end
+
 end

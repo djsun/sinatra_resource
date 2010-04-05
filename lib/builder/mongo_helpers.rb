@@ -369,7 +369,8 @@ module SinatraResource
         if search_string && filter_string
           error 400, convert(body_for(:invalid_params, [FILTER_KEY]))
         elsif search_string
-          { :_keywords => search_string.downcase }
+          words = search_string.downcase.split(" ")
+          { :_keywords => { '$all' => words } }
         elsif filter_string
           begin
             unsafe = QS_FILTER.parse(filter_string)
