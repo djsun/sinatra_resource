@@ -10,7 +10,7 @@ gem 'mongo', "= 0.18.3", '< 1.0'
 gem 'mongo_ext', "= 0.18.3", '< 1.0'
 require 'mongo'
 
-gem 'mongo_mapper', '>= 0.7', '< 0.8'
+gem 'mongo_mapper', '= 0.7.0'
 require 'mongo_mapper'
 
 module Config
