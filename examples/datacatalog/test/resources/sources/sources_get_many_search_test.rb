@@ -144,4 +144,26 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
     end
   end
 
+  context "search=" do
+    before do
+      @search_params = { :search => "" }
+    end
+  
+    %w(basic).each do |role|
+      context "#{role} : get /" do
+        before do
+          get "/", @search_params.merge(:api_key => api_key_for(role))
+          @members = parsed_response_body['members']
+        end
+  
+        use "return 200 Ok"
+        
+        test "body should have no sources" do
+          titles = @members.map { |x| x['title'] }
+          assert_equal 0, titles.length
+        end
+      end
+    end
+  end
+
 end
