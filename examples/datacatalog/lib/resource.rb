@@ -28,6 +28,7 @@ module DataCatalog
         end
         
         def log_event(event, object)
+          # Application-logic could go here.
         end
 
         def lookup_role(document=nil)
