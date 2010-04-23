@@ -362,6 +362,18 @@ module SinatraResource
         full_uri(path)
       end
 
+      # Do application-specific logging for +event+.
+      #
+      # Applications must override this method.
+      #
+      # @param [Symbol] event
+      # @param [Object] object
+      #
+      # @return [undefined]
+      def log_event(event, object)
+        raise NotImplementedError
+      end
+
       # Lookup the role, using +document+ if specified.
       #
       # Applications must override this method.

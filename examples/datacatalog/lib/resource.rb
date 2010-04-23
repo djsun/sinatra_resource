@@ -26,6 +26,9 @@ module DataCatalog
           base_uri = Config.environment_config["base_uri"]
           URI.join(base_uri, path).to_s
         end
+        
+        def log_event(event, object)
+        end
 
         def lookup_role(document=nil)
           api_key = lookup_api_key
