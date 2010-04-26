@@ -370,7 +370,6 @@ module SinatraResource
           error 400, convert(body_for(:invalid_params, [FILTER_KEY]))
         elsif search_string
           words = search_string.downcase.split(" ")
-          log_event(:search, words)
           { :_keywords => { '$all' => words } }
         elsif filter_string
           begin

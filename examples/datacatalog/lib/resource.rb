@@ -27,7 +27,7 @@ module DataCatalog
           URI.join(base_uri, path).to_s
         end
         
-        def log_event(event, object)
+        def log_event(event, params)
           # Application-logic could go here.
         end
 

@@ -367,10 +367,10 @@ module SinatraResource
       # Applications may override this method.
       #
       # @param [Symbol] event
-      # @param [Object] object
+      # @param [Hash] params
       #
       # @return [undefined]
-      def log_event(event, object)
+      def log_event(event, params)
       end
 
       # Lookup the role, using +document+ if specified.
