@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2010-04-26}
+  s.date = %q{2010-07-06}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -211,7 +211,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<sinatra>, [">= 1.0"])
       s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.4"])
       s.add_development_dependency(%q<crack>, [">= 0.1.4"])
-      s.add_development_dependency(%q<djsun-context>, [">= 0.5.6"])
+      s.add_development_dependency(%q<tu-context>, [">= 0.5.8"])
       s.add_development_dependency(%q<pending>, [">= 0.1.1"])
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_development_dependency(%q<yard>, [">= 0.2.3.5"])
@@ -222,7 +222,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<sinatra>, [">= 1.0"])
       s.add_dependency(%q<query_string_filter>, [">= 0.1.4"])
       s.add_dependency(%q<crack>, [">= 0.1.4"])
-      s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
+      s.add_dependency(%q<tu-context>, [">= 0.5.8"])
       s.add_dependency(%q<pending>, [">= 0.1.1"])
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<yard>, [">= 0.2.3.5"])
@@ -234,7 +234,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<sinatra>, [">= 1.0"])
     s.add_dependency(%q<query_string_filter>, [">= 0.1.4"])
     s.add_dependency(%q<crack>, [">= 0.1.4"])
-    s.add_dependency(%q<djsun-context>, [">= 0.5.6"])
+    s.add_dependency(%q<tu-context>, [">= 0.5.8"])
     s.add_dependency(%q<pending>, [">= 0.1.1"])
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
     s.add_dependency(%q<yard>, [">= 0.2.3.5"])

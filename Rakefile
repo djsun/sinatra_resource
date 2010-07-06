@@ -18,7 +18,7 @@ begin
     gem.add_dependency 'query_string_filter', '>= 0.1.4'
 
     gem.add_development_dependency 'crack', '>= 0.1.4'
-    gem.add_development_dependency 'djsun-context', '>= 0.5.6'
+    gem.add_development_dependency 'tu-context', '>= 0.5.8'
     gem.add_development_dependency 'pending', '>= 0.1.1'
     gem.add_development_dependency 'rspec', '>= 1.2.9'
     gem.add_development_dependency 'yard', '>= 0.2.3.5'

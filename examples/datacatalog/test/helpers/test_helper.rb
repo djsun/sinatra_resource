@@ -8,8 +8,8 @@ require 'rr'
 gem 'crack', '>= 0.1.4'
 require 'crack/json'
 
-gem 'djsun-context', '>= 0.5.6'
-require 'context'
+gem 'tu-context', '>= 0.5.8'
+require 'tu-context'
 
 gem 'pending', '>= 0.1.1'
 require 'pending'
