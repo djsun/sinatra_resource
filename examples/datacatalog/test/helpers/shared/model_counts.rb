@@ -22,7 +22,8 @@ class ResourceTestCase
 
   shared "category unchanged" do
     test "should not change category in database" do
-      assert_equal @category_copy, DataCatalog::Category.find_by_id(@category.id)
+      original = DataCatalog::Category.find_by_id(@category.id)
+      assert_equal @category_copy.name, original.name
     end
   end
 
@@ -48,7 +49,9 @@ class ResourceTestCase
 
   shared "note unchanged" do
     test "should not change note in database" do
-      assert_equal @note_copy, DataCatalog::Note.find_by_id(@note.id)
+      original = DataCatalog::Note.find_by_id(@note.id)
+      assert_equal @note_copy.text, original.text
+      assert_equal @note_copy.user_id, original.user_id
     end
   end
 
@@ -74,7 +77,10 @@ class ResourceTestCase
 
   shared "source unchanged" do
     test "should not change source in database" do
-      assert_equal @source_copy, DataCatalog::Source.find_by_id(@source.id)
+      original = DataCatalog::Source.find_by_id(@source.id)
+      assert_equal @source_copy.title, original.title
+      assert_equal @source_copy.description, original.description
+      assert_equal @source_copy.url, original.url
     end
   end
 
@@ -132,7 +138,10 @@ class ResourceTestCase
 
   shared "user unchanged" do
     test "should not change user in database" do
-      assert_equal @user_copy, DataCatalog::User.find_by_id(@user.id)
+      original = DataCatalog::User.find_by_id(@user.id)
+      assert_equal @user_copy.name, original.name
+      assert_equal @user_copy.email, original.email
+      assert_equal @user_copy.role, original.role
     end
   end
 

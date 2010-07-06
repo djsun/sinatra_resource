@@ -61,16 +61,16 @@ class CategoryTest < ModelTestCase
     test "#sources should have 3 categorizations" do
       categorizations = @category.categorizations
       assert_equal 3, categorizations.length
-      3.times do |i|
-        assert_include @categorizations[i], categorizations
+      categorizations.each do |categorization|
+        assert_include categorization, @categorizations
       end
     end
 
     test "#sources should have 3 sources" do
       sources = @category.sources
       assert_equal 3, sources.length
-      3.times do |i|
-        assert_include @sources[i], sources
+      sources.each do |source|
+        assert_include source, @sources
       end
     end
   end

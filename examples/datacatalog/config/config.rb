@@ -1,16 +1,6 @@
 require 'rubygems'
-gem 'activesupport', '= 2.3.5' 
-require 'active_support' 
 
-# Note: mongo_mapper-0.7.0 requires 0.18.3 specifically.
-# However, there is a more recent mongo and mongo_ext (0.19).
-# Unless we specifically require mongo-0.18.3 and mongo_ext-0.18.3,
-# there will be a "Notice: C extension not loaded" warning.
-gem 'mongo', "= 0.18.3", '< 1.0'
-gem 'mongo_ext', "= 0.18.3", '< 1.0'
-require 'mongo'
-
-gem 'mongo_mapper', '= 0.7.0'
+gem 'mongo_mapper', '= 0.8.2'
 require 'mongo_mapper'
 
 module Config
