@@ -16,7 +16,7 @@ module DataCatalog
     permission :create => :curator
     permission :update => :curator
     permission :delete => :curator
-    
+
     # == Properties
 
     property :title
@@ -24,9 +24,9 @@ module DataCatalog
     property :description
 
     # == Callbacks
-    
+
   end
-  
+
   SourcesUsages.build
 
 end

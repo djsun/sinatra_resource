@@ -1,7 +1,7 @@
 module DataCatalog
-  
+
   class Search
-    
+
     # Returns an array of strings, tokenized with stopwords removed.
     #
     # @param [<String>] array
@@ -11,7 +11,7 @@ module DataCatalog
     def self.process(array)
       unstop(tokenize(array))
     end
-    
+
     # Tokenize an array of strings.
     #
     # @param [<String>] array
@@ -25,7 +25,7 @@ module DataCatalog
     end
 
     REMOVE = %r([!,;])
-    
+
     # Tokenize a string, removing extra characters too.
     #
     # @param [String] string
@@ -86,7 +86,7 @@ module DataCatalog
     def self.unstop(array)
       array - STOP_WORDS
     end
-    
+
   end
-  
+
 end

@@ -18,7 +18,7 @@ module DataCatalog
     belongs_to :category, :class_name => 'DataCatalog::Category'
 
     # == Validations
-    
+
     validate :validate_associations
 
     def validate_associations

@@ -1,13 +1,13 @@
 module SinatraResource
 
   class Builder
-    
+
     FILTER_KEY = "filter"
     SEARCH_KEY = "search"
     SHOW_KEY   = "show"
 
     ITEMS_PER_PAGE = 20
-    
+
     def initialize(klass)
       @klass  = klass
 
@@ -21,7 +21,7 @@ module SinatraResource
         @parent_model           = @parent_resource_config[:model]
       end
     end
-    
+
     def build
       build_get_one
       build_get_many
@@ -30,7 +30,7 @@ module SinatraResource
       build_delete
       build_helpers
     end
-    
+
     def build_get_one
       model           = @model
       resource_config = @resource_config
@@ -96,7 +96,7 @@ module SinatraResource
         end
       end
     end
-    
+
     def build_post
       model           = @model
       resource_config = @resource_config
@@ -124,7 +124,7 @@ module SinatraResource
         end
       end
     end
-    
+
     def build_put
       model           = @model
       resource_config = @resource_config
@@ -154,7 +154,7 @@ module SinatraResource
         end
       end
     end
-    
+
     def build_delete
       model           = @model
       resource_config = @resource_config
@@ -182,7 +182,7 @@ module SinatraResource
         end
       end
     end
-    
+
     def build_helpers
       @klass.helpers do
         include ActionDefinitions
@@ -190,7 +190,7 @@ module SinatraResource
         include MongoHelpers
       end
     end
-    
+
   end
-  
+
 end

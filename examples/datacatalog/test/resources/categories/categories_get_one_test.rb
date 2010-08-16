@@ -5,11 +5,11 @@ class CategoriesGetOneResourceTest < ResourceTestCase
   include DataCatalog
 
   def app; Categories end
-  
+
   before do
     @category = create_category
   end
-  
+
   after do
     @category.destroy
   end
@@ -19,7 +19,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@category.id}"
       end
-    
+
       use "return 401 because the API key is missing"
     end
 
@@ -27,7 +27,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@category.id}", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -37,7 +37,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
 
@@ -50,7 +50,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
         )
         get "/#{@category.id}", :api_key => api_key_for(role)
       end
-      
+
       after do
         @source.destroy
         @categorization.destroy
@@ -58,7 +58,7 @@ class CategoriesGetOneResourceTest < ResourceTestCase
 
       use "return 200 Ok"
       doc_properties %w(name log id created_at updated_at sources)
-      
+
       test "body should have correct sources" do
         expected = [
           {

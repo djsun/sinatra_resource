@@ -3,7 +3,7 @@ module ModelHelpers
   def self.included(includee)
     includee.extend(ClassMethods)
   end
-  
+
   module ClassMethods
 
     # Is a document (looked up from +symbol+) missing +key+?

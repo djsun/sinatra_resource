@@ -5,7 +5,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
   include DataCatalog
 
   def app; Sources end
-  
+
   before do
     @source = create_source
   end
@@ -19,7 +19,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@source.id}"
       end
-    
+
       use "return 401 because the API key is missing"
     end
 
@@ -27,7 +27,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@source.id}", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -37,7 +37,7 @@ class SourcesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
 
@@ -50,15 +50,15 @@ class SourcesGetOneResourceTest < ResourceTestCase
         )
         get "/#{@source.id}", :api_key => api_key_for(role)
       end
-    
+
       after do
         @category.destroy
         @categorization.destroy
       end
-    
+
       use "return 200 Ok"
       doc_properties %w(title url categories id created_at updated_at)
-    
+
       test "body should have correct categories" do
         expected = [
           {
@@ -69,13 +69,19 @@ class SourcesGetOneResourceTest < ResourceTestCase
         ]
         assert_equal expected, parsed_response_body["categories"]
       end
+
+      test "correct timestamp format" do
+        parsed = parsed_response_body
+        assert_equal Time.local(2010, 7, 4, 15, 0, 0), parsed['created_at']
+        assert_equal Time.local(2010, 7, 4, 15, 0, 0), parsed['updated_at']
+      end
     end
-    
+
     context "#{role} : get /:id?show=all" do
       before do
         get "/#{@source.id}?show=all", :api_key => api_key_for(role)
       end
-    
+
       use "return 200 Ok"
       doc_properties %w(title url raw categories id created_at updated_at)
     end

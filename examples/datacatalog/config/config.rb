@@ -4,17 +4,17 @@ gem 'mongo_mapper', '= 0.8.2'
 require 'mongo_mapper'
 
 module Config
-  
+
   def self.setup
     setup_mongomapper
     # More application setup can go here...
   end
-  
+
   def self.setup_mongomapper
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
   end
-  
+
   def self.new_mongo_connection
     Mongo::Connection.new(environment_config["mongo_hostname"])
   end
@@ -44,7 +44,7 @@ module Config
       end
     end
   end
-  
+
   def self.environment=(env)
     @environment = env
   end
@@ -52,7 +52,7 @@ module Config
   def self.environments
     config.keys
   end
-  
+
   def self.config
     if @config
       @config

@@ -13,25 +13,25 @@ class SourcesGetManyResourceTest < ResourceTestCase
     end
     @source_titles = ["Source 0", "Source 1", "Source 2"].sort
   end
-  
+
   after do
     @sources.each { |x| x.destroy } if @sources
   end
-  
+
   context "get /" do
     context "anonymous" do
       before do
         get "/"
       end
-    
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -42,13 +42,13 @@ class SourcesGetManyResourceTest < ResourceTestCase
         get "/", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-  
+
       use "return 200 Ok"
-      
+
       test "body should have 3 sources" do
         assert_equal 3, @members.length
       end
-      
+
       test "body should have correct source titles" do
         actual = @members.map { |e| e["title"] }
         assert_equal @source_titles, actual.sort

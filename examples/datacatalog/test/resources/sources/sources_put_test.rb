@@ -19,56 +19,56 @@ class SourcesPutResourceTest < ResourceTestCase
   after do
     @source.destroy
   end
-  
+
   context "put /:id" do
     context "anonymous" do
       before do
         put "/#{@source.id}", @valid_params
       end
-    
+
       use "return 401 because the API key is missing"
       use "source unchanged"
     end
-  
+
     context "incorrect API key" do
       before do
         put "/#{@source.id}", @valid_params.merge(:api_key => BAD_API_KEY)
       end
-  
+
       use "return 401 because the API key is invalid"
       use "source unchanged"
     end
   end
-  
+
   %w(basic).each do |role|
     [:id, :created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(invalid => 9)
         end
-  
+
         use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
     end
-  
+
     [:title, :url].each do |erase|
       context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(erase => "")
         end
-  
+
         use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
     end
-  
+
     [:title, :url].each do |missing|
       context "#{role} : put /:id without #{missing}" do
         before do
           put "/#{@source.id}", valid_params_for(role).delete_if { |k, v| k == missing }
         end
-  
+
         use "return 401 because the API key is unauthorized"
         use "source unchanged"
       end
@@ -78,28 +78,28 @@ class SourcesPutResourceTest < ResourceTestCase
       before do
         put "/#{FAKE_ID}", valid_params_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "source unchanged"
     end
-  
+
     context "#{role} : put /:id with valid params" do
       before do
         put "/#{@source.id}", valid_params_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "source unchanged"
     end
   end
-  
+
   %w(curator).each do |role|
     [:raw, :created_at, :updated_at, :categories, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(invalid => 9)
         end
-  
+
         use "return 400 Bad Request"
         use "source unchanged"
         invalid_param invalid
@@ -111,31 +111,31 @@ class SourcesPutResourceTest < ResourceTestCase
         before do
           put "/#{FAKE_ID}", valid_params_for(role).merge(erase => "")
         end
-      
+
         use "return 404 Not Found with empty response body"
         # (The 404 'takes precedence' over the 400.)
         use "source unchanged"
       end
-    end  
+    end
 
     [:title, :url].each do |erase|
       context "#{role} : put /:id but blanking out #{erase}" do
         before do
           put "/#{@source.id}", valid_params_for(role).merge(erase => "")
         end
-      
+
         use "return 400 Bad Request"
         use "source unchanged"
         missing_param erase
       end
-    end  
+    end
 
     [:title, :url].each do |missing|
       context "#{role} : put /:id without #{missing}" do
         before do
           put "/#{@source.id}", valid_params_for(role).delete_if { |k, v| k == missing }
         end
-      
+
         use "return 200 Ok"
         doc_properties %w(title url id created_at updated_at categories)
 
@@ -153,7 +153,7 @@ class SourcesPutResourceTest < ResourceTestCase
       before do
         put "/#{FAKE_ID}", valid_params_for(role)
       end
-      
+
       use "return 404 Not Found with empty response body"
       use "source unchanged"
     end
@@ -162,7 +162,7 @@ class SourcesPutResourceTest < ResourceTestCase
       before do
         put "/#{@source.id}", valid_params_for(role)
       end
-      
+
       use "return 200 Ok"
       doc_properties %w(title url id created_at updated_at categories)
 
@@ -174,7 +174,7 @@ class SourcesPutResourceTest < ResourceTestCase
       end
     end
   end
-  
+
   %w(admin).each do |role|
     context "#{role} : put /:fake_id with no params" do
       before do
@@ -201,7 +201,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
         end
-  
+
         use "return 400 Bad Request"
         use "source unchanged"
         invalid_param invalid
@@ -214,7 +214,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{FAKE_ID}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")
         end
-      
+
         use "return 404 Not Found with empty response body"
         # (The 404 'takes precedence' over the 400.)
         use "source unchanged"
@@ -227,12 +227,12 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")
         end
-      
+
         use "return 400 Bad Request"
         use "source unchanged"
         missing_param erase
       end
-    end  
+    end
 
     [:title, :url].each do |missing|
       context "#{role} : put /:id without #{missing}" do
@@ -240,7 +240,7 @@ class SourcesPutResourceTest < ResourceTestCase
           put "/#{@source.id}", valid_params_for(role).
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
         end
-      
+
         use "return 200 Ok"
         doc_properties %w(title url id created_at updated_at categories)
 
@@ -258,7 +258,7 @@ class SourcesPutResourceTest < ResourceTestCase
       before do
         put "/#{FAKE_ID}", valid_params_for(role).merge(@extra_admin_params)
       end
-      
+
       use "return 404 Not Found with empty response body"
       use "source unchanged"
     end
@@ -267,7 +267,7 @@ class SourcesPutResourceTest < ResourceTestCase
       before do
         put "/#{@source.id}", valid_params_for(role).merge(@extra_admin_params)
       end
-      
+
       use "return 200 Ok"
       doc_properties %w(title url id created_at updated_at categories)
 

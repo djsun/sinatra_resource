@@ -5,7 +5,7 @@ module SinatraResource
       includee.extend ClassMethods
       includee.setup
     end
-    
+
     module ClassMethods
 
       # High-level way to define a role. You can also specify what role it
@@ -164,5 +164,5 @@ module SinatraResource
 
     end
   end
-  
+
 end

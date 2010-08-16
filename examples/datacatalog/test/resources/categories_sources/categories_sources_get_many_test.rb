@@ -33,7 +33,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
     end
     @source_titles = ["Source 0", "Source 1", "Source 2"].sort
   end
-  
+
   after do
     @other_categorizations.each { |x| x.destroy }
     @other_sources.each { |x| x.destroy }
@@ -48,15 +48,15 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
       before do
         get "/#{@category.id}/sources"
       end
-    
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/#{@category.id}/sources", :api_key => BAD_API_KEY
       end
-      
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -66,7 +66,7 @@ class CategoriesSourcesGetManyResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}/sources", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
 

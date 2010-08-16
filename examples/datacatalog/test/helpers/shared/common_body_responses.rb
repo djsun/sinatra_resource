@@ -11,7 +11,7 @@ class ResourceTestCase
       assert_equal [], parsed_response_body
     end
   end
-  
+
   shared "content type header indicates JSON" do
     test "should have JSON content type" do
       assert_equal "application/json", last_response.headers["Content-Type"]

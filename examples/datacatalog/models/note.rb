@@ -9,7 +9,7 @@ module DataCatalog
     key :text,      String
     key :user_id,   ObjectId
     timestamps!
-  
+
     # == Indices
 
     # == Associations

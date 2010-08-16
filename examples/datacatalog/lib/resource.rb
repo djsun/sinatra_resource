@@ -1,9 +1,9 @@
 require 'uri'
 
 module DataCatalog
-    
+
   module Resource
-    
+
     def self.included(includee)
       includee.instance_eval do
         include SinatraResource::Resource
@@ -21,12 +21,12 @@ module DataCatalog
         def convert(object)
           object == "" ? "" : object.to_json
         end
-        
+
         def full_uri(path)
           base_uri = Config.environment_config["base_uri"]
           URI.join(base_uri, path).to_s
         end
-        
+
         def log_event(event, params)
           # Application-logic could go here.
         end
@@ -73,5 +73,5 @@ module DataCatalog
     end
 
   end
-  
+
 end

@@ -20,7 +20,7 @@ class SourcesUsagesGetManyResourceTest < ResourceTestCase
     end
     @other_source.save
   end
-  
+
   after do
     @other_source.destroy
     @source.destroy
@@ -31,15 +31,15 @@ class SourcesUsagesGetManyResourceTest < ResourceTestCase
       before do
         get "/#{@source.id}/usages"
       end
-      
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/#{@source.id}/usages", :api_key => BAD_API_KEY
       end
-      
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -49,22 +49,22 @@ class SourcesUsagesGetManyResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}/usages", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
-  
+
     context "#{role} : get /:id/usages" do
       before do
         get "/#{@source.id}/usages", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-      
+
       use "return 200 Ok"
-      
+
       test "body should have 3 sources" do
         assert_equal 3, @members.length
       end
-      
+
       test "body should have correct source titles" do
         actual = @members.map { |e| e["title"] }
         assert_equal @usage_titles, actual.sort

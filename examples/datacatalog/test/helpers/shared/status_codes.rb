@@ -1,5 +1,5 @@
 class ResourceTestCase
-  
+
   shared "return 200 Ok" do
     test "status should be 200 Ok" do
       assert_equal 200, last_response.status
@@ -12,7 +12,7 @@ class ResourceTestCase
     test "status should be 201 Created" do
       assert_equal 201, last_response.status
     end
-    
+
     test "location header should start with http://localhost" do
       assert_include "Location", last_response.headers
       generic_uri = %r{^http://localhost}
@@ -26,7 +26,7 @@ class ResourceTestCase
     test "status should be 204 No Content" do
       assert_equal 204, last_response.status
     end
-    
+
     use "return an empty response body"
     use "content type header not set"
   end
@@ -65,7 +65,7 @@ class ResourceTestCase
 
   shared "return 404 Not Found with empty response body" do
     use "return 404 Not Found"
-    
+
     use "return an empty response body"
   end
 

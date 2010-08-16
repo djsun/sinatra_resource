@@ -1,19 +1,19 @@
 module SinatraResource
-  
+
   module Resource
     def self.included(includee)
       includee.extend ClassMethods
       includee.setup
     end
-    
+
     def resource_config
       self.class.resource_config
     end
 
     module ClassMethods
-      
+
       attr_reader :resource_config
-      
+
       # Specify a callback.
       #
       # @param [Symbol] method
@@ -29,7 +29,7 @@ module SinatraResource
         end
         @resource_config[:callbacks][name] = block
       end
-      
+
       # Specify the association +method+ of a parent model that points to
       # its child model.
       #
@@ -45,7 +45,7 @@ module SinatraResource
         end
         @resource_config[:child_assoc] = method
       end
-      
+
       # Build the Sinatra actions based on the DSL statements in this class.
       # You will want to do this last.
       #
@@ -58,7 +58,7 @@ module SinatraResource
         validate
         Builder.new(self).build
       end
-      
+
       # Specify the underlying +model+
       #
       # @example
@@ -79,7 +79,7 @@ module SinatraResource
         end
         @resource_config[:model] = model
       end
-      
+
       # Specify the parent +resource+. Only used for nested resources.
       #
       # @param [Class] resource
@@ -106,7 +106,7 @@ module SinatraResource
         end
         @resource_config[:path] = name
       end
-      
+
       # Specify the minimal role needed to access this resource for reading
       # or writing.
       #
@@ -129,7 +129,7 @@ module SinatraResource
           @resource_config[:permission][verb] = role
         end
       end
-      
+
       # Declare a property and its access rules.
       #
       # @example
@@ -165,7 +165,7 @@ module SinatraResource
           @resource_config[:properties][name][:hide_by_default] = hide
         end
       end
-      
+
       # Declare a relation with a block of code.
       #
       # Only needed with nested resources. 
@@ -192,12 +192,12 @@ module SinatraResource
         end
         @resource_config[:relation][name] = block
       end
-      
+
       # Specify the role definitions for this resource.
       #
       # @example
       #   roles Roles
-      #   
+      # 
       #   # which refers to, for example ...
       #   # module Roles
       #   #   include SinatraResource::Roles
@@ -241,9 +241,9 @@ module SinatraResource
           :roles            => nil,
         }
       end
-      
+
       protected
-      
+
       # Set some defaults, only if they haven't been set already.
       #
       # @return [undefined]
@@ -251,7 +251,7 @@ module SinatraResource
         set_default_path
         set_default_properties
       end
-      
+
       # Set the default relative path for a resource.
       #
       # @return [undefined]
@@ -271,7 +271,7 @@ module SinatraResource
         if keys.include?("_id")
           property :id, :w => :nobody
         end
-        
+
         if keys.include?("created_at")
           property :created_at, :w => :nobody
         end
@@ -280,7 +280,7 @@ module SinatraResource
           property :updated_at, :w => :nobody
         end
       end
-      
+
       # Verifies correctness of resource.
       #
       # @raise [ValidationError] if invalid
@@ -291,8 +291,8 @@ module SinatraResource
           raise ValidationError, "model required"
         end
       end
-      
+
     end
   end
-  
+
 end

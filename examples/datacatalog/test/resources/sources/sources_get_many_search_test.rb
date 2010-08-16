@@ -45,48 +45,48 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
   after do
     @sources.each { |x| x.destroy } if @sources
   end
-  
+
   context "search=arrest" do
     before do
       @search_params = { :search => "arrest" }
     end
-  
+
     context "get /" do
       context "anonymous" do
         before do
           get "/", @search_params
         end
-    
+
         use "return 401 because the API key is missing"
       end
-    
+
       context "incorrect API key" do
         before do
           get "/", @search_params.merge(:api_key => BAD_API_KEY)
         end
-    
+
         use "return 401 because the API key is invalid"
       end
     end
-  
+
     %w(basic curator admin).each do |role|
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
           @members = parsed_response_body['members']
         end
-  
+
         use "return 200 Ok"
-  
+
         test "body should have 1 source" do
           assert_equal 1, @members.length
         end
-        
+
         test "body should have correct source" do
           assert_equal %{2007 Crime in the United States},
             @members[0]['title']
         end
-        
+
         test "members should only have correct attributes" do
           correct = %w(title url categories id created_at updated_at)
           @members.each do |member|
@@ -96,21 +96,21 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
       end
     end
   end
-  
+
   context "search=quotations" do
     before do
       @search_params = { :search => "quotations" }
     end
-  
+
     %w(basic).each do |role|
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
           @members = parsed_response_body['members']
         end
-  
+
         use "return 200 Ok"
-        
+
         test "body should have correct sources" do
           titles = @members.map { |x| x['title'] }
           assert_equal 2, titles.length
@@ -125,16 +125,16 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
     before do
       @search_params = { :search => "flight delays" }
     end
-  
+
     %w(basic).each do |role|
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
           @members = parsed_response_body['members']
         end
-  
+
         use "return 200 Ok"
-        
+
         test "body should have correct sources" do
           titles = @members.map { |x| x['title'] }
           assert_equal 1, titles.length
@@ -148,16 +148,16 @@ class SourcesGetManySearchResourceTest < ResourceTestCase
     before do
       @search_params = { :search => "" }
     end
-  
+
     %w(basic).each do |role|
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => api_key_for(role))
           @members = parsed_response_body['members']
         end
-  
+
         use "return 200 Ok"
-        
+
         test "body should have no sources" do
           titles = @members.map { |x| x['title'] }
           assert_equal 0, titles.length

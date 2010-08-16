@@ -14,7 +14,7 @@ module DataCatalog
         :source_id   => child.id
       )
     end
-    
+
     relation :delete do |parent, child|
       Categorization.find(:conditions => {
         :category_id => parent.id,
@@ -30,7 +30,7 @@ module DataCatalog
     permission :create => :curator
     permission :update => :curator
     permission :delete => :curator
-    
+
     # == Properties
 
     property :title
@@ -38,9 +38,9 @@ module DataCatalog
     property :raw, :w => :admin
 
     # == Callbacks
-    
+
   end
-  
+
   CategoriesSources.build
 
 end

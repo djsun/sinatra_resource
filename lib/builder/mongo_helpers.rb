@@ -1,8 +1,7 @@
-gem 'query_string_filter', '>= 0.1.4'
 require 'query_string_filter'
 
 module SinatraResource
-  
+
   class Builder
 
     module MongoHelpers
@@ -34,7 +33,7 @@ module SinatraResource
         conditions = params.empty? ? {} : make_conditions(params, model)
         model.count(conditions)
       end
-      
+
       def count_nested_documents(parent, child_assoc, child_model)
         #
         # This code needs significant improvement.
@@ -57,7 +56,7 @@ module SinatraResource
         end
         documents.length
       end
-      
+
       # Create a document from params. If not valid, returns 400.
       #
       # @param [Class] model
@@ -105,7 +104,7 @@ module SinatraResource
         end
         child
       end
-      
+
       # Delete a document with +id+.
       #
       # @param [Class] model
@@ -213,7 +212,7 @@ module SinatraResource
           child_model.find_by_id(child_id)
         end
       end
-      
+
       # Find a nested document. If not found, returns 404.
       #
       # @param [MongoMapper::Document] parent_document
@@ -235,7 +234,7 @@ module SinatraResource
         end
         document
       end
-      
+
       # Find +model+ documents: find all documents if no params, otherwise
       # find selected documents.
       #
@@ -286,7 +285,7 @@ module SinatraResource
           select_related(parent, child_assoc, children)
         end
       end
-      
+
       # Delegates to application, who should use custom logic to relate
       # +parent+ and +child+.
       #
@@ -303,7 +302,7 @@ module SinatraResource
         proc.call(parent, child) if proc
         child
       end
-      
+
       # Update a document with +id+ from params. If not valid, returns 400.
       #
       # @param [Class] model
@@ -319,7 +318,7 @@ module SinatraResource
         end
         document
       end
-      
+
       # Update a nested document with params. If not valid, returns 400.
       #
       # @param [MongoMapper::Document] parent
@@ -350,11 +349,11 @@ module SinatraResource
           update_document!(child_model, child_id)
         end
       end
-      
+
       protected
-      
+
       QS_FILTER = QueryStringFilter.new
-      
+
       # Build conditions hash based on +params+.
       #
       # @param [Hash] params
@@ -382,7 +381,7 @@ module SinatraResource
           {}
         end
       end
-      
+
       # Filter out +conditions+ that do not have corresponding keys in
       # +model+. This is part of the process that prevents a user from
       # searching for parameters that they do not have access to.

@@ -5,7 +5,7 @@ class CategoriesSourcesDeleteResourceTest < ResourceTestCase
   include DataCatalog
 
   def app; Categories end
-  
+
   before do
     @category = create_category
     @source = create_source
@@ -36,114 +36,114 @@ class CategoriesSourcesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{@category.id}/sources/#{@source.id}"
       end
-    
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         delete "/#{@category.id}/sources/#{@source.id}", :api_key => BAD_API_KEY
       end
-      
+
       use "return 401 because the API key is invalid"
     end
   end
-  
+
   %w(basic).each do |role|
     context "#{role} : delete /:fake_id/sources/:fake_id" do
       before do
         delete "/#{FAKE_ID}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-    
+
     context "#{role} : delete /:fake_id/sources/:id" do
       before do
         delete "/#{FAKE_ID}/sources/#{@source.id}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-    
+
     context "#{role} : delete /:id/sources/:fake_id" do
       before do
         delete "/#{@category.id}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
-  
+
     context "#{role} : delete /:id/sources/:not_related_id" do
       before do
         delete "/#{@category.id}/sources/#{@other_source.id}",
           :api_key => api_key_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
-  
+
     context "#{role} : delete /:id/sources/:id" do
       before do
         delete "/#{@category.id}/sources/#{@source.id}", :api_key => api_key_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "no change in source count"
     end
   end
-  
+
   %w(curator admin).each do |role|
     context "#{role} : delete /:fake_id/sources/:fake_id" do
       before do
         delete "/#{FAKE_ID}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-    
+
     context "#{role} : delete /:fake_id/sources/:id" do
       before do
         delete "/#{FAKE_ID}/sources/#{@source.id}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-    
+
     context "#{role} : delete /:id/sources/:fake_id" do
       before do
         delete "/#{@category.id}/sources/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-      
+
     context "#{role} : delete /:id/sources/:not_related_id" do
       before do
         delete "/#{@category.id}/sources/#{@other_source.id}",
           :api_key => api_key_for(role)
       end
-      
+
       use "return 404 Not Found with empty response body"
       use "no change in source count"
     end
-  
+
     context "#{role} : delete /:id/sources/:id" do
       before do
         delete "/#{@category.id}/sources/#{@source.id}",
           :api_key => api_key_for(role)
       end
-      
+
       use "return 204 No Content"
       use "one less source"
     end
   end
-  
+
 end

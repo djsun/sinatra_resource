@@ -1,5 +1,5 @@
 namespace :db do
-  
+
   def verbosely_drop_database
     db_name = Config.drop_database
     puts "Dropped database: #{db_name}."
@@ -25,5 +25,5 @@ namespace :db do
       verbosely_drop_database
     end
   end
-  
+
 end

@@ -17,11 +17,11 @@ class UsersGetManyResourceTest < ResourceTestCase
       )
     end
   end
-  
+
   after do
     @users.each { |x| x.destroy } if @users
   end
-  
+
   NAMES = [
     "admin User",
     "basic User",
@@ -30,7 +30,7 @@ class UsersGetManyResourceTest < ResourceTestCase
     "User 1",
     "User 2"
   ].sort
-  
+
   EMAILS = %w(
     admin-user@inter.net
     basic-user@inter.net
@@ -45,32 +45,32 @@ class UsersGetManyResourceTest < ResourceTestCase
       before do
         get "/"
       end
-    
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
-  
+
   %w(basic curator).each do |role|
     context "#{role} : get /" do
       before do
         get "/", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-  
+
       use "return 200 Ok"
-      
+
       test "body should have 6 users" do
         assert_equal 6, @members.length
       end
-      
+
       test "body should have correct names" do
         actual = @members.map { |e| e["name"] }
         assert_equal NAMES, actual.sort
@@ -88,25 +88,25 @@ class UsersGetManyResourceTest < ResourceTestCase
       end
     end
   end
-  
+
   %w(admin).each do |role|
     context "#{role} : get /" do
       before do
         get "/", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-  
+
       use "return 200 Ok"
-      
+
       test "body should have 6 users" do
         assert_equal 6, @members.length
       end
-      
+
       test "body should have correct names" do
         actual = @members.map { |e| e["name"] }
         assert_equal NAMES, actual.sort
       end
-  
+
       test "body should have correct emails" do
         actual = @members.map { |e| e["email"] }
         assert_equal EMAILS, actual.sort
@@ -120,5 +120,5 @@ class UsersGetManyResourceTest < ResourceTestCase
       end
     end
   end
-  
+
 end

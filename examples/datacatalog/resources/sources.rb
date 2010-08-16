@@ -13,13 +13,13 @@ module DataCatalog
     permission :create => :curator
     permission :update => :curator
     permission :delete => :curator
-    
+
     # == Properties
 
     property :title
     property :url
     property :raw, :w => :admin, :hide_by_default => true
-    
+
     property :categories do |source|
       source.categorizations.map do |categorization|
         {
@@ -32,7 +32,7 @@ module DataCatalog
 
     # == Callbacks
   end
-  
+
   Sources.build
 
 end

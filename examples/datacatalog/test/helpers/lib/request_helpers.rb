@@ -8,7 +8,7 @@ module RequestHelpers
       Crack::JSON.parse(s)
     end
   end
-  
+
   def assert_properties(correct, parsed_document)
     correct.each do |property|
       assert_include property, parsed_document
@@ -19,7 +19,7 @@ module RequestHelpers
   def self.included(includee)
     includee.extend(ClassMethods)
   end
-  
+
   module ClassMethods
     def doc_properties(correct)
       test "document should only have correct attributes" do
@@ -34,13 +34,13 @@ module RequestHelpers
         end
       end
     end
-    
+
     def invalid_param(s)
       test "should report #{s} as invalid" do
         assert_include s.to_s, parsed_response_body["errors"]["invalid_params"]
       end
     end
-    
+
     def missing_param(s)
       test "should report missing #{s}" do
         assert_include "can't be empty", parsed_response_body["errors"][s.to_s]
@@ -55,7 +55,7 @@ module RequestHelpers
         assert_equal expected, last_response.headers['Location']
       end
     end
-    
+
     def nested_location_header(parent_path, parent_ivar, child_path)
       test "should set Location header correctly" do
         base_uri = Config.environment_config["base_uri"]
@@ -67,8 +67,8 @@ module RequestHelpers
         assert_equal expected, last_response.headers['Location']
       end
     end
-    
+
 
   end
-  
+
 end

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../helpers/model_test_helper')
 
 class CategoryTest < ModelTestCase
-  
+
   include DataCatalog
 
   before do
@@ -15,33 +15,33 @@ class CategoryTest < ModelTestCase
       before do
         @category = Category.new(@required)
       end
-      
+
       test "should be valid" do
         assert_equal true, @category.valid?
       end
     end
-    
+
     [:name].each do |missing|
       context "missing #{missing}" do
         before do
           @category = Category.new(@required.delete_if { |k, v| k == missing })
         end
-        
+
         missing_key(:category, missing)
       end
     end
   end
-  
+
   context "Category with 0 categorizations" do
     before do
       @category = Category.create(@required)
     end
-    
+
     test "#sources should be empty" do
       assert_equal [], @category.sources
     end
   end
-  
+
   context "Category with 3 categorizations" do
     before do
       @category = Category.create(@required)
@@ -57,7 +57,7 @@ class CategoryTest < ModelTestCase
         )
       end
     end
-  
+
     test "#sources should have 3 categorizations" do
       categorizations = @category.categorizations
       assert_equal 3, categorizations.length

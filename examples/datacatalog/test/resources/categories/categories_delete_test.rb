@@ -20,7 +20,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{@category.id}"
       end
-    
+
       use "return 401 because the API key is missing"
       use "no change in category count"
     end
@@ -29,18 +29,18 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{@category.id}", :api_key => BAD_API_KEY
       end
-      
+
       use "return 401 because the API key is invalid"
       use "no change in category count"
     end
   end
-  
+
   %w(basic).each do |role|
     context "#{role} : delete /:fake_id" do
       before do
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "no change in category count"
     end
@@ -51,7 +51,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
           :api_key => api_key_for(role),
           :key     => "value"
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "no change in category count"
     end
@@ -60,7 +60,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{@category.id}", :api_key => api_key_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
       use "no change in category count"
     end
@@ -71,7 +71,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-      
+
       use "return 404 Not Found with empty response body"
       use "no change in category count"
     end
@@ -82,7 +82,7 @@ class CategoriesDeleteResourceTest < ResourceTestCase
           :api_key => api_key_for(role),
           :key     => "value"
       end
-      
+
       use "return 400 because params were not empty"
       use "no change in category count"
     end
@@ -91,15 +91,15 @@ class CategoriesDeleteResourceTest < ResourceTestCase
       before do
         delete "/#{@category.id}", :api_key => api_key_for(role)
       end
-      
+
       use "return 204 No Content"
       use "one less category"
-      
+
       test "callbacks should work" do
         actual = last_response.headers['X-Test-Callbacks']
         assert_equal "before_destroy after_destroy", actual
       end
     end
   end
-  
+
 end

@@ -21,39 +21,39 @@ class NotesGetManyResourceTest < ResourceTestCase
     end
     @note_texts = ["Note 0", "Note 1", "Note 2"].sort
   end
-  
+
   after do
     @notes.each { |x| x.destroy } if @notes
     @users.each { |x| x.destroy }
   end
-  
+
   context "get /" do
     context "anonymous" do
       before do
         get "/"
       end
-    
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
-  
+
   %w(basic curator).each do |role|
     context "#{role} : get /" do
       before do
         get "/", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-  
+
       use "return 200 Ok"
-      
+
       test "body should have an empty list" do
         assert_equal [], @members
       end
@@ -65,18 +65,18 @@ class NotesGetManyResourceTest < ResourceTestCase
       get "/", :api_key => @users[0]._api_key
       @members = parsed_response_body['members']
     end
-    
+
     use "return 200 Ok"
-  
+
     test "body should have 1 note" do
       assert_equal 1, @members.length
     end
-    
+
     test "body should have correct note text" do
       actual = @members.map { |e| e["text"] }
       assert_equal ["Note 0"], actual.sort
     end
-    
+
     test "members should only have correct attributes" do
       correct = %w(text user_id id created_at updated_at)
       @members.each do |member|
@@ -91,13 +91,13 @@ class NotesGetManyResourceTest < ResourceTestCase
         get "/", :api_key => api_key_for(role)
         @members = parsed_response_body['members']
       end
-  
+
       use "return 200 Ok"
-      
+
       test "body should have 3 notes" do
         assert_equal 3, @members.length
       end
-      
+
       test "body should have correct note text" do
         actual = @members.map { |e| e["text"] }
         assert_equal @note_texts, actual.sort

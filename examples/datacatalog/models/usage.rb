@@ -1,7 +1,7 @@
 module DataCatalog
 
   class Usage
-  
+
     include MongoMapper::EmbeddedDocument
 
     # == Attributes
@@ -21,7 +21,7 @@ module DataCatalog
     # 
     # validates_presence_of :title
     # validates_presence_of :url
-  
+
     # == Class Methods
 
     # == Various Instance Methods

@@ -2,7 +2,7 @@ desc "Run tests"
 task :test => %w(db:reset:test test:models test:resources)
 
 namespace :test do
-  
+
   desc "Run model tests"
   Rake::TestTask.new(:models) do |t|
     t.test_files = FileList["test/models/*_test.rb"]

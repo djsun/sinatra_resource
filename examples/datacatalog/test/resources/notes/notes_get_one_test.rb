@@ -5,7 +5,7 @@ class NotesGetOneResourceTest < ResourceTestCase
   include DataCatalog
 
   def app; Notes end
-  
+
   before do
     @user = create_user
     @note = create_note(
@@ -23,7 +23,7 @@ class NotesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@note.id}"
       end
-    
+
       use "return 401 because the API key is missing"
     end
 
@@ -31,7 +31,7 @@ class NotesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{@note.id}", :api_key => BAD_API_KEY
       end
-  
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -41,15 +41,15 @@ class NotesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 401 because the API key is unauthorized"
     end
-  
+
     context "#{role} : get /:id" do
       before do
         get "/#{@note.id}", :api_key => api_key_for(role)
       end
-      
+
       use "return 401 because the API key is unauthorized"
     end
   end
@@ -68,7 +68,7 @@ class NotesGetOneResourceTest < ResourceTestCase
       before do
         get "/#{FAKE_ID}", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
 

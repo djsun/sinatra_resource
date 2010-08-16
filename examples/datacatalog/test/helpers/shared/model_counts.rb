@@ -1,5 +1,5 @@
 class ResourceTestCase
-  
+
   # == categories
 
   shared "no change in category count" do
@@ -13,7 +13,7 @@ class ResourceTestCase
       assert_equal @category_count - 1, DataCatalog::Category.all.length
     end
   end
-  
+
   shared "one new category" do
     test "should add one category document to database" do
       assert_equal @category_count + 1, DataCatalog::Category.all.length

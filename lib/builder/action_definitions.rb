@@ -1,5 +1,5 @@
 module SinatraResource
-  
+
   class Builder
 
     module ActionDefinitions
@@ -16,7 +16,7 @@ module SinatraResource
           find_document!(model, id)
         end
       end
-      
+
       def document_count_for_get_many(model, resource_config, parent_document, child_assoc)
         if resource_config[:parent]
           count_nested_documents(parent_document, child_assoc, model)
@@ -24,7 +24,7 @@ module SinatraResource
           count_documents(model)
         end
       end
-      
+
       def documents_for_get_many(role, model, resource_config, page, items_per_page, leaf, parent_document, child_assoc)
         check_permission(:list, role, resource_config)
         check_params(:list, role, resource_config, leaf)
@@ -37,7 +37,7 @@ module SinatraResource
           authorized?(:read, lookup_role(doc), resource_config)
         end
       end
-      
+
       def document_for_post(role, model, resource_config, leaf, parent_document, child_assoc)
         check_permission(:create, role, resource_config)
         check_params(:create, role, resource_config, leaf)
@@ -53,7 +53,7 @@ module SinatraResource
         do_callback(:after_create, resource_config, document, parent_document)
         document
       end
-      
+
       def document_for_put(role, model, resource_config, leaf, id, parent_document, child_assoc)
         check_permission(:update, role, resource_config)
         if resource_config[:parent]
@@ -74,7 +74,7 @@ module SinatraResource
         do_callback(:after_update, resource_config, document, parent_document)
         document
       end
-      
+
       def document_for_delete(role, model, resource_config, leaf, id, parent_document, child_assoc)
         check_permission(:delete, role, resource_config)
         if resource_config[:parent]
@@ -97,7 +97,7 @@ module SinatraResource
       end
 
     end
-    
+
   end
-  
+
 end

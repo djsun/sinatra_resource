@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../helpers/model_test_helper')
 
 class SourceTest < ModelTestCase
-  
+
   include DataCatalog
 
   context "Source" do
@@ -11,12 +11,12 @@ class SourceTest < ModelTestCase
         :url   => "http://moneybags.gov/data/2009"
       }
     end
-  
+
     context "correct params" do
       before do
         @source = Source.new(@required)
       end
-      
+
       test "should be valid" do
         assert_equal true, @source.valid?
       end
@@ -27,11 +27,11 @@ class SourceTest < ModelTestCase
         before do
           @source = Source.new(@required.delete_if { |k, v| k == missing })
         end
-        
+
         missing_key(:source, missing)
       end
     end
 
   end
-  
+
 end

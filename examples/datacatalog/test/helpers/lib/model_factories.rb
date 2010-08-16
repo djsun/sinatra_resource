@@ -1,25 +1,25 @@
 module ModelFactories
-  
+
   def create_source(custom={})
     create_model!(DataCatalog::Source, custom, {
       :title => "Healthcare Spending Data",
       :url   => "http://data.gov/details/23",
     })
   end
-  
+
   def create_category(custom={})
     create_model!(DataCatalog::Category, custom, {
       :name => "Sample Category",
     })
   end
-  
+
   def create_categorization(custom={})
     create_model!(DataCatalog::Categorization, custom, {
       :source_id   => "",
       :category_id => "",
     })
   end
-  
+
   def create_note(custom={})
     create_model!(DataCatalog::Note, custom, {
       :text    => "Sample Note",
@@ -34,9 +34,9 @@ module ModelFactories
       :role  => "basic",
     })
   end
-  
+
   # -----
-  
+
   def new_usage(custom={})
     new_model!(DataCatalog::Usage, custom, {
       :title       => "Sample Usage",
@@ -62,5 +62,5 @@ module ModelFactories
     end
     model
   end
-  
+
 end

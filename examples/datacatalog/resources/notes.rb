@@ -22,7 +22,7 @@ module DataCatalog
     # == Callbacks
 
   end
-  
+
   Notes.build
 
 end

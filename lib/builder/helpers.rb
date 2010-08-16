@@ -1,9 +1,9 @@
 module SinatraResource
-  
+
   class Builder
 
     module Helpers
-      
+
       # Build a resource, based on +document+, appropriate for +role+.
       #
       # @param [Symbol] role
@@ -102,7 +102,7 @@ module SinatraResource
           error 401, convert(body_for(:unauthorized))
         end
       end
-      
+
       # Convert +object+ to desired format.
       #
       # For example, an application might want to convert +object+ to JSON or
@@ -143,7 +143,7 @@ module SinatraResource
         end
         convert(object)
       end
-      
+
       # Execute a callback.
       #
       # @param [Symbol] name
@@ -224,7 +224,7 @@ module SinatraResource
       def role_for(model, id)
         lookup_role(model.find_by_id(id))
       end
-      
+
       # Get role for a nested resource situation. Delegates to +lookup_role+.
       #
       # @params [MongoMapper::Document] parent
@@ -265,7 +265,7 @@ module SinatraResource
           hash ? hash[to_r_or_w(action)] : :nobody
         end || :anonymous
       end
-      
+
       protected
 
       # Is +role+ authorized for +action+, and, if specified, +property+?
@@ -383,7 +383,7 @@ module SinatraResource
       def lookup_role(document=nil)
         raise NotImplementedError
       end
-      
+
       # Are the params suitable for +action+? Raise 400 Bad Request if not.
       #
       # @param [Symbol] action

@@ -18,53 +18,53 @@ class SourcesUsagesPostResourceTest < ResourceTestCase
   after do
     @source.destroy
   end
-  
+
   context "post /:id/usages" do
     context "anonymous" do
       before do
         post "/#{@source.id}/usages"
       end
-    
+
       use "return 401 because the API key is missing"
       use "no change in usage count"
     end
-  
+
     context "incorrect API key" do
       before do
         post "/#{@source.id}/usages", :api_key => BAD_API_KEY
       end
-      
+
       use "return 401 because the API key is invalid"
       use "no change in usage count"
     end
   end
-  
+
   %w(basic).each do |role|
     context "#{role} : post /:fake_id/usages" do
       before do
         post "/#{FAKE_ID}/usages", :api_key => api_key_for(role)
       end
-  
+
       use "return 404 Not Found with empty response body"
       use "no change in usage count"
     end
-  
+
     context "#{role} : post /:id/usages" do
       before do
         post "/#{@source.id}/usages", :api_key => api_key_for(role)
       end
-    
+
       use "return 401 because the API key is unauthorized"
       use "no change in usage count"
     end
   end
-  
+
   %w(curator admin).each do |role|
     context "#{role} : post /:fake_id/usages" do
       before do
         post "/#{FAKE_ID}/usages", :api_key => api_key_for(role)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "no change in usage count"
     end
@@ -78,20 +78,20 @@ class SourcesUsagesPostResourceTest < ResourceTestCase
     #       post "/#{@source.id}/usages",
     #         valid_params_for(role).delete_if { |k, v| k == missing }
     #     end
-    #     
+    # 
     #     use "return 400 Bad Request"
     #     use "no change in usage count"
     #     missing_param missing
     #   end
     # end
-    
+
     [:junk].each do |invalid|
       context "#{role} : post /:id/usages/ but with #{invalid}" do
         before do
           post "/#{@source.id}/usages", valid_params_for(role).
             merge(invalid => 9)
         end
-      
+
         use "return 400 Bad Request"
         use "no change in usage count"
         invalid_param invalid
@@ -102,12 +102,12 @@ class SourcesUsagesPostResourceTest < ResourceTestCase
       before do
         post "/#{@source.id}/usages", valid_params_for(role)
       end
-      
+
       use "return 201 Created"
       nested_location_header "sources", :source, "usages"
       use "one new usage"
       doc_properties %w(title url description id)
-      
+
       test "new usage created correctly" do
         source = Source.find_by_id(@source.id)
         # TODO: use reload instead
@@ -120,5 +120,5 @@ class SourcesUsagesPostResourceTest < ResourceTestCase
       end
     end
   end
-  
+
 end

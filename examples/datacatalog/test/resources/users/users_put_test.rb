@@ -21,34 +21,34 @@ class UsersPutResourceTest < ResourceTestCase
   after do
     @user.destroy
   end
-  
+
   context "put /:id" do
     context "anonymous" do
       before do
         put "/#{@user.id}", @valid_params
       end
-    
+
       use "return 401 because the API key is missing"
       use "user unchanged"
     end
-  
+
     context "incorrect API key" do
       before do
         put "/#{@user.id}", @valid_params.merge(:api_key => BAD_API_KEY)
       end
-  
+
       use "return 401 because the API key is invalid"
       use "user unchanged"
     end
   end
-  
+
   %w(basic curator).each do |role|
     [:created_at, :updated_at, :junk].each do |invalid|
       context "#{role} : put /:id but with #{invalid}" do
         before do
           put "/#{@user.id}", valid_params_for(role).merge(invalid => 9)
         end
-  
+
         use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
@@ -59,7 +59,7 @@ class UsersPutResourceTest < ResourceTestCase
         before do
           put "/#{@user.id}", valid_params_for(role).merge(erase => "")
         end
-      
+
         use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
@@ -71,7 +71,7 @@ class UsersPutResourceTest < ResourceTestCase
           put "/#{@user.id}", valid_params_for(role).
             delete_if { |k, v| k == missing }
         end
-      
+
         use "return 401 because the API key is unauthorized"
         use "user unchanged"
       end
@@ -81,7 +81,7 @@ class UsersPutResourceTest < ResourceTestCase
       before do
         put "/#{FAKE_ID}", valid_params_for(role)
       end
-    
+
       use "return 401 because the API key is unauthorized"
       use "user unchanged"
     end
@@ -90,7 +90,7 @@ class UsersPutResourceTest < ResourceTestCase
       before do
         put "/#{@user.id}", valid_params_for(role)
       end
-    
+
       use "return 401 because the API key is unauthorized"
       use "user unchanged"
     end
@@ -122,7 +122,7 @@ class UsersPutResourceTest < ResourceTestCase
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(invalid => 9)
         end
-  
+
         use "return 400 Bad Request"
         use "user unchanged"
         invalid_param invalid
@@ -135,7 +135,7 @@ class UsersPutResourceTest < ResourceTestCase
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).merge(erase => "")
         end
-      
+
         use "return 400 Bad Request"
         use "user unchanged"
         missing_param erase
@@ -148,7 +148,7 @@ class UsersPutResourceTest < ResourceTestCase
           put "/#{FAKE_ID}", valid_params_for(role).
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
         end
-      
+
         use "return 404 Not Found with empty response body"
         use "user unchanged"
       end
@@ -160,11 +160,11 @@ class UsersPutResourceTest < ResourceTestCase
           put "/#{@user.id}", valid_params_for(role).
             merge(@extra_admin_params).delete_if { |k, v| k == missing }
         end
-      
+
         use "return 200 Ok"
         doc_properties %w(name email role _api_key token
           id created_at updated_at)
-  
+
         test "should change correct fields in database" do
           user = User.find_by_id(@user.id)
           @valid_params.merge(@extra_admin_params).each_pair do |key, value|
@@ -179,7 +179,7 @@ class UsersPutResourceTest < ResourceTestCase
       before do
         put "/#{FAKE_ID}", valid_params_for(role).merge(@extra_admin_params)
       end
-    
+
       use "return 404 Not Found with empty response body"
       use "user unchanged"
     end
@@ -188,11 +188,11 @@ class UsersPutResourceTest < ResourceTestCase
       before do
         put "/#{@user.id}", valid_params_for(role).merge(@extra_admin_params)
       end
-      
+
       use "return 200 Ok"
       doc_properties %w(name email role _api_key token
         id created_at updated_at)
-  
+
       test "should change all fields in database" do
         user = User.find_by_id(@user.id)
         @valid_params.merge(@extra_admin_params).each_pair do |key, value|

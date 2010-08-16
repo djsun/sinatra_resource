@@ -70,7 +70,7 @@ know whether to allow or disallow.
     def allow?(user_type, action, resource)
       # logic depends solely on params
     end
-    
+
     def disallow?(user_type, action, resource)
       # logic depends solely on params
     end
@@ -86,14 +86,14 @@ the 'user at hand' is different from the 'user type'.
     :basic_user can   :read   some         Notes # less useful
     :basic_user can   :read   an   owned   Note
     :basic_user can't :read   an   unowned Note
-    
+
     :basic_user can   :create a            Note
-    
+
     :basic_user can't :update any          Note  # less useful
     :basic_user can   :update some         Notes # less useful
     :basic_user can   :update an   owned   Note
     :basic_user can't :update an   unowned Note
-    
+
     :basic_user can't :delete any          Note  # less useful
     :basic_user can   :delete some         Notes # less useful
     :basic_user can   :delete an   owned   Note
@@ -147,7 +147,7 @@ Which brings us back to the 'allow?' and 'disallow?' methods:
     def allow?(user_type, user, action, resource, instance, relation)
       # logic depends solely on params
     end
-    
+
     def disallow?(user_type, user, action, resource, instance, relation)
       # logic depends solely on params
     end
@@ -157,7 +157,7 @@ I would expect that user_type can be derived from user, so we can simplify:
     def allow?(user, action, resource, instance, relation)
       # logic depends solely on params
     end
-    
+
     def disallow?(user, action, resource, instance, relation)
       # logic depends solely on params
     end

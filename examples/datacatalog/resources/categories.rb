@@ -15,7 +15,7 @@ module DataCatalog
     permission :delete => :curator
 
     # == Properties
-    
+
     property :name
     property :log
 
@@ -29,13 +29,13 @@ module DataCatalog
         }
       end
     end
-    
+
     # == Callbacks
-    
+
     callback :before_create do |action|
       action.params["log"] = "before_create"
     end
-    
+
     callback :after_create do |action, category|
       category.log += " after_create"
     end
@@ -43,7 +43,7 @@ module DataCatalog
     callback :before_update do |action, category|
       action.params["log"] = "before_update"
     end
-    
+
     callback :after_update do |action, category|
       category.log += " after_update"
     end
@@ -51,14 +51,14 @@ module DataCatalog
     callback :before_destroy do |action, category|
       action.headers 'X-Test-Callbacks' => 'before_destroy'
     end
-    
+
     callback :after_destroy do |action, category|
       x = action.response['X-Test-Callbacks']
       action.headers 'X-Test-Callbacks' => "#{x} after_destroy"
     end
 
   end
-  
+
   Categories.build
 
 end

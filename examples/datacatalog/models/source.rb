@@ -1,5 +1,5 @@
 module DataCatalog
-  
+
   class Source
 
     include MongoMapper::Document
@@ -35,9 +35,9 @@ module DataCatalog
 
     validates_presence_of :title
     validates_presence_of :url
-    
+
     # == Callbacks
-    
+
     before_save :update_keywords
     def update_keywords
       self._keywords = DataCatalog::Search.process([title, description])

@@ -27,7 +27,7 @@ class SourcesUsagesGetManyFilterResourceTest < ResourceTestCase
     @source = @sources[1]
     @search = SEARCH_FILTERS[0]
   end
-  
+
   after do
     @sources.each { |x| x.destroy }
   end
@@ -37,16 +37,16 @@ class SourcesUsagesGetManyFilterResourceTest < ResourceTestCase
       before do
         get "/#{@source.id}/usages", @search
       end
-      
+
       use "return 401 because the API key is missing"
     end
-  
+
     context "incorrect API key" do
       before do
         get "/#{@source.id}/usages", @search.merge(
           :api_key => BAD_API_KEY)
       end
-      
+
       use "return 401 because the API key is invalid"
     end
   end
@@ -57,10 +57,10 @@ class SourcesUsagesGetManyFilterResourceTest < ResourceTestCase
         get "/#{FAKE_ID}/usages", @search.merge(
           :api_key => api_key_for(role))
       end
-    
+
       use "return 404 Not Found with empty response body"
     end
-  
+
     SEARCH_FILTERS.each do |search|
       context "#{role} : get /:id/usages" do
         before do
@@ -68,13 +68,13 @@ class SourcesUsagesGetManyFilterResourceTest < ResourceTestCase
             :api_key => api_key_for(role))
           @members = parsed_response_body['members']
         end
-      
+
         use "return 200 Ok"
-      
+
         test "body should have 2 sources" do
           assert_equal 2, @members.length
         end
-      
+
         test "body should have correct source titles" do
           actual = @members.map { |e| e["title"] }
           assert_equal ["Usage 0", "Usage 2"], actual.sort
