@@ -7,11 +7,13 @@ class SourcesGetOneResourceTest < ResourceTestCase
   def app; Sources end
 
   before do
+    Timecop.freeze(Time.local(2010, 7, 4, 15, 0, 0))
     @source = create_source
   end
 
   after do
     @source.destroy
+    Timecop.return
   end
 
   context "get /:id" do

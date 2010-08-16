@@ -14,6 +14,8 @@ require 'tu-context'
 gem 'pending', '>= 0.1.1'
 require 'pending'
 
+require 'timecop'
+
 base = File.dirname(__FILE__)
 Dir.glob(base + '/lib/*.rb'       ).each { |f| require f }
 Dir.glob(base + '/test_cases/*.rb').each { |f| require f }
