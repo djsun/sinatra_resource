@@ -1,0 +1,14 @@
+source :rubygems
+
+gem 'sinatra', '>= 1.0'
+gem 'mongo_mapper', '= 0.8.2'
+
+group :test do
+  gem 'crack', '>= 0.1.4'
+  gem 'pending', '>= 0.1.1'
+  gem 'tu-context', '>= 0.5.8'
+end
+
+group :development do
+  gem 'yard'
+end

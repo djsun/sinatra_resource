@@ -1,6 +1,4 @@
 require 'rubygems'
-
-gem 'sinatra', '>= 1.0'
 require 'sinatra/base'
 
 require File.dirname(__FILE__) + '/config/config'

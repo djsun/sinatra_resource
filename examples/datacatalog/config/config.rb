@@ -1,6 +1,4 @@
 require 'rubygems'
-
-gem 'mongo_mapper', '= 0.8.2'
 require 'mongo_mapper'
 
 module Config

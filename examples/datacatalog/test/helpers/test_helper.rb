@@ -1,20 +1,12 @@
 require 'rubygems'
 
-require 'test/unit'
-
+require 'crack/json'
+require 'pending'
 require 'rack/test'
 require 'rr'
-
-gem 'crack', '>= 0.1.4'
-require 'crack/json'
-
-gem 'tu-context', '>= 0.5.8'
-require 'tu-context'
-
-gem 'pending', '>= 0.1.1'
-require 'pending'
-
+require 'test/unit'
 require 'timecop'
+require 'tu-context'
 
 base = File.dirname(__FILE__)
 Dir.glob(base + '/lib/*.rb'       ).each { |f| require f }
