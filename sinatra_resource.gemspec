@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_resource}
-  s.version = "0.4.21"
+  s.version = "0.4.22"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2010-07-15}
+  s.date = %q{2010-08-30}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -19,10 +19,15 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "Gemfile",
+     "Gemfile.lock",
      "LICENSE",
      "README.mdown",
      "Rakefile",
      "VERSION",
+     "examples/datacatalog/.bundle/config",
+     "examples/datacatalog/Gemfile",
+     "examples/datacatalog/Gemfile.lock",
      "examples/datacatalog/Rakefile",
      "examples/datacatalog/app.rb",
      "examples/datacatalog/config.ru",
@@ -123,7 +128,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/djsun/sinatra_resource}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{RESTful actions with Sinatra and MongoMapper}
   s.test_files = [
     "spec/sinatra_resource_spec.rb",
@@ -204,7 +209,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<mongo_mapper>, ["= 0.8.2"])
       s.add_runtime_dependency(%q<sinatra>, [">= 1.0"])
       s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.4"])
