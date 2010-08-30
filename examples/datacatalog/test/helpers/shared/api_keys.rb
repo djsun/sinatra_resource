@@ -9,12 +9,12 @@ class ResourceTestCase
     end
   end
 
-  shared "return 400 because params were not empty" do
+  shared "return 400 because invalid params were present" do
     use "return 400 Bad Request"
 
-    test "body should say params were non-empty" do
+    test "body should say invalid params were present" do
       assert_include "errors", parsed_response_body
-      assert_include "non_empty_params", parsed_response_body["errors"]
+      assert_include "invalid_params", parsed_response_body["errors"]
     end
   end
 

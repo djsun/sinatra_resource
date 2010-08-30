@@ -330,8 +330,6 @@ module SinatraResource
           { "errors" => { "invalid_filter" => object } }
         when :no_params
           { "errors" => "no_params" }
-        when :non_empty_params
-          { "errors" => "non_empty_params" }
         when :not_found
           ""
         when :unauthorized
@@ -401,7 +399,7 @@ module SinatraResource
             [FILTER_KEY, SEARCH_KEY].include?(k)
           end
           unless p.empty?
-            error 400, convert(body_for(:non_empty_params))
+            error 400, convert(body_for(:invalid_params, p))
           end
         when :read
           p = params.reject { |k, v| k == SHOW_KEY }
@@ -410,7 +408,7 @@ module SinatraResource
               { SHOW_KEY => params[SHOW_KEY] }))
           end
           unless p.empty?
-            error 400, convert(body_for(:non_empty_params))
+            error 400, convert(body_for(:invalid_params, p))
           end
         when :create
           # No need to complain. If there are problems,
@@ -421,7 +419,7 @@ module SinatraResource
           end
         when :delete
           unless params.empty?
-            error 400, convert(body_for(:non_empty_params))
+            error 400, convert(body_for(:invalid_params, p))
           end
         else
           raise Error, "Unexpected: #{action.inspect}"

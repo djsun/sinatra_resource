@@ -83,7 +83,7 @@ class SourcesDeleteResourceTest < ResourceTestCase
           :key     => "value"
       end
 
-      use "return 400 because params were not empty"
+      use "return 400 because invalid params were present"
       use "no change in source count"
     end
 
