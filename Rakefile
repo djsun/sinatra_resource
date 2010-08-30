@@ -11,15 +11,20 @@ begin
     gem.homepage = "http://github.com/djsun/sinatra_resource"
     gem.authors = ["David James"]
 
-    gem.add_dependency 'mongo_mapper', '= 0.8.2'
-    gem.add_dependency 'sinatra', '>= 1.0'
+    gem.add_dependency 'activesupport', '~> 2.3.8'
+    gem.add_dependency 'frequency', '>= 0.1.2'
+    gem.add_dependency 'kronos', '>= 0.1.6'
+    gem.add_dependency 'mongo_mapper', '= 0.8.4'
     gem.add_dependency 'query_string_filter', '>= 0.1.4'
+    gem.add_dependency 'sinatra', '>= 1.0'
 
     gem.add_development_dependency 'crack', '>= 0.1.4'
-    gem.add_development_dependency 'tu-context', '>= 0.5.8'
     gem.add_development_dependency 'pending', '>= 0.1.1'
+    gem.add_development_dependency 'rr', '>= 0.10.11'
     gem.add_development_dependency 'rspec', '>= 1.2.9'
-    gem.add_development_dependency 'yard', '>= 0.2.3.5'
+    gem.add_development_dependency 'timecop', '>= 0.3.5'
+    gem.add_development_dependency 'tu-context', '>= 0.5.8'
+    gem.add_development_dependency 'yard', '>= 0.6.0'
 
     # gem is a Gem::Specification ...
     # ... see http://www.rubygems.org/read/chapter/20 for additional settings
