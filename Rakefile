@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{RESTful actions with Sinatra and MongoMapper}
     gem.description = %Q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
     gem.email = "djames@sunlightfoundation.com"
-    gem.homepage = "http://github.com/djsun/sinatra_resource"
+    gem.homepage = "http://github.com/sunlightlabs/sinatra_resource"
     gem.authors = ["David James"]
 
     gem.add_dependency 'activesupport', '~> 2.3.8'
