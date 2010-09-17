@@ -1,28 +1,25 @@
-## About
+# SinatraResource
 
-Want to build Web services in the Resource Oriented Architecture style? With resource_sinatra, success is all but guaranteed, provided that you are using a [Sinatra](http://sinatrarb.com) + [MongoMapper](http://github.com/djsun/mongomapper) stack.
+SinatraResource can help you build Web services in the Resource Oriented Architecture style. It is built on top of [Sinatra](http://sinatrarb.com) and [MongoMapper](http://github.com/mongomapper).
 
 ## Installation
 
-It might not be a bad idea to make sure you are running the latest RubyGems:
+Check to see if you are running a recent version of RubyGems:
 
+    gem --version
+    # should be 1.3.7 of better, if not:
     sudo gem update --system
 
-You will need gemcutter if you don't have it already:
+I recommend a user-level installation:
 
-    gem install gemcutter
-    gem tumble
+    gem install sinatra_resource
 
-I recommend a user-level install:
-
-    gem install resource_sinatra
-
-Note: in general, beware of `sudo gem install <project_name>` -- it gives elevated privileges. Do you trust `<project name>`? Better to be safe and use a local install to `~/.gem`.
+(A general note: beware of `sudo gem install <project_name>` -- it gives elevated privileges. Do you trust `<project name>`? Better to be safe and not use the `sudo` -- this gives you a local install in your `~/.gem` directory.)
 
 ## Usage
 
-For a basic example of what this looks like when integrated into a real-world Sinatra app, see `/examples/datacatalog`.
+For a basic example of what this looks like when integrated into a real-world Sinatra app, see the `/examples/datacatalog` directory.
 
 ## History
 
-This code was extracted from the [National Data Catalog](http://groups.google.com/group/datacatalog), a project of the [Sunlight Labs](http://sunlightlabs.com).
+This code was extracted from the [National Data Catalog](http://nationaldatacatalog.com) ([source code](http://github.com/sunlightlabs/datacatalog-api)), a project of the [Sunlight Labs](http://sunlightlabs.com).
