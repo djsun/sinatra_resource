@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David James"]
-  s.date = %q{2010-08-30}
+  s.date = %q{2010-09-20}
   s.description = %q{A DSL for creating RESTful actions with Sinatra and MongoMapper. It embraces the Resource Oriented Architecture as explained by Leonard Richardson and Sam Ruby.}
   s.email = %q{djames@sunlightfoundation.com}
   s.extra_rdoc_files = [
@@ -126,7 +126,7 @@ Gem::Specification.new do |s|
      "tasks/spec.rake",
      "tasks/yard.rake"
   ]
-  s.homepage = %q{http://github.com/djsun/sinatra_resource}
+  s.homepage = %q{http://github.com/sunlightlabs/sinatra_resource}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
@@ -211,48 +211,57 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activesupport>, ["~> 2.3.8"])
-      s.add_runtime_dependency(%q<frequency>, [">= 0.1.2"])
-      s.add_runtime_dependency(%q<kronos>, [">= 0.1.6"])
-      s.add_runtime_dependency(%q<mongo_mapper>, ["= 0.8.4"])
-      s.add_runtime_dependency(%q<query_string_filter>, [">= 0.1.4"])
-      s.add_runtime_dependency(%q<sinatra>, [">= 1.0"])
-      s.add_development_dependency(%q<crack>, [">= 0.1.4"])
-      s.add_development_dependency(%q<pending>, [">= 0.1.1"])
-      s.add_development_dependency(%q<rr>, [">= 0.10.11"])
-      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_development_dependency(%q<timecop>, [">= 0.3.5"])
-      s.add_development_dependency(%q<tu-context>, [">= 0.5.8"])
-      s.add_development_dependency(%q<yard>, [">= 0.6.0"])
+      s.add_runtime_dependency(%q<activesupport>, ["~> 3.0.0"])
+      s.add_runtime_dependency(%q<frequency>, ["~> 0.1.5"])
+      s.add_runtime_dependency(%q<kronos>, ["~> 0.1.7"])
+      s.add_runtime_dependency(%q<i18n>, ["~> 0.4.1"])
+      s.add_runtime_dependency(%q<mongo_mapper>, ["~> 0.8.4"])
+      s.add_runtime_dependency(%q<query_string_filter>, ["~> 0.1.6"])
+      s.add_runtime_dependency(%q<sinatra>, ["~> 1.0.0"])
+      s.add_development_dependency(%q<crack>, ["~> 0.1.4"])
+      s.add_development_dependency(%q<pending>, ["~> 0.1.1"])
+      s.add_development_dependency(%q<rake>, ["~> 0.8.7"])
+      s.add_development_dependency(%q<rcov>, ["~> 0.9.8"])
+      s.add_development_dependency(%q<rr>, ["~> 1.0.0"])
+      s.add_development_dependency(%q<rspec>, ["~> 1.3.0"])
+      s.add_development_dependency(%q<timecop>, ["~> 0.3.5"])
+      s.add_development_dependency(%q<tu-context>, ["~> 0.5.8"])
+      s.add_development_dependency(%q<yard>, ["~> 0.6.1"])
     else
-      s.add_dependency(%q<activesupport>, ["~> 2.3.8"])
-      s.add_dependency(%q<frequency>, [">= 0.1.2"])
-      s.add_dependency(%q<kronos>, [">= 0.1.6"])
-      s.add_dependency(%q<mongo_mapper>, ["= 0.8.4"])
-      s.add_dependency(%q<query_string_filter>, [">= 0.1.4"])
-      s.add_dependency(%q<sinatra>, [">= 1.0"])
-      s.add_dependency(%q<crack>, [">= 0.1.4"])
-      s.add_dependency(%q<pending>, [">= 0.1.1"])
-      s.add_dependency(%q<rr>, [">= 0.10.11"])
-      s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<timecop>, [">= 0.3.5"])
-      s.add_dependency(%q<tu-context>, [">= 0.5.8"])
-      s.add_dependency(%q<yard>, [">= 0.6.0"])
+      s.add_dependency(%q<activesupport>, ["~> 3.0.0"])
+      s.add_dependency(%q<frequency>, ["~> 0.1.5"])
+      s.add_dependency(%q<kronos>, ["~> 0.1.7"])
+      s.add_dependency(%q<i18n>, ["~> 0.4.1"])
+      s.add_dependency(%q<mongo_mapper>, ["~> 0.8.4"])
+      s.add_dependency(%q<query_string_filter>, ["~> 0.1.6"])
+      s.add_dependency(%q<sinatra>, ["~> 1.0.0"])
+      s.add_dependency(%q<crack>, ["~> 0.1.4"])
+      s.add_dependency(%q<pending>, ["~> 0.1.1"])
+      s.add_dependency(%q<rake>, ["~> 0.8.7"])
+      s.add_dependency(%q<rcov>, ["~> 0.9.8"])
+      s.add_dependency(%q<rr>, ["~> 1.0.0"])
+      s.add_dependency(%q<rspec>, ["~> 1.3.0"])
+      s.add_dependency(%q<timecop>, ["~> 0.3.5"])
+      s.add_dependency(%q<tu-context>, ["~> 0.5.8"])
+      s.add_dependency(%q<yard>, ["~> 0.6.1"])
     end
   else
-    s.add_dependency(%q<activesupport>, ["~> 2.3.8"])
-    s.add_dependency(%q<frequency>, [">= 0.1.2"])
-    s.add_dependency(%q<kronos>, [">= 0.1.6"])
-    s.add_dependency(%q<mongo_mapper>, ["= 0.8.4"])
-    s.add_dependency(%q<query_string_filter>, [">= 0.1.4"])
-    s.add_dependency(%q<sinatra>, [">= 1.0"])
-    s.add_dependency(%q<crack>, [">= 0.1.4"])
-    s.add_dependency(%q<pending>, [">= 0.1.1"])
-    s.add_dependency(%q<rr>, [">= 0.10.11"])
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<timecop>, [">= 0.3.5"])
-    s.add_dependency(%q<tu-context>, [">= 0.5.8"])
-    s.add_dependency(%q<yard>, [">= 0.6.0"])
+    s.add_dependency(%q<activesupport>, ["~> 3.0.0"])
+    s.add_dependency(%q<frequency>, ["~> 0.1.5"])
+    s.add_dependency(%q<kronos>, ["~> 0.1.7"])
+    s.add_dependency(%q<i18n>, ["~> 0.4.1"])
+    s.add_dependency(%q<mongo_mapper>, ["~> 0.8.4"])
+    s.add_dependency(%q<query_string_filter>, ["~> 0.1.6"])
+    s.add_dependency(%q<sinatra>, ["~> 1.0.0"])
+    s.add_dependency(%q<crack>, ["~> 0.1.4"])
+    s.add_dependency(%q<pending>, ["~> 0.1.1"])
+    s.add_dependency(%q<rake>, ["~> 0.8.7"])
+    s.add_dependency(%q<rcov>, ["~> 0.9.8"])
+    s.add_dependency(%q<rr>, ["~> 1.0.0"])
+    s.add_dependency(%q<rspec>, ["~> 1.3.0"])
+    s.add_dependency(%q<timecop>, ["~> 0.3.5"])
+    s.add_dependency(%q<tu-context>, ["~> 0.5.8"])
+    s.add_dependency(%q<yard>, ["~> 0.6.1"])
   end
 end
 
