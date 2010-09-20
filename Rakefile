@@ -11,8 +11,6 @@ begin
     gem.authors = ["David James"]
 
     gem.add_dependency 'activesupport', '~> 3.0.0'
-    # gem.add_dependency 'bson', '~> 1.0.7'
-    # gem.add_dependency 'bson_ext', '~> 1.0.7'
     gem.add_dependency 'frequency', '~> 0.1.5'
     gem.add_dependency 'kronos', '~> 0.1.7'
     gem.add_dependency 'i18n', '~> 0.4.1'
