@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'bundler/setup'
 
 begin
   require 'jeweler'
