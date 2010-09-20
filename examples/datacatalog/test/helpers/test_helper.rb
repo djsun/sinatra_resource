@@ -1,10 +1,5 @@
 require 'rubygems'
-begin
-  require 'bundler'
-  Bundler.setup
-rescue LoadError
-  puts "Please run `gem install bundler` and `bundle install`"
-end
+require 'bundler/setup'
 require 'crack/json'
 require 'pending'
 require 'rack/test'
