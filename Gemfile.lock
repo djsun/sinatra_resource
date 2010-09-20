@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sinatra_resource (0.4.23)
+    sinatra_resource (0.4.24)
       activesupport (~> 3.0.0)
       frequency (~> 0.1.5)
       i18n (~> 0.4.1)

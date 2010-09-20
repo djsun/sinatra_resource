@@ -9,5 +9,5 @@ gem 'rack-test', '~> 0.5.4'
 # Don't use the following line in your sinatra_resource application...
 gemspec :path => '../..'
 # ...instead use:
-# gem 'sinatra_resource', '~> 0.4.23'
-# (use the latest version, not necessarily 0.4.23)
+# gem 'sinatra_resource', '~> 0.4.24'
+# (use the latest version, not necessarily 0.4.24)
