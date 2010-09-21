@@ -9,8 +9,7 @@ module SinatraResource
     ITEMS_PER_PAGE = 20
 
     def initialize(klass)
-      @klass  = klass
-
+      @klass = klass
       @resource_config = @klass.resource_config
       @child_assoc     = @resource_config[:child_assoc]
       @model           = @resource_config[:model]

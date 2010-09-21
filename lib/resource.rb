@@ -271,11 +271,9 @@ module SinatraResource
         if keys.include?("_id")
           property :id, :w => :nobody
         end
-
         if keys.include?("created_at")
           property :created_at, :w => :nobody
         end
-
         if keys.include?("updated_at")
           property :updated_at, :w => :nobody
         end
