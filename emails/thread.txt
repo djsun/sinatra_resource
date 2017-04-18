@@ -1,0 +1,7 @@
+This looks incredibly useful, and I'll be using it right away.
+
+http://github.com/blog/712-pull-requests-2-0
+
+Doing pull requests previously always meant I had to go lookup the multi-command git syntax, and communication about the code happened out of band. Both problems are now gone.
+
+-- Eric
